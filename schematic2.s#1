@@ -3166,7 +3166,7 @@ SOT-23 package
 <part name="P+2" library="supply1" deviceset="+5V" device=""/>
 <part name="P-1" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+3" library="supply1" deviceset="+5V" device=""/>
-<part name="JP1" library="Felicia_force_logger" deviceset="PINHD-1X6" device=""/>
+<part name="JOYSTICK" library="Felicia_force_logger" deviceset="PINHD-1X6" device=""/>
 <part name="P-6" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+4" library="supply1" deviceset="+5V" device=""/>
 <part name="P+5" library="supply1" deviceset="+5V" device=""/>
@@ -3175,7 +3175,7 @@ SOT-23 package
 <part name="P-8" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+7" library="supply1" deviceset="+5V" device=""/>
 <part name="P+8" library="supply1" deviceset="+5V" device=""/>
-<part name="U$8" library="Felicia_force_logger" deviceset="PINHD-1X4" device="STRAIGHT"/>
+<part name="BEAM" library="Felicia_force_logger" deviceset="PINHD-1X4" device="" value="PINHD-1X4"/>
 <part name="P-9" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
 <part name="C+" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
@@ -3185,28 +3185,28 @@ SOT-23 package
 <part name="U$11" library="Felicia_force_logger" deviceset="MICROSD" device=""/>
 <part name="IC6" library="Felicia_force_logger" deviceset="DS3231" device="/SO"/>
 <part name="U$12" library="Felicia_force_logger" deviceset="CR1220_BATTERY_HOLDER" device="SMD"/>
-<part name="U$13" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$14" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="5H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="5L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="GND10" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
-<part name="U$15" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$16" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="2H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="2L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="GND11" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="+3V2" library="supply1" deviceset="+3V3" device=""/>
-<part name="U$17" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$18" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="4H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="4L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="+3V3" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND12" library="Felicia_force_logger" deviceset="AGND" device=""/>
-<part name="U$19" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$20" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="1H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="1L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND13" library="Felicia_force_logger" deviceset="AGND" device=""/>
-<part name="U$21" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$22" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="3H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="3L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="+3V5" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND14" library="Felicia_force_logger" deviceset="AGND" device=""/>
-<part name="U$23" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
-<part name="U$24" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="0H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="0L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="GND15" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="+3V6" library="supply1" deviceset="+3V3" device=""/>
 <part name="+3V7" library="supply1" deviceset="+3V3" device=""/>
@@ -3311,7 +3311,7 @@ SOT-23 package
 <instance part="P+2" gate="1" x="116.84" y="208.28"/>
 <instance part="P-1" gate="G$2" x="154.94" y="144.78" rot="R180"/>
 <instance part="P+3" gate="1" x="154.94" y="119.38" rot="R180"/>
-<instance part="JP1" gate="A" x="0" y="193.04"/>
+<instance part="JOYSTICK" gate="A" x="0" y="193.04"/>
 <instance part="P-6" gate="G$2" x="5.08" y="172.72"/>
 <instance part="P+4" gate="1" x="10.16" y="172.72" rot="R180"/>
 <instance part="P+5" gate="1" x="33.02" y="180.34"/>
@@ -3320,7 +3320,7 @@ SOT-23 package
 <instance part="P-8" gate="G$2" x="91.44" y="30.48" rot="R180"/>
 <instance part="P+7" gate="1" x="91.44" y="5.08" rot="R180"/>
 <instance part="P+8" gate="1" x="40.64" y="93.98"/>
-<instance part="U$8" gate="G$1" x="10.16" y="68.58"/>
+<instance part="BEAM" gate="G$1" x="10.16" y="68.58"/>
 <instance part="P-9" gate="G$2" x="15.24" y="50.8"/>
 <instance part="P+9" gate="1" x="20.32" y="50.8" rot="R180"/>
 <instance part="C+" gate="G$1" x="215.9" y="20.32" rot="R180"/>
@@ -3330,28 +3330,28 @@ SOT-23 package
 <instance part="U$11" gate="G$1" x="304.8" y="81.28"/>
 <instance part="IC6" gate="G$1" x="170.18" y="68.58"/>
 <instance part="U$12" gate="G$1" x="233.68" y="73.66" rot="R180"/>
-<instance part="U$13" gate="G$1" x="109.22" y="43.18" rot="R270"/>
-<instance part="U$14" gate="G$1" x="116.84" y="43.18" rot="R90"/>
+<instance part="5H" gate="G$1" x="109.22" y="43.18" rot="R270"/>
+<instance part="5L" gate="G$1" x="116.84" y="43.18" rot="R90"/>
 <instance part="GND10" gate="G$1" x="116.84" y="30.48"/>
 <instance part="+3V1" gate="G$1" x="109.22" y="30.48" rot="R180"/>
-<instance part="U$15" gate="G$1" x="104.14" y="68.58" rot="R270"/>
-<instance part="U$16" gate="G$1" x="111.76" y="68.58" rot="R90"/>
+<instance part="2H" gate="G$1" x="104.14" y="68.58" rot="R270"/>
+<instance part="2L" gate="G$1" x="111.76" y="68.58" rot="R90"/>
 <instance part="GND11" gate="G$1" x="111.76" y="55.88"/>
 <instance part="+3V2" gate="G$1" x="104.14" y="55.88" rot="R180"/>
-<instance part="U$17" gate="G$1" x="86.36" y="129.54" rot="R270"/>
-<instance part="U$18" gate="G$1" x="93.98" y="129.54" rot="R90"/>
+<instance part="4H" gate="G$1" x="86.36" y="129.54" rot="R270"/>
+<instance part="4L" gate="G$1" x="93.98" y="129.54" rot="R90"/>
 <instance part="+3V3" gate="G$1" x="86.36" y="116.84" rot="R180"/>
 <instance part="GND12" gate="G$1" x="93.98" y="116.84"/>
-<instance part="U$19" gate="G$1" x="81.28" y="154.94" rot="R270"/>
-<instance part="U$20" gate="G$1" x="88.9" y="154.94" rot="R90"/>
+<instance part="1H" gate="G$1" x="81.28" y="154.94" rot="R270"/>
+<instance part="1L" gate="G$1" x="88.9" y="154.94" rot="R90"/>
 <instance part="+3V4" gate="G$1" x="81.28" y="142.24" rot="R180"/>
 <instance part="GND13" gate="G$1" x="88.9" y="144.78"/>
-<instance part="U$21" gate="G$1" x="160.02" y="160.02" rot="R270"/>
-<instance part="U$22" gate="G$1" x="167.64" y="160.02" rot="R90"/>
+<instance part="3H" gate="G$1" x="160.02" y="160.02" rot="R270"/>
+<instance part="3L" gate="G$1" x="167.64" y="160.02" rot="R90"/>
 <instance part="+3V5" gate="G$1" x="160.02" y="147.32" rot="R180"/>
 <instance part="GND14" gate="G$1" x="167.64" y="147.32"/>
-<instance part="U$23" gate="G$1" x="175.26" y="187.96" rot="R90"/>
-<instance part="U$24" gate="G$1" x="182.88" y="187.96" rot="R270"/>
+<instance part="0H" gate="G$1" x="175.26" y="187.96" rot="R90"/>
+<instance part="0L" gate="G$1" x="182.88" y="187.96" rot="R270"/>
 <instance part="GND15" gate="G$1" x="182.88" y="203.2" rot="R180"/>
 <instance part="+3V6" gate="G$1" x="175.26" y="203.2"/>
 <instance part="+3V7" gate="G$1" x="215.9" y="160.02" rot="R90"/>
@@ -3437,9 +3437,9 @@ SOT-23 package
 <wire x1="68.58" y1="132.08" x2="86.36" y2="132.08" width="0.1524" layer="91"/>
 <wire x1="86.36" y1="132.08" x2="93.98" y2="132.08" width="0.1524" layer="91"/>
 <wire x1="93.98" y1="132.08" x2="99.06" y2="132.08" width="0.1524" layer="91"/>
-<pinref part="U$17" gate="G$1" pin="A"/>
+<pinref part="4H" gate="G$1" pin="A"/>
 <junction x="86.36" y="132.08"/>
-<pinref part="U$18" gate="G$1" pin="C"/>
+<pinref part="4L" gate="G$1" pin="C"/>
 <junction x="93.98" y="132.08"/>
 <label x="99.06" y="132.08" size="1.778" layer="95"/>
 </segment>
@@ -3553,9 +3553,9 @@ SOT-23 package
 <wire x1="149.86" y1="149.86" x2="149.86" y2="162.56" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="162.56" x2="160.02" y2="162.56" width="0.1524" layer="91"/>
 <wire x1="160.02" y1="162.56" x2="167.64" y2="162.56" width="0.1524" layer="91"/>
-<pinref part="U$21" gate="G$1" pin="A"/>
+<pinref part="3H" gate="G$1" pin="A"/>
 <junction x="160.02" y="162.56"/>
-<pinref part="U$22" gate="G$1" pin="C"/>
+<pinref part="3L" gate="G$1" pin="C"/>
 <junction x="167.64" y="162.56"/>
 <wire x1="167.64" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
 <label x="172.72" y="162.56" size="1.778" layer="95"/>
@@ -3633,10 +3633,10 @@ SOT-23 package
 <wire x1="-2.54" y1="187.96" x2="5.08" y2="187.96" width="0.1524" layer="91"/>
 <pinref part="P-6" gate="G$2" pin="VNEG"/>
 <wire x1="5.08" y1="187.96" x2="5.08" y2="175.26" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="6"/>
+<pinref part="JOYSTICK" gate="A" pin="6"/>
 </segment>
 <segment>
-<pinref part="U$8" gate="G$1" pin="4"/>
+<pinref part="BEAM" gate="G$1" pin="4"/>
 <wire x1="7.62" y1="66.04" x2="15.24" y2="66.04" width="0.1524" layer="91"/>
 <pinref part="P-9" gate="G$2" pin="VNEG"/>
 <wire x1="15.24" y1="66.04" x2="15.24" y2="53.34" width="0.1524" layer="91"/>
@@ -3654,10 +3654,10 @@ SOT-23 package
 <wire x1="-2.54" y1="190.5" x2="10.16" y2="190.5" width="0.1524" layer="91"/>
 <pinref part="P+4" gate="1" pin="+5V"/>
 <wire x1="10.16" y1="190.5" x2="10.16" y2="175.26" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="5"/>
+<pinref part="JOYSTICK" gate="A" pin="5"/>
 </segment>
 <segment>
-<pinref part="U$8" gate="G$1" pin="3"/>
+<pinref part="BEAM" gate="G$1" pin="3"/>
 <wire x1="7.62" y1="68.58" x2="20.32" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="P+9" gate="1" pin="+5V"/>
 <wire x1="20.32" y1="68.58" x2="20.32" y2="53.34" width="0.1524" layer="91"/>
@@ -3752,10 +3752,10 @@ SOT-23 package
 <wire x1="154.94" y1="175.26" x2="157.48" y2="175.26" width="0.2032" layer="91"/>
 <wire x1="160.02" y1="198.12" x2="170.18" y2="198.12" width="0.1524" layer="91"/>
 <junction x="160.02" y="198.12"/>
-<pinref part="U$24" gate="G$1" pin="C"/>
+<pinref part="0L" gate="G$1" pin="C"/>
 <wire x1="182.88" y1="185.42" x2="193.04" y2="185.42" width="0.1524" layer="91"/>
 <junction x="182.88" y="185.42"/>
-<pinref part="U$23" gate="G$1" pin="A"/>
+<pinref part="0H" gate="G$1" pin="A"/>
 <wire x1="175.26" y1="185.42" x2="182.88" y2="185.42" width="0.1524" layer="91"/>
 <label x="190.5" y="185.42" size="1.778" layer="95"/>
 <wire x1="170.18" y1="198.12" x2="170.18" y2="185.42" width="0.1524" layer="91"/>
@@ -3780,7 +3780,7 @@ SOT-23 package
 <net name="N$18" class="0">
 <segment>
 <wire x1="-2.54" y1="200.66" x2="109.22" y2="200.66" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="1"/>
+<pinref part="JOYSTICK" gate="A" pin="1"/>
 <pinref part="JOY_X" gate="G$1" pin="+"/>
 <wire x1="109.22" y1="200.66" x2="109.22" y2="193.04" width="0.1524" layer="91"/>
 </segment>
@@ -3788,7 +3788,7 @@ SOT-23 package
 <net name="N$19" class="0">
 <segment>
 <wire x1="101.6" y1="198.12" x2="-2.54" y2="198.12" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="2"/>
+<pinref part="JOYSTICK" gate="A" pin="2"/>
 <wire x1="101.6" y1="198.12" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="JOY_X" gate="G$1" pin="-"/>
 <wire x1="101.6" y1="172.72" x2="109.22" y2="172.72" width="0.1524" layer="91"/>
@@ -3831,9 +3831,9 @@ SOT-23 package
 <wire x1="73.66" y1="139.7" x2="73.66" y2="147.32" width="0.1524" layer="91"/>
 <wire x1="76.2" y1="157.48" x2="81.28" y2="157.48" width="0.1524" layer="91"/>
 <wire x1="81.28" y1="157.48" x2="88.9" y2="157.48" width="0.1524" layer="91"/>
-<pinref part="U$19" gate="G$1" pin="A"/>
+<pinref part="1H" gate="G$1" pin="A"/>
 <junction x="81.28" y="157.48"/>
-<pinref part="U$20" gate="G$1" pin="C"/>
+<pinref part="1L" gate="G$1" pin="C"/>
 <junction x="88.9" y="157.48"/>
 <wire x1="88.9" y1="157.48" x2="93.98" y2="157.48" width="0.1524" layer="91"/>
 <label x="91.44" y="157.48" size="1.778" layer="95"/>
@@ -3858,7 +3858,7 @@ SOT-23 package
 <wire x1="15.24" y1="195.58" x2="15.24" y2="165.1" width="0.1524" layer="91"/>
 <pinref part="JOY_Y" gate="G$1" pin="+"/>
 <wire x1="15.24" y1="165.1" x2="25.4" y2="165.1" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="3"/>
+<pinref part="JOYSTICK" gate="A" pin="3"/>
 </segment>
 </net>
 <net name="N$24" class="0">
@@ -3867,7 +3867,7 @@ SOT-23 package
 <wire x1="12.7" y1="193.04" x2="12.7" y2="144.78" width="0.1524" layer="91"/>
 <pinref part="JOY_Y" gate="G$1" pin="-"/>
 <wire x1="12.7" y1="144.78" x2="25.4" y2="144.78" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="A" pin="4"/>
+<pinref part="JOYSTICK" gate="A" pin="4"/>
 </segment>
 </net>
 <net name="A5" class="0">
@@ -3887,9 +3887,9 @@ SOT-23 package
 <wire x1="86.36" y1="45.72" x2="109.22" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="109.22" y1="45.72" x2="116.84" y2="45.72" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="45.72" x2="124.46" y2="45.72" width="0.1524" layer="91"/>
-<pinref part="U$13" gate="G$1" pin="A"/>
+<pinref part="5H" gate="G$1" pin="A"/>
 <junction x="109.22" y="45.72"/>
-<pinref part="U$14" gate="G$1" pin="C"/>
+<pinref part="5L" gate="G$1" pin="C"/>
 <junction x="116.84" y="45.72"/>
 <label x="121.92" y="45.72" size="1.778" layer="95"/>
 </segment>
@@ -3928,9 +3928,9 @@ SOT-23 package
 <wire x1="93.98" y1="71.12" x2="104.14" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="71.12" x2="111.76" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="111.76" y1="71.12" x2="116.84" y2="71.12" width="0.1524" layer="91"/>
-<pinref part="U$15" gate="G$1" pin="A"/>
+<pinref part="2H" gate="G$1" pin="A"/>
 <junction x="104.14" y="71.12"/>
-<pinref part="U$16" gate="G$1" pin="C"/>
+<pinref part="2L" gate="G$1" pin="C"/>
 <junction x="111.76" y="71.12"/>
 <label x="114.3" y="71.12" size="1.778" layer="95"/>
 <pinref part="R$70" gate="G$1" pin="2"/>
@@ -3950,7 +3950,7 @@ SOT-23 package
 </net>
 <net name="N$31" class="0">
 <segment>
-<pinref part="U$8" gate="G$1" pin="2"/>
+<pinref part="BEAM" gate="G$1" pin="2"/>
 <wire x1="7.62" y1="71.12" x2="25.4" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="25.4" y1="71.12" x2="25.4" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="BEAM_Z" gate="G$1" pin="-"/>
@@ -3959,7 +3959,7 @@ SOT-23 package
 </net>
 <net name="N$32" class="0">
 <segment>
-<pinref part="U$8" gate="G$1" pin="1"/>
+<pinref part="BEAM" gate="G$1" pin="1"/>
 <wire x1="7.62" y1="73.66" x2="25.4" y2="73.66" width="0.1524" layer="91"/>
 <wire x1="25.4" y1="73.66" x2="25.4" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="BEAM_Z" gate="G$1" pin="+"/>
@@ -3984,27 +3984,27 @@ SOT-23 package
 </net>
 <net name="+3V3" class="0">
 <segment>
-<pinref part="U$13" gate="G$1" pin="C"/>
+<pinref part="5H" gate="G$1" pin="C"/>
 <pinref part="+3V1" gate="G$1" pin="+3V3"/>
 <wire x1="109.22" y1="33.02" x2="109.22" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$17" gate="G$1" pin="C"/>
+<pinref part="4H" gate="G$1" pin="C"/>
 <pinref part="+3V3" gate="G$1" pin="+3V3"/>
 <wire x1="86.36" y1="119.38" x2="86.36" y2="127" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$19" gate="G$1" pin="C"/>
+<pinref part="1H" gate="G$1" pin="C"/>
 <pinref part="+3V4" gate="G$1" pin="+3V3"/>
 <wire x1="81.28" y1="144.78" x2="81.28" y2="152.4" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$21" gate="G$1" pin="C"/>
+<pinref part="3H" gate="G$1" pin="C"/>
 <pinref part="+3V5" gate="G$1" pin="+3V3"/>
 <wire x1="160.02" y1="149.86" x2="160.02" y2="157.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$23" gate="G$1" pin="C"/>
+<pinref part="0H" gate="G$1" pin="C"/>
 <pinref part="+3V6" gate="G$1" pin="+3V3"/>
 <wire x1="175.26" y1="200.66" x2="175.26" y2="190.5" width="0.1524" layer="91"/>
 </segment>
@@ -4231,12 +4231,12 @@ SOT-23 package
 <wire x1="63.5" y1="116.84" x2="63.5" y2="111.76" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$18" gate="G$1" pin="A"/>
+<pinref part="4L" gate="G$1" pin="A"/>
 <pinref part="GND12" gate="G$1" pin="GND"/>
 <wire x1="93.98" y1="119.38" x2="93.98" y2="127" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$20" gate="G$1" pin="A"/>
+<pinref part="1L" gate="G$1" pin="A"/>
 <pinref part="GND13" gate="G$1" pin="GND"/>
 <wire x1="88.9" y1="147.32" x2="88.9" y2="152.4" width="0.1524" layer="91"/>
 </segment>
@@ -4246,7 +4246,7 @@ SOT-23 package
 <wire x1="78.74" y1="73.66" x2="78.74" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$16" gate="G$1" pin="A"/>
+<pinref part="2L" gate="G$1" pin="A"/>
 <pinref part="GND11" gate="G$1" pin="GND"/>
 <wire x1="111.76" y1="58.42" x2="111.76" y2="66.04" width="0.1524" layer="91"/>
 </segment>
@@ -4256,7 +4256,7 @@ SOT-23 package
 <wire x1="81.28" y1="30.48" x2="81.28" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$14" gate="G$1" pin="A"/>
+<pinref part="5L" gate="G$1" pin="A"/>
 <pinref part="GND10" gate="G$1" pin="GND"/>
 <wire x1="116.84" y1="33.02" x2="116.84" y2="40.64" width="0.1524" layer="91"/>
 </segment>
@@ -4691,12 +4691,12 @@ SOT-23 package
 <label x="195.58" y="129.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U$24" gate="G$1" pin="A"/>
+<pinref part="0L" gate="G$1" pin="A"/>
 <pinref part="GND15" gate="G$1" pin="GND"/>
 <wire x1="182.88" y1="200.66" x2="182.88" y2="190.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$22" gate="G$1" pin="A"/>
+<pinref part="3L" gate="G$1" pin="A"/>
 <pinref part="GND14" gate="G$1" pin="GND"/>
 <wire x1="167.64" y1="149.86" x2="167.64" y2="157.48" width="0.1524" layer="91"/>
 </segment>
