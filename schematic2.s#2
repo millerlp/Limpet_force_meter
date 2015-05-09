@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.0.0">
+<eagle version="7.2.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -3309,15 +3309,15 @@ SOT-23 package
 <instance part="P+1" gate="1" x="220.98" y="22.86" rot="R270"/>
 <instance part="P-4" gate="G$2" x="116.84" y="157.48"/>
 <instance part="P+2" gate="1" x="116.84" y="208.28"/>
-<instance part="P-1" gate="G$2" x="154.94" y="144.78" rot="R180"/>
+<instance part="P-1" gate="G$2" x="154.94" y="147.32" rot="R180"/>
 <instance part="P+3" gate="1" x="154.94" y="119.38" rot="R180"/>
 <instance part="JOYSTICK" gate="A" x="0" y="193.04"/>
 <instance part="P-6" gate="G$2" x="5.08" y="172.72"/>
 <instance part="P+4" gate="1" x="10.16" y="172.72" rot="R180"/>
 <instance part="P+5" gate="1" x="33.02" y="180.34"/>
-<instance part="P-7" gate="G$2" x="73.66" y="116.84" rot="R180"/>
+<instance part="P-7" gate="G$2" x="73.66" y="119.38" rot="R180"/>
 <instance part="P+6" gate="1" x="73.66" y="91.44" rot="R180"/>
-<instance part="P-8" gate="G$2" x="91.44" y="30.48" rot="R180"/>
+<instance part="P-8" gate="G$2" x="91.44" y="33.02" rot="R180"/>
 <instance part="P+7" gate="1" x="91.44" y="5.08" rot="R180"/>
 <instance part="P+8" gate="1" x="40.64" y="93.98"/>
 <instance part="BEAM" gate="G$1" x="10.16" y="68.58"/>
@@ -4058,6 +4058,11 @@ SOT-23 package
 <wire x1="320.04" y1="167.64" x2="309.88" y2="167.64" width="0.1524" layer="91"/>
 <label x="307.34" y="167.64" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="2H" gate="G$1" pin="C"/>
+<pinref part="+3V2" gate="G$1" pin="+3V3"/>
+<wire x1="104.14" y1="66.04" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="N$26" class="0">
 <segment>
@@ -4729,14 +4734,17 @@ SOT-23 package
 <segment>
 <pinref part="90" gate="G$1" pin="P$1"/>
 <pinref part="P-7" gate="G$2" pin="VNEG"/>
+<wire x1="73.66" y1="116.84" x2="73.66" y2="114.3" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="80" gate="G$1" pin="P$1"/>
 <pinref part="P-1" gate="G$2" pin="VNEG"/>
+<wire x1="154.94" y1="144.78" x2="154.94" y2="142.24" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="70" gate="G$1" pin="P$1"/>
 <pinref part="P-8" gate="G$2" pin="VNEG"/>
+<wire x1="91.44" y1="30.48" x2="91.44" y2="27.94" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
