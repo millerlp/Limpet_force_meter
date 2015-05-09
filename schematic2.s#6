@@ -1617,6 +1617,41 @@ Standard header/terminal spacing</description>
 <rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
 <rectangle x1="-2.794" y1="-0.254" x2="-2.286" y2="0.254" layer="51"/>
 </package>
+<package name="SWITCH_SMD_RA_SPDT">
+<description>&lt;b&gt;Slide switch SPDT right angle &lt;/b&gt;&lt;br&gt;
+Based on Copal PN CSS-1210B (or 1210TB)</description>
+<smd name="P$1" x="-3" y="3.75" dx="1.27" dy="0.635" layer="1" rot="R270"/>
+<smd name="P$2" x="-1" y="3.75" dx="1.27" dy="0.635" layer="1" rot="R270"/>
+<smd name="P$3_COMMON" x="1" y="3.75" dx="1.27" dy="0.635" layer="1" rot="R270"/>
+<hole x="-3.15" y="0.1" drill="0.9"/>
+<hole x="3.15" y="0.1" drill="0.9"/>
+<wire x1="-4.25" y1="0" x2="-1.75" y2="0" width="0.127" layer="51"/>
+<wire x1="-1.75" y1="0" x2="1.75" y2="0" width="0.127" layer="51"/>
+<wire x1="1.75" y1="0" x2="4.25" y2="0" width="0.127" layer="51"/>
+<wire x1="4.25" y1="0" x2="4.25" y2="3" width="0.127" layer="51"/>
+<wire x1="4.25" y1="3" x2="-4.25" y2="3" width="0.127" layer="51"/>
+<wire x1="-4.25" y1="3" x2="-4.25" y2="0" width="0.127" layer="51"/>
+<text x="-3.41" y="1.45" size="1.27" layer="51" font="vector">1</text>
+<text x="-1.39" y="1.48" size="1.27" layer="51" font="vector">2</text>
+<text x="0.5" y="1.5" size="1.27" layer="51" font="vector">C</text>
+<wire x1="-1.75" y1="0" x2="-1.75" y2="-2" width="0.127" layer="51"/>
+<wire x1="-1.75" y1="-2" x2="1.75" y2="-2" width="0.127" layer="51"/>
+<wire x1="1.75" y1="-2" x2="1.75" y2="0" width="0.127" layer="51"/>
+<text x="-4" y="4.5" size="1.27" layer="25" font="vector">&gt;NAME</text>
+<wire x1="-4.15" y1="3" x2="-4.15" y2="0" width="0.127" layer="21"/>
+<wire x1="-4.15" y1="0" x2="4.15" y2="0" width="0.127" layer="21"/>
+<wire x1="4.15" y1="0" x2="4.15" y2="3" width="0.127" layer="21"/>
+<wire x1="4.15" y1="3" x2="-4.15" y2="3" width="0.127" layer="21"/>
+<wire x1="-4.3" y1="3" x2="4.25" y2="3" width="0.127" layer="39"/>
+<wire x1="4.25" y1="3" x2="4.25" y2="0" width="0.127" layer="39"/>
+<wire x1="4.25" y1="0" x2="2" y2="0" width="0.127" layer="39"/>
+<wire x1="-4.25" y1="0" x2="-4.25" y2="3.05" width="0.127" layer="39"/>
+<wire x1="-4.25" y1="0" x2="-2" y2="0" width="0.127" layer="39"/>
+<wire x1="-2" y1="0" x2="2" y2="0" width="0.127" layer="39"/>
+<wire x1="2" y1="0" x2="2" y2="-2" width="0.127" layer="39"/>
+<wire x1="2" y1="-2" x2="-2" y2="-2" width="0.127" layer="39"/>
+<wire x1="-2" y1="-2" x2="-2" y2="0" width="0.127" layer="39"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DUE_HALF_SHIELD_A7-ANALOG">
@@ -2157,6 +2192,16 @@ Half Shield</text>
 <wire x1="7.62" y1="7.62" x2="0" y2="7.62" width="0.254" layer="94"/>
 <text x="0" y="7.62" size="1.27" layer="104">&gt;NAME</text>
 <text x="0" y="-10.16" size="1.27" layer="127">&gt;VALUE</text>
+</symbol>
+<symbol name="SWITCH_SPDT">
+<description>&lt;b&gt;Single Pole, Dual Throw switch&lt;/b&gt;</description>
+<pin name="P$1" x="7.62" y="5.08" length="middle" rot="R180"/>
+<pin name="P$2" x="7.62" y="-5.08" length="middle" rot="R180"/>
+<pin name="P$3" x="-5.08" y="0" length="middle"/>
+<circle x="0" y="0" radius="0.803215625" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="0.254" width="0.254" layer="94"/>
+<wire x1="0" y1="0.254" x2="3.302" y2="3.556" width="0.254" layer="94"/>
+<text x="-2.54" y="7.62" size="1.6764" layer="125" font="vector">&gt;NAME</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -3069,6 +3114,26 @@ SOT-23 package
 </device>
 </devices>
 </deviceset>
+<deviceset name="SWITCH_SLIDE_SMD_SPDT">
+<description>&lt;b&gt;Single Pole Dual Throw switch&lt;/b&gt;&lt;br&gt;
+Copal PN CSS-1210TB (surface mount, right-angle)
+Digikey PN 563-1091-1-ND</description>
+<gates>
+<gate name="G$1" symbol="SWITCH_SPDT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="SWITCH_SMD_RA_SPDT">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3_COMMON"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 <library name="supply1">
@@ -3269,6 +3334,7 @@ SOT-23 package
 <part name="GND2" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="GND5" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="GND34" library="Felicia_force_logger" deviceset="AGND" device=""/>
+<part name="U$2" library="Felicia_force_logger" deviceset="SWITCH_SLIDE_SMD_SPDT" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -3416,6 +3482,7 @@ SOT-23 package
 <instance part="GND2" gate="G$1" x="63.5" y="109.22"/>
 <instance part="GND5" gate="G$1" x="162.56" y="220.98" rot="R180"/>
 <instance part="GND34" gate="G$1" x="139.7" y="172.72" rot="R180"/>
+<instance part="U$2" gate="G$1" x="175.26" y="38.1" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -3459,14 +3526,6 @@ SOT-23 package
 <pinref part="AMP" gate="B" pin="+IN"/>
 <pinref part="GND4" gate="G$1" pin="GND"/>
 <wire x1="60.96" y1="162.56" x2="60.96" y2="160.02" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="GND_2"/>
-<pinref part="GND8" gate="1" pin="GND"/>
-<wire x1="223.52" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="GND_1"/>
-<wire x1="233.68" y1="154.94" x2="223.52" y2="154.94" width="0.2032" layer="91"/>
-<wire x1="223.52" y1="154.94" x2="223.52" y2="152.4" width="0.2032" layer="91"/>
 </segment>
 <segment>
 <pinref part="U$11" gate="G$1" pin="GND"/>
@@ -3608,24 +3667,11 @@ SOT-23 package
 </net>
 <net name="VRAW" class="0">
 <segment>
-<pinref part="U$3" gate="G$1" pin="P$14_VIN"/>
-<wire x1="147.32" y1="20.32" x2="152.4" y2="20.32" width="0.1524" layer="91"/>
-<label x="144.78" y="20.32" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U$28" gate="G$1" pin="PWR"/>
-<wire x1="147.32" y1="40.64" x2="152.4" y2="40.64" width="0.1524" layer="91"/>
-<label x="149.86" y="40.64" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="VIN"/>
-<wire x1="233.68" y1="149.86" x2="228.6" y2="149.86" width="0.1524" layer="91"/>
-<label x="228.6" y="149.86" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="PWR_PINS" gate="G$1" pin="1"/>
-<wire x1="193.04" y1="152.4" x2="200.66" y2="152.4" width="0.1524" layer="91"/>
-<label x="200.66" y="152.4" size="1.778" layer="95"/>
+<pinref part="U$2" gate="G$1" pin="P$2"/>
+<wire x1="147.32" y1="40.64" x2="167.64" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="167.64" y1="40.64" x2="167.64" y2="43.18" width="0.1524" layer="91"/>
+<label x="157.48" y="40.64" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="-5V" class="0">
@@ -3777,21 +3823,13 @@ SOT-23 package
 <label x="218.44" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$18" class="0">
-<segment>
-<wire x1="-2.54" y1="200.66" x2="109.22" y2="200.66" width="0.1524" layer="91"/>
-<pinref part="JOYSTICK" gate="A" pin="1"/>
-<pinref part="JOY_X" gate="G$1" pin="+"/>
-<wire x1="109.22" y1="200.66" x2="109.22" y2="193.04" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$19" class="0">
 <segment>
-<wire x1="101.6" y1="198.12" x2="-2.54" y2="198.12" width="0.1524" layer="91"/>
-<pinref part="JOYSTICK" gate="A" pin="2"/>
-<wire x1="101.6" y1="198.12" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="200.66" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="JOY_X" gate="G$1" pin="-"/>
 <wire x1="101.6" y1="172.72" x2="109.22" y2="172.72" width="0.1524" layer="91"/>
+<pinref part="JOYSTICK" gate="A" pin="1"/>
+<wire x1="-2.54" y1="200.66" x2="101.6" y2="200.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -3855,19 +3893,19 @@ SOT-23 package
 <net name="N$23" class="0">
 <segment>
 <wire x1="-2.54" y1="195.58" x2="15.24" y2="195.58" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="195.58" x2="15.24" y2="165.1" width="0.1524" layer="91"/>
-<pinref part="JOY_Y" gate="G$1" pin="+"/>
-<wire x1="15.24" y1="165.1" x2="25.4" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="15.24" y1="195.58" x2="15.24" y2="144.78" width="0.1524" layer="91"/>
 <pinref part="JOYSTICK" gate="A" pin="3"/>
+<pinref part="JOY_Y" gate="G$1" pin="-"/>
+<wire x1="15.24" y1="144.78" x2="25.4" y2="144.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$24" class="0">
 <segment>
-<wire x1="-2.54" y1="193.04" x2="12.7" y2="193.04" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="193.04" x2="12.7" y2="144.78" width="0.1524" layer="91"/>
-<pinref part="JOY_Y" gate="G$1" pin="-"/>
-<wire x1="12.7" y1="144.78" x2="25.4" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="193.04" x2="20.32" y2="193.04" width="0.1524" layer="91"/>
 <pinref part="JOYSTICK" gate="A" pin="4"/>
+<wire x1="20.32" y1="193.04" x2="20.32" y2="165.1" width="0.1524" layer="91"/>
+<pinref part="JOY_Y" gate="G$1" pin="+"/>
+<wire x1="20.32" y1="165.1" x2="25.4" y2="165.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="A5" class="0">
@@ -4049,11 +4087,6 @@ SOT-23 package
 <label x="127" y="99.06" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ANALOG7_HEADER" gate="G$1" pin="P$3"/>
-<wire x1="195.58" y1="134.62" x2="198.12" y2="134.62" width="0.1524" layer="91"/>
-<label x="195.58" y="134.62" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="I2C_HEADER" gate="G$1" pin="1"/>
 <wire x1="320.04" y1="167.64" x2="309.88" y2="167.64" width="0.1524" layer="91"/>
 <label x="307.34" y="167.64" size="1.778" layer="95"/>
@@ -4062,6 +4095,16 @@ SOT-23 package
 <pinref part="2H" gate="G$1" pin="C"/>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="104.14" y1="66.04" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="ANALOG7_HEADER" gate="G$1" pin="P$3"/>
+<wire x1="195.58" y1="134.62" x2="198.12" y2="134.62" width="0.1524" layer="91"/>
+<label x="195.58" y="134.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="PWR_PINS" gate="G$1" pin="5"/>
+<wire x1="193.04" y1="162.56" x2="200.66" y2="162.56" width="0.1524" layer="91"/>
+<label x="200.66" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$26" class="0">
@@ -4316,6 +4359,16 @@ SOT-23 package
 <wire x1="220.98" y1="15.24" x2="228.6" y2="15.24" width="0.1524" layer="91"/>
 <junction x="220.98" y="15.24"/>
 </segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="GND_2"/>
+<pinref part="GND8" gate="1" pin="GND"/>
+<wire x1="223.52" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="GND_1"/>
+<wire x1="233.68" y1="154.94" x2="223.52" y2="154.94" width="0.2032" layer="91"/>
+<wire x1="223.52" y1="154.94" x2="223.52" y2="152.4" width="0.2032" layer="91"/>
+<label x="226.06" y="154.94" size="1.778" layer="95"/>
+<label x="226.06" y="152.4" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="CARD_DETECT" class="0">
 <segment>
@@ -4442,14 +4495,6 @@ SOT-23 package
 <label x="327.66" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$34" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="RESET"/>
-<pinref part="RESET" gate="G$1" pin="S1"/>
-<wire x1="233.68" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="162.56" x2="220.98" y2="175.26" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$35" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND_DEBUG"/>
@@ -4537,12 +4582,11 @@ SOT-23 package
 <wire x1="193.04" y1="165.1" x2="200.66" y2="165.1" width="0.1524" layer="91"/>
 <label x="200.66" y="165.1" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="3V3" class="0">
 <segment>
-<pinref part="PWR_PINS" gate="G$1" pin="5"/>
-<wire x1="193.04" y1="162.56" x2="200.66" y2="162.56" width="0.1524" layer="91"/>
-<label x="200.66" y="162.56" size="1.778" layer="95"/>
+<pinref part="U$1" gate="G$1" pin="RESET"/>
+<pinref part="RESET" gate="G$1" pin="S1"/>
+<wire x1="233.68" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="162.56" x2="220.98" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V" class="0">
@@ -4745,6 +4789,36 @@ SOT-23 package
 <pinref part="70" gate="G$1" pin="P$1"/>
 <pinref part="P-8" gate="G$2" pin="VNEG"/>
 <wire x1="91.44" y1="30.48" x2="91.44" y2="27.94" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="VIN" class="0">
+<segment>
+<pinref part="U$2" gate="G$1" pin="P$3"/>
+<wire x1="180.34" y1="38.1" x2="195.58" y2="38.1" width="0.1524" layer="91"/>
+<label x="195.58" y="38.1" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$3" gate="G$1" pin="P$14_VIN"/>
+<wire x1="152.4" y1="20.32" x2="144.78" y2="20.32" width="0.1524" layer="91"/>
+<label x="144.78" y="20.32" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="VIN"/>
+<wire x1="233.68" y1="149.86" x2="228.6" y2="149.86" width="0.1524" layer="91"/>
+<label x="228.6" y="149.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="PWR_PINS" gate="G$1" pin="1"/>
+<wire x1="193.04" y1="152.4" x2="200.66" y2="152.4" width="0.1524" layer="91"/>
+<label x="200.66" y="152.4" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="JOYSTICK" gate="A" pin="2"/>
+<pinref part="JOY_X" gate="G$1" pin="+"/>
+<wire x1="-2.54" y1="198.12" x2="109.22" y2="198.12" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="198.12" x2="109.22" y2="193.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
