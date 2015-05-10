@@ -1073,20 +1073,23 @@ Digikey PN 587-2045-1-ND</description>
 <text x="-2" y="-2" size="0.6096" layer="25" font="vector">&gt;VALUE</text>
 </package>
 <package name="MICROSD">
-<wire x1="13" y1="-15.14" x2="14" y2="-15.14" width="0.127" layer="21"/>
-<wire x1="14" y1="-15.14" x2="14" y2="-0.04" width="0.127" layer="21"/>
-<wire x1="14" y1="-0.04" x2="0" y2="-0.04" width="0.127" layer="21"/>
-<wire x1="0" y1="-0.04" x2="0" y2="-14.44" width="0.127" layer="21"/>
-<wire x1="0" y1="-14.44" x2="1" y2="-14.44" width="0.127" layer="21"/>
+<description>&lt;b&gt;Micro-SD / Transflash card holder with SPI pinout&lt;/b&gt;
+&lt;p&gt;
+For the 3M # 2908-05WB-MG and/or 4UCON #19656&lt;br&gt;
+push-push type (spring-loaded)
+&lt;p&gt;
+Digikey PN 3M5607CT-ND</description>
+<wire x1="14" y1="-12.6" x2="14" y2="-0.04" width="0.127" layer="21"/>
+<wire x1="0" y1="-0.04" x2="0" y2="-11.9" width="0.127" layer="21"/>
 <wire x1="1" y1="-14.44" x2="1.7" y2="-13.54" width="0.127" layer="21" curve="-90"/>
 <wire x1="1.7" y1="-13.54" x2="11.4" y2="-13.54" width="0.127" layer="21"/>
 <wire x1="11.4" y1="-13.54" x2="13" y2="-15.14" width="0.127" layer="21" curve="-90"/>
-<wire x1="0.4" y1="-14.7" x2="1.6" y2="-15.9" width="0.127" layer="21" curve="90"/>
-<wire x1="1.6" y1="-15.9" x2="10.8" y2="-15.9" width="0.127" layer="21"/>
-<wire x1="10.8" y1="-15.9" x2="12.1" y2="-14.8" width="0.127" layer="21" curve="90"/>
-<wire x1="0.4" y1="-15.6" x2="1.6" y2="-16.8" width="0.127" layer="21" curve="90"/>
-<wire x1="1.6" y1="-16.8" x2="10.8" y2="-16.8" width="0.127" layer="21"/>
-<wire x1="10.8" y1="-16.8" x2="12.1" y2="-15.7" width="0.127" layer="21" curve="90"/>
+<wire x1="0.4" y1="-14.7" x2="1.6" y2="-15.9" width="0.127" layer="51" curve="90"/>
+<wire x1="1.6" y1="-15.9" x2="10.8" y2="-15.9" width="0.127" layer="51"/>
+<wire x1="10.8" y1="-15.9" x2="12.1" y2="-14.8" width="0.127" layer="51" curve="90"/>
+<wire x1="0.4" y1="-15.6" x2="1.6" y2="-16.8" width="0.127" layer="51" curve="90"/>
+<wire x1="1.6" y1="-16.8" x2="10.8" y2="-16.8" width="0.127" layer="51"/>
+<wire x1="10.8" y1="-16.8" x2="12.1" y2="-15.7" width="0.127" layer="51" curve="90"/>
 <smd name="MT1" x="0.4" y="-13.54" dx="1.4" dy="1.9" layer="1"/>
 <smd name="MT2" x="13.6" y="-14.44" dx="1.4" dy="1.9" layer="1"/>
 <smd name="CD1" x="2" y="-0.44" dx="1.4" dy="1.8" layer="1" rot="R90"/>
@@ -1100,6 +1103,13 @@ Digikey PN 587-2045-1-ND</description>
 <smd name="2" x="7.9" y="-10.24" dx="0.7" dy="1.5" layer="1"/>
 <smd name="1" x="9" y="-10.64" dx="0.7" dy="1.5" layer="1"/>
 <text x="3.7" y="-3.94" size="1.27" layer="25">&gt;NAME</text>
+<wire x1="0" y1="0" x2="0.635" y2="0" width="0.127" layer="21"/>
+<wire x1="13.97" y1="0" x2="9.525" y2="0" width="0.127" layer="21"/>
+<wire x1="3.175" y1="0" x2="6.35" y2="0" width="0.127" layer="21"/>
+<wire x1="0.635" y1="-12.446" x2="-0.254" y2="-12.446" width="0.127" layer="41"/>
+<wire x1="-0.254" y1="-12.446" x2="-0.254" y2="0.3048" width="0.127" layer="41"/>
+<wire x1="-0.254" y1="0.3048" x2="0.635" y2="0.3048" width="0.127" layer="41"/>
+<wire x1="0.635" y1="0.3048" x2="0.635" y2="-12.446" width="0.127" layer="41"/>
 </package>
 <package name="SO16W">
 <description>&lt;b&gt;SMALL OUTLINE INTEGRATED CIRCUIT&lt;/b&gt;&lt;p&gt;
@@ -3200,6 +3210,57 @@ Digikey PN 563-1091-1-ND</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="miller">
+<packages>
+<package name="STAND-OFF">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447
+Outer keepout is 0.127" radius (0.254" diameter).</description>
+<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
+<circle x="0" y="0" radius="3.2258" width="0.127" layer="39"/>
+<hole x="0" y="0" drill="3.302"/>
+</package>
+<package name="STAND-OFF-TIGHT">
+<description>&lt;b&gt;Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<wire x1="0" y1="1.8542" x2="0" y2="-1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="41" curve="-180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="180"/>
+<wire x1="0" y1="-1.8542" x2="0" y2="1.8542" width="0.2032" layer="42" curve="-180"/>
+<circle x="0" y="0" radius="2.794" width="0.127" layer="39"/>
+<hole x="0" y="0" drill="3.048"/>
+</package>
+</packages>
+<symbols>
+<symbol name="STAND-OFF">
+<circle x="0" y="0" radius="1.27" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="STAND-OFF" prefix="STANDOFF">
+<description>&lt;b&gt;#4 Stand Off&lt;/b&gt;&lt;p&gt;
+This is the mechanical footprint for a #4 phillips button head screw. Use the keepout ring to avoid running the screw head into surrounding components. SKU : PRT-00447</description>
+<gates>
+<gate name="G$1" symbol="STAND-OFF" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="STAND-OFF">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="TIGHT" package="STAND-OFF-TIGHT">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -3227,9 +3288,9 @@ Digikey PN 563-1091-1-ND</description>
 <part name="C72" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
 <part name="C92" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
 <part name="C82" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
-<part name="R_AMP90" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
-<part name="R_AMP80" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
-<part name="R_AMP70" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
+<part name="R_AMP2" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
+<part name="R_AMP1" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
+<part name="R_AMP3" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
 <part name="U$3" library="Felicia_force_logger" deviceset="DC-DC_CONVERTER_DUAL_SUPPLY" device=""/>
 <part name="GND7" library="Felicia_force_logger" deviceset="GND" device=""/>
 <part name="GND8" library="Felicia_force_logger" deviceset="GND" device=""/>
@@ -3349,6 +3410,8 @@ Digikey PN 563-1091-1-ND</description>
 <part name="RC92" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
 <part name="RC82" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
 <part name="RC72" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
+<part name="STANDOFF1" library="miller" deviceset="STAND-OFF" device=""/>
+<part name="STANDOFF2" library="miller" deviceset="STAND-OFF" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -3376,9 +3439,9 @@ Digikey PN 563-1091-1-ND</description>
 <instance part="C72" gate="G$1" x="83.82" y="53.34" rot="R270"/>
 <instance part="C92" gate="G$1" x="66.04" y="139.7" rot="R270"/>
 <instance part="C82" gate="G$1" x="149.86" y="175.26" rot="R270"/>
-<instance part="R_AMP90" gate="G$1" x="22.86" y="154.94" rot="R90"/>
-<instance part="R_AMP80" gate="G$1" x="106.68" y="182.88" rot="R90"/>
-<instance part="R_AMP70" gate="G$1" x="30.48" y="68.58" rot="R90"/>
+<instance part="R_AMP2" gate="G$1" x="22.86" y="154.94" rot="R90"/>
+<instance part="R_AMP1" gate="G$1" x="106.68" y="182.88" rot="R90"/>
+<instance part="R_AMP3" gate="G$1" x="30.48" y="68.58" rot="R90"/>
 <instance part="U$3" gate="G$1" x="170.18" y="15.24"/>
 <instance part="GND7" gate="1" x="147.32" y="7.62"/>
 <instance part="GND8" gate="1" x="223.52" y="149.86"/>
@@ -3500,6 +3563,8 @@ Digikey PN 563-1091-1-ND</description>
 <instance part="RC92" gate="G$1" x="68.58" y="147.32" rot="R180"/>
 <instance part="RC82" gate="G$1" x="152.4" y="180.34" rot="R180"/>
 <instance part="RC72" gate="G$1" x="86.36" y="60.96" rot="R180"/>
+<instance part="STANDOFF1" gate="G$1" x="5.08" y="5.08"/>
+<instance part="STANDOFF2" gate="G$1" x="12.7" y="5.08"/>
 </instances>
 <busses>
 </busses>
@@ -3658,28 +3723,28 @@ Digikey PN 563-1091-1-ND</description>
 <segment>
 <pinref part="JOY_X" gate="G$1" pin="RG@1"/>
 <wire x1="106.68" y1="187.96" x2="109.22" y2="187.96" width="0.1524" layer="91"/>
-<pinref part="R_AMP80" gate="G$1" pin="2"/>
+<pinref part="R_AMP1" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="JOY_X" gate="G$1" pin="RG@2"/>
 <wire x1="106.68" y1="177.8" x2="109.22" y2="177.8" width="0.1524" layer="91"/>
-<pinref part="R_AMP80" gate="G$1" pin="1"/>
+<pinref part="R_AMP1" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$9" class="0">
 <segment>
 <pinref part="BEAM_Z" gate="G$1" pin="RG@1"/>
 <wire x1="30.48" y1="73.66" x2="33.02" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="R_AMP70" gate="G$1" pin="2"/>
+<pinref part="R_AMP3" gate="G$1" pin="2"/>
 </segment>
 </net>
 <net name="N$10" class="0">
 <segment>
 <pinref part="BEAM_Z" gate="G$1" pin="RG@2"/>
 <wire x1="30.48" y1="63.5" x2="33.02" y2="63.5" width="0.1524" layer="91"/>
-<pinref part="R_AMP70" gate="G$1" pin="1"/>
+<pinref part="R_AMP3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="VRAW" class="0">
@@ -3850,14 +3915,14 @@ Digikey PN 563-1091-1-ND</description>
 <net name="N$2" class="0">
 <segment>
 <pinref part="JOY_Y" gate="G$1" pin="RG@1"/>
-<pinref part="R_AMP90" gate="G$1" pin="2"/>
+<pinref part="R_AMP2" gate="G$1" pin="2"/>
 <wire x1="22.86" y1="160.02" x2="25.4" y2="160.02" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$7" class="0">
 <segment>
 <pinref part="JOY_Y" gate="G$1" pin="RG@2"/>
-<pinref part="R_AMP90" gate="G$1" pin="1"/>
+<pinref part="R_AMP2" gate="G$1" pin="1"/>
 <wire x1="22.86" y1="149.86" x2="25.4" y2="149.86" width="0.1524" layer="91"/>
 </segment>
 </net>
