@@ -3528,14 +3528,6 @@ Digikey PN 563-1091-1-ND</description>
 <wire x1="60.96" y1="162.56" x2="60.96" y2="160.02" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="GND_2"/>
-<pinref part="GND8" gate="1" pin="GND"/>
-<wire x1="223.52" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="GND_1"/>
-<wire x1="233.68" y1="154.94" x2="223.52" y2="154.94" width="0.2032" layer="91"/>
-<wire x1="223.52" y1="154.94" x2="223.52" y2="152.4" width="0.2032" layer="91"/>
-</segment>
-<segment>
 <pinref part="U$11" gate="G$1" pin="GND"/>
 <pinref part="GND18" gate="G$1" pin="GND"/>
 <wire x1="287.02" y1="60.96" x2="274.32" y2="60.96" width="0.1524" layer="91"/>
@@ -3674,11 +3666,6 @@ Digikey PN 563-1091-1-ND</description>
 </segment>
 </net>
 <net name="VRAW" class="0">
-<segment>
-<pinref part="PWR_PINS" gate="G$1" pin="1"/>
-<wire x1="193.04" y1="152.4" x2="200.66" y2="152.4" width="0.1524" layer="91"/>
-<label x="200.66" y="152.4" size="1.778" layer="95"/>
-</segment>
 <segment>
 <pinref part="U$28" gate="G$1" pin="PWR"/>
 <pinref part="U$2" gate="G$1" pin="P$2"/>
@@ -3836,21 +3823,13 @@ Digikey PN 563-1091-1-ND</description>
 <label x="218.44" y="142.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$18" class="0">
-<segment>
-<wire x1="-2.54" y1="200.66" x2="109.22" y2="200.66" width="0.1524" layer="91"/>
-<pinref part="JOYSTICK" gate="A" pin="1"/>
-<pinref part="JOY_X" gate="G$1" pin="+"/>
-<wire x1="109.22" y1="200.66" x2="109.22" y2="193.04" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$19" class="0">
 <segment>
-<wire x1="101.6" y1="198.12" x2="-2.54" y2="198.12" width="0.1524" layer="91"/>
-<pinref part="JOYSTICK" gate="A" pin="2"/>
-<wire x1="101.6" y1="198.12" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
+<wire x1="101.6" y1="200.66" x2="101.6" y2="172.72" width="0.1524" layer="91"/>
 <pinref part="JOY_X" gate="G$1" pin="-"/>
 <wire x1="101.6" y1="172.72" x2="109.22" y2="172.72" width="0.1524" layer="91"/>
+<pinref part="JOYSTICK" gate="A" pin="1"/>
+<wire x1="-2.54" y1="200.66" x2="101.6" y2="200.66" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -3914,19 +3893,19 @@ Digikey PN 563-1091-1-ND</description>
 <net name="N$23" class="0">
 <segment>
 <wire x1="-2.54" y1="195.58" x2="15.24" y2="195.58" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="195.58" x2="15.24" y2="165.1" width="0.1524" layer="91"/>
-<pinref part="JOY_Y" gate="G$1" pin="+"/>
-<wire x1="15.24" y1="165.1" x2="25.4" y2="165.1" width="0.1524" layer="91"/>
+<wire x1="15.24" y1="195.58" x2="15.24" y2="144.78" width="0.1524" layer="91"/>
 <pinref part="JOYSTICK" gate="A" pin="3"/>
+<pinref part="JOY_Y" gate="G$1" pin="-"/>
+<wire x1="15.24" y1="144.78" x2="25.4" y2="144.78" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$24" class="0">
 <segment>
-<wire x1="-2.54" y1="193.04" x2="12.7" y2="193.04" width="0.1524" layer="91"/>
-<wire x1="12.7" y1="193.04" x2="12.7" y2="144.78" width="0.1524" layer="91"/>
-<pinref part="JOY_Y" gate="G$1" pin="-"/>
-<wire x1="12.7" y1="144.78" x2="25.4" y2="144.78" width="0.1524" layer="91"/>
+<wire x1="-2.54" y1="193.04" x2="20.32" y2="193.04" width="0.1524" layer="91"/>
 <pinref part="JOYSTICK" gate="A" pin="4"/>
+<wire x1="20.32" y1="193.04" x2="20.32" y2="165.1" width="0.1524" layer="91"/>
+<pinref part="JOY_Y" gate="G$1" pin="+"/>
+<wire x1="20.32" y1="165.1" x2="25.4" y2="165.1" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="A5" class="0">
@@ -4108,11 +4087,6 @@ Digikey PN 563-1091-1-ND</description>
 <label x="127" y="99.06" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="ANALOG7_HEADER" gate="G$1" pin="P$3"/>
-<wire x1="195.58" y1="134.62" x2="198.12" y2="134.62" width="0.1524" layer="91"/>
-<label x="195.58" y="134.62" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="I2C_HEADER" gate="G$1" pin="1"/>
 <wire x1="320.04" y1="167.64" x2="309.88" y2="167.64" width="0.1524" layer="91"/>
 <label x="307.34" y="167.64" size="1.778" layer="95"/>
@@ -4121,6 +4095,16 @@ Digikey PN 563-1091-1-ND</description>
 <pinref part="2H" gate="G$1" pin="C"/>
 <pinref part="+3V2" gate="G$1" pin="+3V3"/>
 <wire x1="104.14" y1="66.04" x2="104.14" y2="58.42" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="ANALOG7_HEADER" gate="G$1" pin="P$3"/>
+<wire x1="195.58" y1="134.62" x2="198.12" y2="134.62" width="0.1524" layer="91"/>
+<label x="195.58" y="134.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="PWR_PINS" gate="G$1" pin="5"/>
+<wire x1="193.04" y1="162.56" x2="200.66" y2="162.56" width="0.1524" layer="91"/>
+<label x="200.66" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$26" class="0">
@@ -4375,6 +4359,16 @@ Digikey PN 563-1091-1-ND</description>
 <wire x1="220.98" y1="15.24" x2="228.6" y2="15.24" width="0.1524" layer="91"/>
 <junction x="220.98" y="15.24"/>
 </segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="GND_2"/>
+<pinref part="GND8" gate="1" pin="GND"/>
+<wire x1="223.52" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
+<pinref part="U$1" gate="G$1" pin="GND_1"/>
+<wire x1="233.68" y1="154.94" x2="223.52" y2="154.94" width="0.2032" layer="91"/>
+<wire x1="223.52" y1="154.94" x2="223.52" y2="152.4" width="0.2032" layer="91"/>
+<label x="226.06" y="154.94" size="1.778" layer="95"/>
+<label x="226.06" y="152.4" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="CARD_DETECT" class="0">
 <segment>
@@ -4501,14 +4495,6 @@ Digikey PN 563-1091-1-ND</description>
 <label x="327.66" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$34" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="RESET"/>
-<pinref part="RESET" gate="G$1" pin="S1"/>
-<wire x1="233.68" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="162.56" x2="220.98" y2="175.26" width="0.1524" layer="91"/>
-</segment>
-</net>
 <net name="N$35" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND_DEBUG"/>
@@ -4596,12 +4582,11 @@ Digikey PN 563-1091-1-ND</description>
 <wire x1="193.04" y1="165.1" x2="200.66" y2="165.1" width="0.1524" layer="91"/>
 <label x="200.66" y="165.1" size="1.778" layer="95"/>
 </segment>
-</net>
-<net name="3V3" class="0">
 <segment>
-<pinref part="PWR_PINS" gate="G$1" pin="5"/>
-<wire x1="193.04" y1="162.56" x2="200.66" y2="162.56" width="0.1524" layer="91"/>
-<label x="200.66" y="162.56" size="1.778" layer="95"/>
+<pinref part="U$1" gate="G$1" pin="RESET"/>
+<pinref part="RESET" gate="G$1" pin="S1"/>
+<wire x1="233.68" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
+<wire x1="220.98" y1="162.56" x2="220.98" y2="175.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V" class="0">
@@ -4821,6 +4806,19 @@ Digikey PN 563-1091-1-ND</description>
 <pinref part="U$1" gate="G$1" pin="VIN"/>
 <wire x1="233.68" y1="149.86" x2="228.6" y2="149.86" width="0.1524" layer="91"/>
 <label x="228.6" y="149.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="PWR_PINS" gate="G$1" pin="1"/>
+<wire x1="193.04" y1="152.4" x2="200.66" y2="152.4" width="0.1524" layer="91"/>
+<label x="200.66" y="152.4" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$1" class="0">
+<segment>
+<pinref part="JOYSTICK" gate="A" pin="2"/>
+<pinref part="JOY_X" gate="G$1" pin="+"/>
+<wire x1="-2.54" y1="198.12" x2="109.22" y2="198.12" width="0.1524" layer="91"/>
+<wire x1="109.22" y1="198.12" x2="109.22" y2="193.04" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>

@@ -3248,8 +3248,8 @@ Digikey PN 563-1091-1-ND</description>
 <part name="BEAM" library="Felicia_force_logger" deviceset="PINHD-1X4" device="" value="PINHD-1X4"/>
 <part name="P-9" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
-<part name="C+" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
-<part name="C-" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
+<part name="C15" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
+<part name="C14" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
 <part name="IND+" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
 <part name="IND-" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
 <part name="U$11" library="Felicia_force_logger" deviceset="MICROSD" device=""/>
@@ -3394,8 +3394,8 @@ Digikey PN 563-1091-1-ND</description>
 <instance part="BEAM" gate="G$1" x="10.16" y="68.58"/>
 <instance part="P-9" gate="G$2" x="15.24" y="50.8"/>
 <instance part="P+9" gate="1" x="20.32" y="50.8" rot="R180"/>
-<instance part="C+" gate="G$1" x="215.9" y="20.32" rot="R180"/>
-<instance part="C-" gate="G$1" x="220.98" y="12.7" rot="R180"/>
+<instance part="C15" gate="G$1" x="215.9" y="20.32" rot="R180"/>
+<instance part="C14" gate="G$1" x="220.98" y="12.7" rot="R180"/>
 <instance part="IND+" gate="G$1" x="200.66" y="22.86"/>
 <instance part="IND-" gate="G$1" x="213.36" y="7.62"/>
 <instance part="U$11" gate="G$1" x="327.66" y="81.28"/>
@@ -3693,7 +3693,7 @@ Digikey PN 563-1091-1-ND</description>
 <wire x1="15.24" y1="66.04" x2="15.24" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C-" gate="G$1" pin="1"/>
+<pinref part="C14" gate="G$1" pin="1"/>
 <pinref part="IND-" gate="G$1" pin="1"/>
 <pinref part="P-5" gate="G$2" pin="VNEG"/>
 <wire x1="220.98" y1="7.62" x2="223.52" y2="7.62" width="0.1524" layer="91"/>
@@ -3717,7 +3717,7 @@ Digikey PN 563-1091-1-ND</description>
 <pinref part="IND+" gate="G$1" pin="1"/>
 <wire x1="208.28" y1="22.86" x2="215.9" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="P+1" gate="1" pin="+5V"/>
-<pinref part="C+" gate="G$1" pin="2"/>
+<pinref part="C15" gate="G$1" pin="2"/>
 <wire x1="215.9" y1="22.86" x2="218.44" y2="22.86" width="0.1524" layer="91"/>
 <junction x="215.9" y="22.86"/>
 </segment>
@@ -4230,9 +4230,9 @@ Digikey PN 563-1091-1-ND</description>
 </segment>
 <segment>
 <pinref part="U$3" gate="G$1" pin="P$9_0V"/>
-<pinref part="C+" gate="G$1" pin="1"/>
+<pinref part="C15" gate="G$1" pin="1"/>
 <wire x1="187.96" y1="15.24" x2="215.9" y2="15.24" width="0.1524" layer="91"/>
-<pinref part="C-" gate="G$1" pin="2"/>
+<pinref part="C14" gate="G$1" pin="2"/>
 <wire x1="215.9" y1="15.24" x2="220.98" y2="15.24" width="0.1524" layer="91"/>
 <junction x="215.9" y="15.24"/>
 <pinref part="GND9" gate="1" pin="GND"/>

@@ -4118,13 +4118,15 @@ Digikey PN 563-1091-1-ND</description>
 <label x="200.66" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$26" class="0">
+<net name="VBAT" class="0">
 <segment>
 <pinref part="IC6" gate="G$1" pin="VBAT"/>
-<wire x1="228.6" y1="73.66" x2="251.46" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="73.66" x2="248.92" y2="73.66" width="0.1524" layer="91"/>
 <pinref part="U$12" gate="G$1" pin="VBAT"/>
-<wire x1="251.46" y1="73.66" x2="264.16" y2="73.66" width="0.1524" layer="91"/>
-<junction x="251.46" y="73.66"/>
+<label x="236.22" y="76.2" size="1.778" layer="95" rot="R180"/>
+<pinref part="U$12" gate="G$1" pin="P$1"/>
+<wire x1="248.92" y1="73.66" x2="251.46" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="251.46" y1="73.66" x2="251.46" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$30" class="0">
