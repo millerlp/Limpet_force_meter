@@ -729,21 +729,6 @@ Digikey PN 3386P-104LF-ND for example</description>
 <text x="-5.08" y="5.08" size="1.27" layer="25">&gt;NAME</text>
 <text x="-5.08" y="-6.35" size="1.27" layer="27">&gt;VALUE</text>
 </package>
-<package name="0603">
-<wire x1="-1.473" y1="0.983" x2="1.473" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="1.473" y1="0.983" x2="1.473" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="1.473" y1="-0.983" x2="-1.473" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-1.473" y1="-0.983" x2="-1.473" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="-0.356" y1="0.432" x2="0.356" y2="0.432" width="0.1016" layer="51"/>
-<wire x1="-0.356" y1="-0.419" x2="0.356" y2="-0.419" width="0.1016" layer="51"/>
-<smd name="1" x="-0.85" y="0" dx="1.1" dy="1" layer="1"/>
-<smd name="2" x="0.85" y="0" dx="1.1" dy="1" layer="1"/>
-<text x="-0.889" y="0.762" size="1.27" layer="25" font="vector">&gt;NAME</text>
-<text x="-0.889" y="-2.032" size="1.27" layer="27" font="vector">&gt;VALUE</text>
-<rectangle x1="-0.8382" y1="-0.4699" x2="-0.3381" y2="0.4801" layer="51"/>
-<rectangle x1="0.3302" y1="-0.4699" x2="0.8303" y2="0.4801" layer="51"/>
-<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
-</package>
 <package name="CAP-PTH-SMALL">
 <wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.2032" layer="21"/>
 <pad name="1" x="0" y="0" drill="0.7"/>
@@ -776,12 +761,17 @@ chip</description>
 <rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
 </package>
 <package name="0805">
+<description>Capacitor, 0805</description>
 <wire x1="-0.3" y1="0.6" x2="0.3" y2="0.6" width="0.1524" layer="21"/>
 <wire x1="-0.3" y1="-0.6" x2="0.3" y2="-0.6" width="0.1524" layer="21"/>
 <smd name="1" x="-0.9" y="0" dx="0.8" dy="1.2" layer="1"/>
 <smd name="2" x="0.9" y="0" dx="0.8" dy="1.2" layer="1"/>
 <text x="-2.6" y="1" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.2" y="-2.2" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-1.524" y1="0.889" x2="1.524" y2="0.889" width="0.127" layer="39"/>
+<wire x1="1.524" y1="0.889" x2="1.524" y2="-0.889" width="0.127" layer="39"/>
+<wire x1="1.524" y1="-0.889" x2="-1.524" y2="-0.889" width="0.127" layer="39"/>
+<wire x1="-1.524" y1="-0.889" x2="-1.524" y2="0.889" width="0.127" layer="39"/>
 </package>
 <package name="R0805">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
@@ -1656,6 +1646,22 @@ chip</description>
 <rectangle x1="0.4318" y1="-0.4318" x2="0.8382" y2="0.4318" layer="51"/>
 <rectangle x1="-0.8382" y1="-0.4318" x2="-0.4318" y2="0.4318" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.4001" x2="0.1999" y2="0.4001" layer="35"/>
+</package>
+<package name="0603">
+<description>Capacitor, 0805</description>
+<wire x1="-1.4986" y1="0.6604" x2="1.4986" y2="0.6604" width="0.0508" layer="39"/>
+<wire x1="1.4986" y1="0.6604" x2="1.4986" y2="-0.6604" width="0.0508" layer="39"/>
+<wire x1="1.4986" y1="-0.6604" x2="-1.4986" y2="-0.6604" width="0.0508" layer="39"/>
+<wire x1="-1.4986" y1="-0.6604" x2="-1.4986" y2="0.6604" width="0.0508" layer="39"/>
+<wire x1="-0.356" y1="0.432" x2="0.356" y2="0.432" width="0.1016" layer="51"/>
+<wire x1="-0.356" y1="-0.419" x2="0.356" y2="-0.419" width="0.1016" layer="51"/>
+<smd name="1" x="-0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<smd name="2" x="0.85" y="0" dx="1.1" dy="1" layer="1"/>
+<text x="-0.889" y="0.762" size="1.27" layer="25" font="vector">&gt;NAME</text>
+<text x="-0.889" y="-2.032" size="1.27" layer="27" font="vector">&gt;VALUE</text>
+<rectangle x1="-0.8382" y1="-0.4699" x2="-0.3381" y2="0.4801" layer="51"/>
+<rectangle x1="0.3302" y1="-0.4699" x2="0.8303" y2="0.4801" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
 </package>
 </packages>
 <symbols>
@@ -3248,8 +3254,8 @@ Digikey PN 563-1091-1-ND</description>
 <part name="BEAM" library="Felicia_force_logger" deviceset="PINHD-1X4" device="" value="PINHD-1X4"/>
 <part name="P-9" library="Felicia_force_logger" deviceset="VNEG" device=""/>
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
-<part name="C+" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
-<part name="C-" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
+<part name="C15" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
+<part name="C14" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
 <part name="IND+" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
 <part name="IND-" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
 <part name="U$11" library="Felicia_force_logger" deviceset="MICROSD" device=""/>
@@ -3394,8 +3400,8 @@ Digikey PN 563-1091-1-ND</description>
 <instance part="BEAM" gate="G$1" x="10.16" y="68.58"/>
 <instance part="P-9" gate="G$2" x="15.24" y="50.8"/>
 <instance part="P+9" gate="1" x="20.32" y="50.8" rot="R180"/>
-<instance part="C+" gate="G$1" x="215.9" y="20.32" rot="R180"/>
-<instance part="C-" gate="G$1" x="220.98" y="12.7" rot="R180"/>
+<instance part="C15" gate="G$1" x="215.9" y="20.32" rot="R180"/>
+<instance part="C14" gate="G$1" x="220.98" y="12.7" rot="R180"/>
 <instance part="IND+" gate="G$1" x="200.66" y="22.86"/>
 <instance part="IND-" gate="G$1" x="213.36" y="7.62"/>
 <instance part="U$11" gate="G$1" x="327.66" y="81.28"/>
@@ -3693,7 +3699,7 @@ Digikey PN 563-1091-1-ND</description>
 <wire x1="15.24" y1="66.04" x2="15.24" y2="53.34" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="C-" gate="G$1" pin="1"/>
+<pinref part="C14" gate="G$1" pin="1"/>
 <pinref part="IND-" gate="G$1" pin="1"/>
 <pinref part="P-5" gate="G$2" pin="VNEG"/>
 <wire x1="220.98" y1="7.62" x2="223.52" y2="7.62" width="0.1524" layer="91"/>
@@ -3717,7 +3723,7 @@ Digikey PN 563-1091-1-ND</description>
 <pinref part="IND+" gate="G$1" pin="1"/>
 <wire x1="208.28" y1="22.86" x2="215.9" y2="22.86" width="0.1524" layer="91"/>
 <pinref part="P+1" gate="1" pin="+5V"/>
-<pinref part="C+" gate="G$1" pin="2"/>
+<pinref part="C15" gate="G$1" pin="2"/>
 <wire x1="215.9" y1="22.86" x2="218.44" y2="22.86" width="0.1524" layer="91"/>
 <junction x="215.9" y="22.86"/>
 </segment>
@@ -4112,13 +4118,15 @@ Digikey PN 563-1091-1-ND</description>
 <label x="200.66" y="162.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$26" class="0">
+<net name="VBAT" class="0">
 <segment>
 <pinref part="IC6" gate="G$1" pin="VBAT"/>
-<wire x1="228.6" y1="73.66" x2="251.46" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="228.6" y1="73.66" x2="248.92" y2="73.66" width="0.1524" layer="91"/>
 <pinref part="U$12" gate="G$1" pin="VBAT"/>
-<wire x1="251.46" y1="73.66" x2="264.16" y2="73.66" width="0.1524" layer="91"/>
-<junction x="251.46" y="73.66"/>
+<label x="236.22" y="76.2" size="1.778" layer="95" rot="R180"/>
+<pinref part="U$12" gate="G$1" pin="P$1"/>
+<wire x1="248.92" y1="73.66" x2="251.46" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="251.46" y1="73.66" x2="251.46" y2="76.2" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$30" class="0">
@@ -4230,9 +4238,9 @@ Digikey PN 563-1091-1-ND</description>
 </segment>
 <segment>
 <pinref part="U$3" gate="G$1" pin="P$9_0V"/>
-<pinref part="C+" gate="G$1" pin="1"/>
+<pinref part="C15" gate="G$1" pin="1"/>
 <wire x1="187.96" y1="15.24" x2="215.9" y2="15.24" width="0.1524" layer="91"/>
-<pinref part="C-" gate="G$1" pin="2"/>
+<pinref part="C14" gate="G$1" pin="2"/>
 <wire x1="215.9" y1="15.24" x2="220.98" y2="15.24" width="0.1524" layer="91"/>
 <junction x="215.9" y="15.24"/>
 <pinref part="GND9" gate="1" pin="GND"/>
