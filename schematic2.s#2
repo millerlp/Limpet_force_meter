@@ -791,18 +791,16 @@ chip</description>
 <package name="R0805">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
 chip</description>
-<wire x1="-0.41" y1="0.635" x2="0.41" y2="0.635" width="0.1524" layer="51"/>
-<wire x1="-0.41" y1="-0.635" x2="0.41" y2="-0.635" width="0.1524" layer="51"/>
-<wire x1="-1.778" y1="0.983" x2="1.778" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="1.778" y1="0.983" x2="1.778" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="1.778" y1="-0.983" x2="-1.778" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-1.778" y1="-0.983" x2="-1.778" y2="0.983" width="0.0508" layer="39"/>
+<wire x1="-0.254" y1="0.635" x2="0.254" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-0.254" y1="-0.635" x2="0.254" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-1.778" y1="0.9144" x2="1.778" y2="0.9144" width="0.0508" layer="39"/>
+<wire x1="1.778" y1="0.9144" x2="1.778" y2="-0.9144" width="0.0508" layer="39"/>
+<wire x1="1.778" y1="-0.9144" x2="-1.778" y2="-0.9144" width="0.0508" layer="39"/>
+<wire x1="-1.778" y1="-0.9144" x2="-1.778" y2="0.9144" width="0.0508" layer="39"/>
 <smd name="1" x="-1" y="0" dx="1.1" dy="1.4" layer="1"/>
 <smd name="2" x="1" y="0" dx="1.1" dy="1.4" layer="1"/>
 <text x="-0.762" y="1.016" size="1.27" layer="25">&gt;NAME</text>
 <text x="-0.762" y="-2.286" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="0.4064" y1="-0.6985" x2="1.0564" y2="0.7015" layer="21"/>
-<rectangle x1="-1.0668" y1="-0.6985" x2="-0.4168" y2="0.7015" layer="21"/>
 <rectangle x1="-0.1999" y1="-0.5001" x2="0.1999" y2="0.5001" layer="35"/>
 </package>
 <package name="R1005">
@@ -1136,9 +1134,9 @@ push-push type (spring-loaded)
 Digikey PN 3M5607CT-ND</description>
 <wire x1="14" y1="-12.6" x2="14" y2="-0.04" width="0.127" layer="21"/>
 <wire x1="0" y1="-0.04" x2="0" y2="-11.9" width="0.127" layer="21"/>
-<wire x1="1" y1="-14.44" x2="1.7" y2="-13.54" width="0.127" layer="21" curve="-90"/>
-<wire x1="1.7" y1="-13.54" x2="11.4" y2="-13.54" width="0.127" layer="21"/>
-<wire x1="11.4" y1="-13.54" x2="13" y2="-15.14" width="0.127" layer="21" curve="-90"/>
+<wire x1="1.27" y1="-14.44" x2="2.032" y2="-13.54" width="0.127" layer="21" curve="-90"/>
+<wire x1="2.032" y1="-13.54" x2="10.922" y2="-13.54" width="0.127" layer="21"/>
+<wire x1="10.922" y1="-13.54" x2="12.446" y2="-15.14" width="0.127" layer="21" curve="-90"/>
 <wire x1="0.4" y1="-14.7" x2="1.6" y2="-15.9" width="0.127" layer="51" curve="90"/>
 <wire x1="1.6" y1="-15.9" x2="10.8" y2="-15.9" width="0.127" layer="51"/>
 <wire x1="10.8" y1="-15.9" x2="12.1" y2="-14.8" width="0.127" layer="51" curve="90"/>
@@ -3557,9 +3555,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <part name="C72" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
 <part name="C92" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
 <part name="C82" library="Felicia_force_logger" deviceset="CAP" device="0805" value="3.3nF"/>
-<part name="R_AMP2" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
-<part name="R_AMP1" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
-<part name="R_AMP3" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10K"/>
+<part name="R_AMP2" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10KΩ"/>
+<part name="R_AMP1" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10KΩ"/>
+<part name="R_AMP3" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10KΩ"/>
 <part name="U$3" library="Felicia_force_logger" deviceset="DC-DC_CONVERTER_DUAL_SUPPLY" device=""/>
 <part name="GND7" library="Felicia_force_logger" deviceset="GND" device=""/>
 <part name="GND8" library="Felicia_force_logger" deviceset="GND" device=""/>
@@ -3586,8 +3584,8 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <part name="P+9" library="supply1" deviceset="+5V" device=""/>
 <part name="C15" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
 <part name="C14" library="Felicia_force_logger" deviceset="CAP" device="0805" value="4.7uF"/>
-<part name="IND+" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
-<part name="IND-" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10uH"/>
+<part name="IND+" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10µH"/>
+<part name="IND-" library="Felicia_force_logger" deviceset="INDUCTOR" device="0805_TY" value="10µH"/>
 <part name="U$11" library="Felicia_force_logger" deviceset="MICROSD" device=""/>
 <part name="IC6" library="Felicia_force_logger" deviceset="DS3231" device="/SO"/>
 <part name="U$12" library="Felicia_force_logger" deviceset="CR1220_BATTERY_HOLDER" device="SMD"/>
@@ -3619,8 +3617,8 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <part name="GND16" library="Felicia_force_logger" deviceset="DGND" device=""/>
 <part name="GND17" library="Felicia_force_logger" deviceset="DGND" device=""/>
 <part name="GND18" library="Felicia_force_logger" deviceset="DGND" device=""/>
-<part name="R10" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="100k ohm"/>
-<part name="R11" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="100k ohm"/>
+<part name="R10" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="100kΩ"/>
+<part name="R11" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="100kΩ"/>
 <part name="+3V8" library="supply1" deviceset="+3V3" device=""/>
 <part name="C6" library="Felicia_force_logger" deviceset="CAP" device="0805" value="0.1µF"/>
 <part name="C7" library="Felicia_force_logger" deviceset="CAP" device="0805" value="0.1µF"/>
@@ -3674,9 +3672,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <part name="GND36" library="Felicia_force_logger" deviceset="GND" device=""/>
 <part name="GND37" library="Felicia_force_logger" deviceset="GND" device=""/>
 <part name="GND22" library="Felicia_force_logger" deviceset="GND" device=""/>
-<part name="RC92" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
-<part name="RC82" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
-<part name="RC72" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33k ohm"/>
+<part name="RC92" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33kΩ"/>
+<part name="RC82" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33kΩ"/>
+<part name="RC72" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="33kΩ"/>
 <part name="STANDOFF1" library="miller" deviceset="STAND-OFF" device=""/>
 <part name="STANDOFF2" library="miller" deviceset="STAND-OFF" device=""/>
 <part name="I2C_HEADER" library="Felicia_force_logger" deviceset="PINHD-1X6" device="LOCK"/>

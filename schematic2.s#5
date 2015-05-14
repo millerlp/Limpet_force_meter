@@ -148,8 +148,8 @@ Matches Uno R3 footprint, but adds Due SPI 2x3 header, debug wire 4-pin header, 
 <wire x1="-1.41" y1="13.14" x2="-1.41" y2="4.14" width="0.254" layer="51"/>
 <wire x1="-6.61" y1="43.84" x2="8.89" y2="43.84" width="0.254" layer="51"/>
 <wire x1="-6.61" y1="31.64" x2="8.89" y2="31.64" width="0.254" layer="51"/>
-<wire x1="-1.41" y1="13.14" x2="8.79" y2="13.14" width="0.254" layer="51"/>
-<wire x1="-1.41" y1="4.14" x2="8.79" y2="4.14" width="0.254" layer="51"/>
+<wire x1="-1.41" y1="13.14" x2="11.965" y2="13.14" width="0.254" layer="51"/>
+<wire x1="-1.41" y1="4.14" x2="11.965" y2="4.14" width="0.254" layer="51"/>
 <wire x1="64.77" y1="52.07" x2="64.77" y2="49.53" width="0.127" layer="51"/>
 <wire x1="62.23" y1="31.115" x2="62.865" y2="31.75" width="0.254" layer="51"/>
 <wire x1="62.865" y1="31.75" x2="66.675" y2="31.75" width="0.254" layer="51"/>
@@ -598,7 +598,11 @@ Matches Uno R3 footprint, but adds Due SPI 2x3 header, debug wire 4-pin header, 
 <wire x1="66.675" y1="1.27" x2="65.405" y2="1.27" width="0.127" layer="21"/>
 <wire x1="69.215" y1="1.27" x2="67.945" y2="1.27" width="0.127" layer="21"/>
 <wire x1="0" y1="0" x2="0" y2="53.34" width="0.254" layer="51"/>
-<wire x1="8.89" y1="4.14" x2="8.89" y2="13.14" width="0.127" layer="51"/>
+<wire x1="12.065" y1="4.14" x2="12.065" y2="13.14" width="0.254" layer="51"/>
+<circle x="15.24" y="50.8" radius="1.6002" width="0.127" layer="51"/>
+<circle x="13.97" y="2.54" radius="1.6002" width="0.127" layer="51"/>
+<circle x="66.04" y="35.56" radius="1.6002" width="0.127" layer="51"/>
+<circle x="66.04" y="6.35" radius="1.6002" width="0.127" layer="51"/>
 </package>
 <package name="SO8">
 <description>&lt;b&gt;8-Lead Small Outline IC&lt;/b&gt; (SO-8)&lt;p&gt;
@@ -3632,7 +3636,7 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <part name="R15" library="Felicia_force_logger" deviceset="RESISTOR_SMD" device="R0805" value="10k ohm"/>
 <part name="+3V9" library="supply1" deviceset="+3V3" device=""/>
 <part name="INPUT" library="Felicia_force_logger" deviceset="PUSHBUTTON_DPST_SMD" device=""/>
-<part name="RESET" library="Felicia_force_logger" deviceset="PUSHBUTTON_DPST_SMD" device=""/>
+<part name="RESET" library="Felicia_force_logger" deviceset="PUSHBUTTON_DPST_SMD" device="" value="PUSHBUTTON"/>
 <part name="GND25" library="Felicia_force_logger" deviceset="GND" device=""/>
 <part name="DEBUG" library="Felicia_force_logger" deviceset="PINHD-1X4" device="LOCK"/>
 <part name="U$28" library="Felicia_force_logger" deviceset="POWER_JACK_2,1MM" device=""/>
@@ -3780,8 +3784,8 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <instance part="R15" gate="G$1" x="294.64" y="175.26" rot="R90"/>
 <instance part="+3V9" gate="G$1" x="284.48" y="187.96"/>
 <instance part="INPUT" gate="G$1" x="289.56" y="137.16"/>
-<instance part="RESET" gate="G$1" x="215.9" y="195.58"/>
-<instance part="GND25" gate="1" x="205.74" y="193.04"/>
+<instance part="RESET" gate="G$1" x="215.9" y="175.26"/>
+<instance part="GND25" gate="1" x="228.6" y="172.72"/>
 <instance part="DEBUG" gate="G$1" x="251.46" y="195.58" rot="R90"/>
 <instance part="U$28" gate="G$1" x="144.78" y="33.02"/>
 <instance part="U$29" gate="G$1" x="236.22" y="7.62"/>
@@ -4542,12 +4546,6 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <label x="248.92" y="106.68" size="1.778" layer="95" rot="R90"/>
 </segment>
 <segment>
-<pinref part="RESET" gate="G$1" pin="P1"/>
-<pinref part="GND25" gate="1" pin="GND"/>
-<wire x1="210.82" y1="195.58" x2="205.74" y2="195.58" width="0.1524" layer="91"/>
-<label x="203.2" y="195.58" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U$1" gate="G$1" pin="GND1"/>
 <wire x1="269.24" y1="162.56" x2="276.86" y2="162.56" width="0.1524" layer="91"/>
 <label x="271.78" y="162.56" size="1.778" layer="95"/>
@@ -4617,6 +4615,11 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="INPUT" gate="G$1" pin="S1"/>
 <wire x1="294.64" y1="137.16" x2="302.26" y2="137.16" width="0.1524" layer="91"/>
 <pinref part="GND22" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="RESET" gate="G$1" pin="S1"/>
+<wire x1="220.98" y1="175.26" x2="228.6" y2="175.26" width="0.1524" layer="91"/>
+<pinref part="GND25" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="CARD_DETECT" class="0">
@@ -4826,9 +4829,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="RESET"/>
-<pinref part="RESET" gate="G$1" pin="S1"/>
-<wire x1="233.68" y1="162.56" x2="220.98" y2="162.56" width="0.1524" layer="91"/>
-<wire x1="220.98" y1="162.56" x2="220.98" y2="195.58" width="0.1524" layer="91"/>
+<wire x1="233.68" y1="162.56" x2="210.82" y2="162.56" width="0.1524" layer="91"/>
+<pinref part="RESET" gate="G$1" pin="P1"/>
+<wire x1="210.82" y1="175.26" x2="210.82" y2="162.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="5V" class="0">

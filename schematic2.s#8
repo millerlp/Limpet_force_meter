@@ -3708,7 +3708,7 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <instance part="R_AMP3" gate="G$1" x="30.48" y="68.58" rot="R90"/>
 <instance part="U$3" gate="G$1" x="170.18" y="15.24"/>
 <instance part="GND7" gate="1" x="147.32" y="7.62"/>
-<instance part="GND8" gate="1" x="223.52" y="149.86"/>
+<instance part="GND8" gate="1" x="223.52" y="147.066"/>
 <instance part="P-2" gate="G$2" x="33.02" y="129.54"/>
 <instance part="P-3" gate="G$2" x="40.64" y="43.18"/>
 <instance part="GND9" gate="1" x="228.6" y="12.7"/>
@@ -4130,10 +4130,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <segment>
 <pinref part="AMP" gate="A" pin="OUT"/>
 <wire x1="160.02" y1="175.26" x2="160.02" y2="180.34" width="0.1524" layer="91"/>
-<wire x1="160.02" y1="180.34" x2="160.02" y2="198.12" width="0.1524" layer="91"/>
-<wire x1="160.02" y1="198.12" x2="170.18" y2="198.12" width="0.1524" layer="91"/>
-<junction x="160.02" y="198.12"/>
+<wire x1="160.02" y1="198.12" x2="162.56" y2="198.12" width="0.1524" layer="91"/>
 <pinref part="0L" gate="G$1" pin="C"/>
+<wire x1="162.56" y1="198.12" x2="170.18" y2="198.12" width="0.1524" layer="91"/>
 <wire x1="182.88" y1="185.42" x2="193.04" y2="185.42" width="0.1524" layer="91"/>
 <junction x="182.88" y="185.42"/>
 <pinref part="0H" gate="G$1" pin="A"/>
@@ -4147,6 +4146,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="RC82" gate="G$1" pin="1"/>
 <wire x1="160.02" y1="180.34" x2="157.48" y2="180.34" width="0.1524" layer="91"/>
 <junction x="160.02" y="180.34"/>
+<wire x1="160.02" y1="180.34" x2="162.56" y2="180.34" width="0.1524" layer="91"/>
+<wire x1="162.56" y1="180.34" x2="162.56" y2="198.12" width="0.1524" layer="91"/>
+<junction x="162.56" y="198.12"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="A0"/>
@@ -4185,8 +4187,8 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <net name="N$21" class="0">
 <segment>
 <pinref part="AMP" gate="B" pin="-IN"/>
-<wire x1="53.34" y1="154.94" x2="60.96" y2="154.94" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="154.94" x2="60.96" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="154.94" x2="58.42" y2="154.94" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="154.94" x2="60.96" y2="154.94" width="0.1524" layer="91"/>
 <pinref part="C92" gate="G$1" pin="2"/>
 <wire x1="60.96" y1="147.32" x2="60.96" y2="139.7" width="0.1524" layer="91"/>
 <wire x1="60.96" y1="139.7" x2="63.5" y2="139.7" width="0.1524" layer="91"/>
@@ -4194,17 +4196,19 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="RC92" gate="G$1" pin="2"/>
 <wire x1="60.96" y1="147.32" x2="63.5" y2="147.32" width="0.1524" layer="91"/>
 <junction x="60.96" y="147.32"/>
+<wire x1="60.96" y1="147.32" x2="58.42" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="147.32" x2="58.42" y2="154.94" width="0.1524" layer="91"/>
+<junction x="58.42" y="154.94"/>
 </segment>
 </net>
 <net name="A1" class="0">
 <segment>
 <pinref part="AMP" gate="B" pin="OUT"/>
-<wire x1="76.2" y1="157.48" x2="76.2" y2="147.32" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="147.32" x2="73.66" y2="147.32" width="0.1524" layer="91"/>
 <pinref part="C92" gate="G$1" pin="1"/>
 <wire x1="71.12" y1="139.7" x2="73.66" y2="139.7" width="0.1524" layer="91"/>
 <wire x1="73.66" y1="139.7" x2="73.66" y2="147.32" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="157.48" x2="81.28" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="157.48" x2="78.74" y2="157.48" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="157.48" x2="81.28" y2="157.48" width="0.1524" layer="91"/>
 <wire x1="81.28" y1="157.48" x2="88.9" y2="157.48" width="0.1524" layer="91"/>
 <pinref part="1H" gate="G$1" pin="A"/>
 <junction x="81.28" y="157.48"/>
@@ -4214,6 +4218,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <label x="91.44" y="157.48" size="1.778" layer="95"/>
 <pinref part="RC92" gate="G$1" pin="1"/>
 <junction x="73.66" y="147.32"/>
+<wire x1="73.66" y1="147.32" x2="78.74" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="147.32" x2="78.74" y2="157.48" width="0.1524" layer="91"/>
+<junction x="78.74" y="157.48"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="A1"/>
@@ -4275,8 +4282,8 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <net name="N$25" class="0">
 <segment>
 <pinref part="AMP" gate="C" pin="-IN"/>
-<wire x1="68.58" y1="68.58" x2="78.74" y2="68.58" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="68.58" x2="78.74" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="68.58" y1="68.58" x2="76.2" y2="68.58" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="68.58" x2="78.74" y2="68.58" width="0.1524" layer="91"/>
 <pinref part="C72" gate="G$1" pin="2"/>
 <wire x1="78.74" y1="60.96" x2="78.74" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="78.74" y1="53.34" x2="81.28" y2="53.34" width="0.1524" layer="91"/>
@@ -4284,17 +4291,19 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="RC72" gate="G$1" pin="2"/>
 <wire x1="78.74" y1="60.96" x2="81.28" y2="60.96" width="0.1524" layer="91"/>
 <junction x="78.74" y="60.96"/>
+<wire x1="78.74" y1="60.96" x2="76.2" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="60.96" x2="76.2" y2="68.58" width="0.1524" layer="91"/>
+<junction x="76.2" y="68.58"/>
 </segment>
 </net>
 <net name="A2" class="0">
 <segment>
-<wire x1="91.44" y1="60.96" x2="93.98" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="AMP" gate="C" pin="OUT"/>
-<wire x1="93.98" y1="60.96" x2="93.98" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="C72" gate="G$1" pin="1"/>
 <wire x1="88.9" y1="53.34" x2="91.44" y2="53.34" width="0.1524" layer="91"/>
 <wire x1="91.44" y1="53.34" x2="91.44" y2="60.96" width="0.1524" layer="91"/>
-<wire x1="93.98" y1="71.12" x2="104.14" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="93.98" y1="71.12" x2="96.52" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="71.12" x2="104.14" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="71.12" x2="111.76" y2="71.12" width="0.1524" layer="91"/>
 <wire x1="111.76" y1="71.12" x2="116.84" y2="71.12" width="0.1524" layer="91"/>
 <pinref part="2H" gate="G$1" pin="A"/>
@@ -4304,6 +4313,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <label x="114.3" y="71.12" size="1.778" layer="95"/>
 <pinref part="RC72" gate="G$1" pin="1"/>
 <junction x="91.44" y="60.96"/>
+<wire x1="91.44" y1="60.96" x2="96.52" y2="60.96" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="60.96" x2="96.52" y2="71.12" width="0.1524" layer="91"/>
+<junction x="96.52" y="71.12"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="A2"/>
@@ -4445,7 +4457,9 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <label x="236.22" y="76.2" size="1.778" layer="95" rot="R180"/>
 <pinref part="U$12" gate="G$1" pin="P$1"/>
 <wire x1="248.92" y1="73.66" x2="251.46" y2="73.66" width="0.1524" layer="91"/>
-<wire x1="251.46" y1="73.66" x2="251.46" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="251.46" y1="76.2" x2="248.92" y2="76.2" width="0.1524" layer="91"/>
+<wire x1="248.92" y1="76.2" x2="248.92" y2="73.66" width="0.1524" layer="91"/>
+<junction x="248.92" y="73.66"/>
 </segment>
 </net>
 <net name="N$30" class="0">
@@ -4580,12 +4594,14 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <segment>
 <pinref part="U$1" gate="G$1" pin="GND_2"/>
 <pinref part="GND8" gate="1" pin="GND"/>
-<wire x1="223.52" y1="152.4" x2="233.68" y2="152.4" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="GND_1"/>
 <wire x1="233.68" y1="154.94" x2="223.52" y2="154.94" width="0.2032" layer="91"/>
 <wire x1="223.52" y1="154.94" x2="223.52" y2="152.4" width="0.2032" layer="91"/>
 <label x="226.06" y="154.94" size="1.778" layer="95"/>
 <label x="226.06" y="152.4" size="1.778" layer="95"/>
+<wire x1="223.52" y1="152.4" x2="223.52" y2="149.606" width="0.2032" layer="91"/>
+<wire x1="233.68" y1="152.4" x2="223.52" y2="152.4" width="0.1524" layer="91"/>
+<junction x="223.52" y="152.4"/>
 </segment>
 <segment>
 <pinref part="R12" gate="G$1" pin="2"/>
@@ -4790,13 +4806,6 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="ANALOG7_HEADER" gate="G$1" pin="P$1"/>
 <wire x1="152.4" y1="71.12" x2="154.94" y2="71.12" width="0.1524" layer="91"/>
 <label x="152.4" y="71.12" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="NC" class="0">
-<segment>
-<pinref part="PWR_PINS" gate="G$1" pin="8"/>
-<wire x1="193.04" y1="170.18" x2="200.66" y2="170.18" width="0.1524" layer="91"/>
-<label x="198.12" y="170.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="IOREF" class="0">
@@ -5174,23 +5183,27 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="BEAM_Z" gate="G$1" pin="REF"/>
 <wire x1="45.72" y1="58.42" x2="45.72" y2="33.02" width="0.1524" layer="91"/>
 <pinref part="REF" gate="C" pin="OUT"/>
-<wire x1="45.72" y1="33.02" x2="66.04" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="33.02" x2="66.04" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="66.04" y1="40.64" x2="81.28" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="33.02" x2="63.5" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="33.02" x2="66.04" y2="33.02" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="40.64" x2="81.28" y2="40.64" width="0.1524" layer="91"/>
 <pinref part="REF" gate="C" pin="-IN"/>
 <wire x1="81.28" y1="40.64" x2="81.28" y2="35.56" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="40.64" x2="63.5" y2="33.02" width="0.1524" layer="91"/>
+<junction x="63.5" y="33.02"/>
 </segment>
 </net>
 <net name="REF_JOYX" class="0">
 <segment>
 <pinref part="REF" gate="B" pin="-IN"/>
 <wire x1="63.5" y1="121.92" x2="63.5" y2="127" width="0.1524" layer="91"/>
-<wire x1="63.5" y1="127" x2="48.26" y2="127" width="0.1524" layer="91"/>
+<wire x1="63.5" y1="127" x2="45.72" y2="127" width="0.1524" layer="91"/>
 <pinref part="JOY_Y" gate="G$1" pin="REF"/>
 <wire x1="38.1" y1="144.78" x2="38.1" y2="119.38" width="0.1524" layer="91"/>
 <pinref part="REF" gate="B" pin="OUT"/>
-<wire x1="38.1" y1="119.38" x2="48.26" y2="119.38" width="0.1524" layer="91"/>
-<wire x1="48.26" y1="127" x2="48.26" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="38.1" y1="119.38" x2="45.72" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="119.38" x2="48.26" y2="119.38" width="0.1524" layer="91"/>
+<wire x1="45.72" y1="127" x2="45.72" y2="119.38" width="0.1524" layer="91"/>
+<junction x="45.72" y="119.38"/>
 </segment>
 </net>
 <net name="REF_JOYY" class="0">
@@ -5198,11 +5211,13 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 <pinref part="REF" gate="A" pin="-IN"/>
 <wire x1="144.78" y1="167.64" x2="144.78" y2="149.86" width="0.1524" layer="91"/>
 <pinref part="REF" gate="A" pin="OUT"/>
-<wire x1="129.54" y1="147.32" x2="129.54" y2="167.64" width="0.1524" layer="91"/>
 <pinref part="JOY_X" gate="G$1" pin="REF"/>
 <wire x1="121.92" y1="172.72" x2="121.92" y2="147.32" width="0.1524" layer="91"/>
-<wire x1="121.92" y1="147.32" x2="129.54" y2="147.32" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="167.64" x2="144.78" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="121.92" y1="147.32" x2="127" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="127" y1="147.32" x2="129.54" y2="147.32" width="0.1524" layer="91"/>
+<wire x1="127" y1="167.64" x2="144.78" y2="167.64" width="0.1524" layer="91"/>
+<wire x1="127" y1="167.64" x2="127" y2="147.32" width="0.1524" layer="91"/>
+<junction x="127" y="147.32"/>
 </segment>
 </net>
 <net name="I2C_RES" class="0">
@@ -5225,6 +5240,108 @@ TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="102,1,60.96,162.56,GND,AGND,,,,"/>
+<approved hash="102,1,144.78,208.28,GND,AGND,,,,"/>
+<approved hash="102,1,78.74,76.2,GND,AGND,,,,"/>
+<approved hash="102,1,223.52,7.62,VNEG,-5V,,,,"/>
+<approved hash="102,1,5.08,175.26,VNEG,-5V,,,,"/>
+<approved hash="102,1,15.24,53.34,VNEG,-5V,,,,"/>
+<approved hash="102,1,309.88,68.58,VSS,DGND,,,,"/>
+<approved hash="102,1,309.88,71.12,VDD,+3V3,,,,"/>
+<approved hash="102,1,309.88,60.96,GND,DGND,,,,"/>
+<approved hash="102,1,309.88,63.5,GND1,DGND,,,,"/>
+<approved hash="102,1,116.84,33.02,GND,AGND,,,,"/>
+<approved hash="102,1,111.76,58.42,GND,AGND,,,,"/>
+<approved hash="102,1,93.98,119.38,GND,AGND,,,,"/>
+<approved hash="102,1,88.9,147.32,GND,AGND,,,,"/>
+<approved hash="102,1,167.64,149.86,GND,AGND,,,,"/>
+<approved hash="102,1,182.88,200.66,GND,AGND,,,,"/>
+<approved hash="102,1,269.24,68.58,GND,DGND,,,,"/>
+<approved hash="102,1,241.3,71.12,GND,DGND,,,,"/>
+<approved hash="102,1,297.18,58.42,GND,DGND,,,,"/>
+<approved hash="102,1,205.74,40.64,GND,AGND,,,,"/>
+<approved hash="102,1,231.14,40.64,GND,DGND,,,,"/>
+<approved hash="102,1,137.16,129.54,GND,AGND,,,,"/>
+<approved hash="102,1,152.4,187.96,GND,AGND,,,,"/>
+<approved hash="102,1,40.64,180.34,GND,AGND,,,,"/>
+<approved hash="102,1,22.86,127,GND,AGND,,,,"/>
+<approved hash="102,1,50.8,93.98,GND,AGND,,,,"/>
+<approved hash="102,1,30.48,40.64,GND,AGND,,,,"/>
+<approved hash="102,1,106.68,154.94,GND,AGND,,,,"/>
+<approved hash="102,1,121.92,208.28,GND,AGND,,,,"/>
+<approved hash="102,1,162.56,218.44,GND,AGND,,,,"/>
+<approved hash="102,1,139.7,170.18,GND,AGND,,,,"/>
+<approved hash="201,1,139.7,170.18,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,162.56,218.44,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,121.92,208.28,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,106.68,154.94,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,30.48,40.64,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,50.8,93.98,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,22.86,127,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,40.64,180.34,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,152.4,187.96,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,137.16,129.54,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,231.14,40.64,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,205.74,40.64,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,297.18,58.42,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,241.3,71.12,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,269.24,68.58,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,182.88,200.66,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,167.64,149.86,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,88.9,147.32,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,93.98,119.38,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,111.76,58.42,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,116.84,33.02,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,309.88,60.96,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,78.74,76.2,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,144.78,208.28,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,60.96,162.56,GND,AGND\, GND\, DGND,,,,"/>
+<approved hash="201,1,15.24,53.34,VNEG,VNEG\, -5V,,,,"/>
+<approved hash="201,1,5.08,175.26,VNEG,VNEG\, -5V,,,,"/>
+<approved hash="201,1,223.52,7.62,VNEG,VNEG\, -5V,,,,"/>
+<approved hash="104,1,116.84,167.64,JOY_X,-V,VNEG,,,"/>
+<approved hash="104,1,116.84,198.12,JOY_X,+V,+5V,,,"/>
+<approved hash="104,1,33.02,139.7,JOY_Y,-V,VNEG,,,"/>
+<approved hash="104,1,33.02,170.18,JOY_Y,+V,+5V,,,"/>
+<approved hash="104,1,40.64,53.34,BEAM_Z,-V,VNEG,,,"/>
+<approved hash="104,1,40.64,83.82,BEAM_Z,+V,+5V,,,"/>
+<approved hash="114,1,136.651,147.383,REF,D,-IN,,,"/>
+<approved hash="114,1,136.651,147.383,REF,D,+IN,,,"/>
+<approved hash="104,1,137.16,154.94,REFP,V+,+5V,,,"/>
+<approved hash="104,1,137.16,139.7,REFP,V-,AGND,,,"/>
+<approved hash="114,1,152.909,198.056,AMP,D,-IN,,,"/>
+<approved hash="114,1,152.909,198.056,AMP,D,+IN,,,"/>
+<approved hash="104,1,152.4,205.74,AMPP,V+,+5V,,,"/>
+<approved hash="104,1,152.4,190.5,AMPP,V-,AGND,,,"/>
+<approved hash="104,1,152.4,20.32,U$3,P$14_VIN,VIN,,,"/>
+<approved hash="104,1,152.4,10.16,U$3,P$1_-VIN,GND,,,"/>
+<approved hash="104,1,187.96,20.32,U$3,P$8_VOUT,N$29,,,"/>
+<approved hash="104,1,187.96,10.16,U$3,P$10_-VOUT,N$28,,,"/>
+<approved hash="104,1,187.96,15.24,U$3,P$9_0V,GND,,,"/>
+<approved hash="104,1,198.12,76.2,IC6,VCC,+3V3,,,"/>
+<approved hash="104,1,228.6,71.12,IC6,GND,DGND,,,"/>
+<approved hash="103,1,198.12,68.58,IC6,NC,DGND,,,"/>
+<approved hash="103,1,198.12,66.04,IC6,NC1,DGND,,,"/>
+<approved hash="103,1,198.12,63.5,IC6,NC2,DGND,,,"/>
+<approved hash="103,1,198.12,60.96,IC6,NC3,DGND,,,"/>
+<approved hash="103,1,228.6,60.96,IC6,NC4,DGND,,,"/>
+<approved hash="103,1,228.6,63.5,IC6,NC5,DGND,,,"/>
+<approved hash="103,1,228.6,66.04,IC6,NC6,DGND,,,"/>
+<approved hash="103,1,228.6,68.58,IC6,NC7,DGND,,,"/>
+<approved hash="104,1,264.16,73.66,U$12,GND,DGND,,,"/>
+<approved hash="104,1,134.62,99.06,TMP102,VCC,+3V3,,,"/>
+<approved hash="104,1,154.94,96.52,TMP102,GND,AGND,,,"/>
+<approved hash="113,1,-0.0742219,195.711,JOYSTICK,,,,,"/>
+<approved hash="113,1,218.44,45.0431,SJ1,,,,,"/>
+<approved hash="113,1,248.789,193.323,DEBUG,,,,,"/>
+<approved hash="113,1,348.724,132.211,DPINS_1ST,,,,,"/>
+<approved hash="113,1,189.756,129.409,ANALOG_IN,,,,,"/>
+<approved hash="113,1,190.574,159.889,PWR_PINS,,,,,"/>
+<approved hash="113,1,143.622,75.4168,ANALOG7_HEADER,,,,,"/>
+<approved hash="113,1,316.523,162.691,I2C_HEADER,,,,,"/>
+<approved hash="115,1,227.33,162.56,RESET,,,,,"/>
+</errors>
 </schematic>
 </drawing>
 <compatibility>

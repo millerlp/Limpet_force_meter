@@ -11,7 +11,7 @@
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="16" fill="1" visible="yes" active="yes"/>
@@ -143,7 +143,78 @@
 <text x="28.321" y="33.655" size="1.016" layer="25" font="vector" ratio="13" rot="R90">SWDIO</text>
 <text x="30.988" y="33.401" size="1.016" layer="25" font="vector" ratio="13" rot="R90">SWCLK</text>
 <text x="33.528" y="35.179" size="1.016" layer="25" font="vector" ratio="13" rot="R90">GND</text>
-<text x="75.057" y="45.72" size="1.016" layer="25" font="vector" ratio="13">BEAM Vref ADJ</text>
+<text x="74.168" y="49.149" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">BEAM
+Vref ADJ</text>
+<text x="76.327" y="4.953" size="0.8128" layer="25" font="vector" ratio="13" align="center">2nd STAGE 
+AMP</text>
+<text x="72.263" y="1.397" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">TMP102</text>
+<text x="83.439" y="31.75" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">JOY Y
+Vref ADJ</text>
+<text x="83.566" y="13.716" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">JOY X
+ Vref ADJ</text>
+<text x="76.454" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" align="center">A7</text>
+<text x="79.121" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" align="center">GND</text>
+<text x="81.661" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" align="center">3V3</text>
+<text x="9.525" y="21.463" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">microSD</text>
+<text x="25.781" y="17.018" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">MEV1D1205DC</text>
+<text x="24.13" y="17.399" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">DC-DC 5V Dual Supply</text>
+<text x="25.4" y="1.143" size="1.27" layer="25" font="vector" ratio="13" align="center">ON</text>
+<text x="18.288" y="1.016" size="1.27" layer="25" font="vector" ratio="13" align="center">OFF</text>
+<text x="56.515" y="23.241" size="1.27" layer="25" font="vector" ratio="13" align="center">3.6V Zener Diodes</text>
+<text x="59.817" y="30.607" size="1.016" layer="25" font="vector" ratio="13" align="center">MISO</text>
+<text x="60.198" y="28.067" size="1.016" layer="25" font="vector" ratio="13" align="center">SCK</text>
+<text x="59.309" y="25.527" size="1.016" layer="25" font="vector" ratio="13" align="center">RESET</text>
+<text x="68.834" y="30.353" size="1.016" layer="25" font="vector" ratio="13" align="center">5V</text>
+<text x="69.342" y="28.829" size="1.016" layer="25" font="vector" ratio="13" align="center">MOSI</text>
+<text x="100.965" y="40.513" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-5V</text>
+<text x="100.965" y="43.561" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+5V</text>
+<text x="97.282" y="46.482" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="100.711" y="48.133" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">output</text>
+<text x="100.965" y="22.352" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+5V</text>
+<text x="100.965" y="25.4" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-5V</text>
+<text x="100.838" y="13.335" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Xout</text>
+<text x="100.838" y="18.542" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Yout</text>
+<text x="97.282" y="20.066" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+</text>
+<text x="97.409" y="17.526" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="97.536" y="14.732" size="1.016" layer="25" font="vector" ratio="13" align="center">+</text>
+<text x="97.536" y="12.319" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="97.282" y="49.276" size="1.016" layer="25" font="vector" ratio="13" align="center">+</text>
+<text x="50.927" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">5</text>
+<text x="53.34" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">4</text>
+<text x="55.88" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">3</text>
+<text x="58.42" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">2</text>
+<text x="60.833" y="52.959" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">1</text>
+<text x="63.5" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">0</text>
+<text x="48.26" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">6</text>
+<text x="45.847" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">7</text>
+<text x="41.91" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">8</text>
+<text x="39.37" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">9</text>
+<text x="17.272" y="48.387" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">SCL1</text>
+<text x="26.797" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="29.337" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">13</text>
+<text x="31.877" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">12</text>
+<text x="34.417" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">11</text>
+<text x="36.957" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">10</text>
+<text x="39.497" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">9</text>
+<text x="42.037" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">8</text>
+<text x="38.1" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">5V</text>
+<text x="35.687" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">3V3</text>
+<text x="40.767" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="43.307" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="45.847" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">Vin</text>
+<text x="47.625" y="2.794" size="0.8128" layer="25" font="vector" ratio="13" rot="R270" align="center">Vin</text>
+<text x="50.927" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A0</text>
+<text x="53.467" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A1</text>
+<text x="56.007" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A2</text>
+<text x="58.039" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A3</text>
+<text x="66.04" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A6</text>
+<text x="68.707" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A7</text>
+<text x="64.135" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A5</text>
+<text x="60.96" y="45.72" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">TX0</text>
+<text x="63.5" y="45.72" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">RX0</text>
+<text x="45.72" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">7</text>
+<text x="48.26" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">6</text>
+<text x="50.927" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">5</text>
 </plain>
 <libraries>
 <library name="Felicia_force_logger">
@@ -397,18 +468,16 @@ wide body 7.5 mm/JEDEC MS-013AA</description>
 <package name="R0805">
 <description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
 chip</description>
-<wire x1="-0.41" y1="0.635" x2="0.41" y2="0.635" width="0.1524" layer="51"/>
-<wire x1="-0.41" y1="-0.635" x2="0.41" y2="-0.635" width="0.1524" layer="51"/>
-<wire x1="-1.778" y1="0.983" x2="1.778" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="1.778" y1="0.983" x2="1.778" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="1.778" y1="-0.983" x2="-1.778" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-1.778" y1="-0.983" x2="-1.778" y2="0.983" width="0.0508" layer="39"/>
+<wire x1="-0.254" y1="0.635" x2="0.254" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-0.254" y1="-0.635" x2="0.254" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-1.778" y1="0.9144" x2="1.778" y2="0.9144" width="0.0508" layer="39"/>
+<wire x1="1.778" y1="0.9144" x2="1.778" y2="-0.9144" width="0.0508" layer="39"/>
+<wire x1="1.778" y1="-0.9144" x2="-1.778" y2="-0.9144" width="0.0508" layer="39"/>
+<wire x1="-1.778" y1="-0.9144" x2="-1.778" y2="0.9144" width="0.0508" layer="39"/>
 <smd name="1" x="-1" y="0" dx="1.1" dy="1.4" layer="1"/>
 <smd name="2" x="1" y="0" dx="1.1" dy="1.4" layer="1"/>
 <text x="-0.762" y="1.016" size="1.27" layer="25">&gt;NAME</text>
 <text x="-0.762" y="-2.286" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="0.4064" y1="-0.6985" x2="1.0564" y2="0.7015" layer="21"/>
-<rectangle x1="-1.0668" y1="-0.6985" x2="-0.4168" y2="0.7015" layer="21"/>
 <rectangle x1="-0.1999" y1="-0.5001" x2="0.1999" y2="0.5001" layer="35"/>
 </package>
 <package name="PAD-JUMPER-3-3OF3_NC_BY_TRACE_YES_SILK_FULL_BOX">
@@ -942,9 +1011,9 @@ push-push type (spring-loaded)
 Digikey PN 3M5607CT-ND</description>
 <wire x1="14" y1="-12.6" x2="14" y2="-0.04" width="0.127" layer="21"/>
 <wire x1="0" y1="-0.04" x2="0" y2="-11.9" width="0.127" layer="21"/>
-<wire x1="1" y1="-14.44" x2="1.7" y2="-13.54" width="0.127" layer="21" curve="-90"/>
-<wire x1="1.7" y1="-13.54" x2="11.4" y2="-13.54" width="0.127" layer="21"/>
-<wire x1="11.4" y1="-13.54" x2="13" y2="-15.14" width="0.127" layer="21" curve="-90"/>
+<wire x1="1.27" y1="-14.44" x2="2.032" y2="-13.54" width="0.127" layer="21" curve="-90"/>
+<wire x1="2.032" y1="-13.54" x2="10.922" y2="-13.54" width="0.127" layer="21"/>
+<wire x1="10.922" y1="-13.54" x2="12.446" y2="-15.14" width="0.127" layer="21" curve="-90"/>
 <wire x1="0.4" y1="-14.7" x2="1.6" y2="-15.9" width="0.127" layer="51" curve="90"/>
 <wire x1="1.6" y1="-15.9" x2="10.8" y2="-15.9" width="0.127" layer="51"/>
 <wire x1="10.8" y1="-15.9" x2="12.1" y2="-14.8" width="0.127" layer="51" curve="90"/>
@@ -1126,11 +1195,8 @@ Digikey PN: 811-2272-ND</description>
 <wire x1="9.8552" y1="-5.0038" x2="9.8552" y2="5.0038" width="0.127" layer="51"/>
 <wire x1="9.8552" y1="5.0038" x2="-9.8552" y2="5.0038" width="0.127" layer="51"/>
 </package>
-<package name="1X10-BIG">
-<wire x1="-12.7" y1="1.27" x2="12.7" y2="1.27" width="0.127" layer="21"/>
-<wire x1="12.7" y1="1.27" x2="12.7" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="12.7" y1="-1.27" x2="-12.7" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="-12.7" y1="-1.27" x2="-12.7" y2="1.27" width="0.127" layer="21"/>
+<package name="1X10-CLEANBIG">
+<description>1x10 pin header 0.1" spacing (2.54mm) straight, no silkscreen</description>
 <pad name="1" x="-11.43" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
 <pad name="2" x="-8.89" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
 <pad name="3" x="-6.35" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
@@ -1419,7 +1485,6 @@ Please make sure your boards conform to these design rules.</description>
 </autorouter>
 <elements>
 <element name="TRIMMER" library="Felicia_force_logger" package="R-TRIMMER_67W_TT_ELEC" value="100k ohm" x="89.662" y="31.75" smashed="yes" rot="R180">
-<attribute name="NAME" x="94.615" y="29.083" size="0.8128" layer="25" font="vector" ratio="14" rot="R180"/>
 <attribute name="VALUE" x="92.964" y="33.655" size="0.8128" layer="25" font="vector" ratio="14" rot="R180"/>
 </element>
 <element name="ANALOG7_HEADER" library="Felicia_force_logger" package="1X03" value="" x="78.867" y="2.286" smashed="yes">
@@ -1490,7 +1555,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="MPN" value="AD620AN" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="ALTERA CORPORATION" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="1523782" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="96.52" y="10.922" size="1.27" layer="25" font="vector" ratio="13" rot="R270"/>
+<attribute name="NAME" x="96.647" y="9.144" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
 <attribute name="VALUE" x="92.075" y="2.286" size="1.27" layer="25" font="vector" ratio="13" rot="R90"/>
 </element>
 <element name="JOY_Y" library="Felicia_force_logger" package="DIL08" value="AD620N" x="91.44" y="22.86" smashed="yes" rot="R90">
@@ -1510,12 +1575,11 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="VALUE" x="92.075" y="37.084" size="1.27" layer="25" font="vector" ratio="13" rot="R90"/>
 </element>
 <element name="REF" library="Felicia_force_logger" package="DIL14" value="LM324N" x="75.946" y="34.544" smashed="yes" rot="R90">
-<attribute name="NAME" x="78.994" y="25.273" size="1.27" layer="25" ratio="10" rot="R180"/>
-<attribute name="VALUE" x="76.581" y="27.813" size="1.27" layer="27" ratio="10" rot="R90"/>
+<attribute name="NAME" x="77.851" y="25.4" size="1.27" layer="25" font="vector" ratio="14" rot="R180"/>
+<attribute name="VALUE" x="76.581" y="27.813" size="1.27" layer="25" font="vector" ratio="14" rot="R90"/>
 </element>
 <element name="AMP" library="Felicia_force_logger" package="DIL14" value="LM324N" x="75.946" y="14.986" smashed="yes" rot="R90">
-<attribute name="NAME" x="78.994" y="5.715" size="1.27" layer="25" ratio="10" rot="R180"/>
-<attribute name="VALUE" x="76.581" y="8.255" size="1.27" layer="27" ratio="10" rot="R90"/>
+<attribute name="VALUE" x="76.581" y="8.255" size="1.27" layer="25" font="vector" ratio="14" rot="R90"/>
 </element>
 <element name="IC6" library="Felicia_force_logger" package="SO16W" value="DS3231/SO" x="6.35" y="35.56" smashed="yes">
 <attribute name="VALUE" x="13.081" y="31.115" size="1.016" layer="25" font="vector" ratio="13" rot="R90"/>
@@ -1550,20 +1614,20 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="VALUE" x="81.534" y="25.4" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R$70" library="Felicia_force_logger" package="1X02" value="" x="84.709" y="40.64" smashed="yes" rot="R270">
-<attribute name="NAME" x="84.2518" y="38.1762" size="1.016" layer="25" font="vector" ratio="14" rot="R270"/>
+<attribute name="NAME" x="84.3788" y="38.0492" size="0.8128" layer="25" font="vector" ratio="14" rot="R270"/>
 <attribute name="VALUE" x="81.534" y="43.18" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R_AMP2" library="Felicia_force_logger" package="R0805" value="10K Ω" x="96.139" y="15.875" smashed="yes" rot="R90">
+<element name="R_AMP2" library="Felicia_force_logger" package="R0805" value="10KΩ" x="96.139" y="15.875" smashed="yes" rot="R90">
 <attribute name="NAME" x="95.377" y="13.462" size="0.8128" layer="25" font="vector" ratio="12" rot="R90"/>
-<attribute name="VALUE" x="97.79" y="13.97" size="0.8128" layer="27" font="vector" ratio="12" rot="R90"/>
+<attribute name="VALUE" x="95.885" y="14.097" size="0.8128" layer="27" font="vector" ratio="12" rot="R270"/>
 </element>
-<element name="R10" library="Felicia_force_logger" package="R0805" value="100k ohm" x="20.32" y="25.781" smashed="yes">
-<attribute name="NAME" x="19.558" y="26.797" size="1.27" layer="25"/>
-<attribute name="VALUE" x="19.558" y="23.495" size="1.27" layer="27"/>
+<element name="R10" library="Felicia_force_logger" package="R0805" value="100kΩ" x="20.32" y="25.781" smashed="yes">
+<attribute name="NAME" x="19.304" y="26.67" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="VALUE" x="18.288" y="23.876" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
-<element name="R11" library="Felicia_force_logger" package="R0805" value="100k ohm" x="20.32" y="21.336" smashed="yes">
-<attribute name="NAME" x="19.558" y="22.352" size="1.27" layer="25"/>
-<attribute name="VALUE" x="19.558" y="19.05" size="1.27" layer="27"/>
+<element name="R11" library="Felicia_force_logger" package="R0805" value="100kΩ" x="20.32" y="21.336" smashed="yes">
+<attribute name="NAME" x="19.304" y="22.225" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="VALUE" x="18.161" y="19.431" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="R12" library="Felicia_force_logger" package="R0805" value="100ohm" x="55.88" y="40.64" smashed="yes" rot="R270">
 <attribute name="NAME" x="57.023" y="42.037" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
@@ -1580,8 +1644,8 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="22.987" y="39.497" size="1.016" layer="25" font="vector" ratio="13" rot="R180"/>
 </element>
 <element name="R_AMP1" library="Felicia_force_logger" package="R0805" value="10KΩ" x="98.552" y="2.667" smashed="yes" rot="R90">
-<attribute name="NAME" x="100.584" y="0.889" size="0.8128" layer="25" font="vector" ratio="14" rot="R90"/>
-<attribute name="VALUE" x="98.933" y="4.699" size="0.8128" layer="25" font="vector" ratio="12" rot="R90"/>
+<attribute name="NAME" x="99.314" y="4.699" size="0.8128" layer="25" font="vector" ratio="14" rot="R90"/>
+<attribute name="VALUE" x="100.33" y="4.699" size="0.8128" layer="25" font="vector" ratio="12" rot="R90"/>
 </element>
 <element name="R_AMP3" library="Felicia_force_logger" package="R0805" value="10KΩ" x="96.393" y="33.909" smashed="yes" rot="R90">
 <attribute name="NAME" x="97.536" y="36.195" size="0.8128" layer="25" font="vector" ratio="13" rot="R270"/>
@@ -1591,58 +1655,55 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="32.385" y="29.845" size="0.4064" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="32.385" y="26.67" size="0.4064" layer="28" rot="MR0"/>
 </element>
-<element name="TMP102" library="Felicia_force_logger" package="SOT23" value="LM62" x="72.39" y="3.429" smashed="yes" rot="R270">
-<attribute name="VALUE" x="69.215" y="5.334" size="1.27" layer="27" rot="R270"/>
-</element>
+<element name="TMP102" library="Felicia_force_logger" package="SOT23" value="LM62" x="72.39" y="3.429" smashed="yes" rot="R270"/>
 <element name="U$1" library="Felicia_force_logger" package="DUE_HALF_SHIELD_A7-ANALOG" value="DUE_HALF_SHIELD_A7-ANALOG" x="0" y="0" smashed="yes"/>
-<element name="IND-" library="Felicia_force_logger" package="I_0805" value="10uH" x="38.735" y="19.685" smashed="yes" rot="R270">
-<attribute name="NAME" x="39.735" y="21.685" size="0.6096" layer="25" font="vector" rot="R270"/>
-<attribute name="VALUE" x="36.735" y="21.685" size="0.6096" layer="25" font="vector" rot="R270"/>
+<element name="IND-" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="19.685" smashed="yes" rot="R270">
+<attribute name="NAME" x="39.862" y="21.558" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
+<attribute name="VALUE" x="38.64" y="18.129" size="0.8128" layer="25" font="vector" ratio="13" rot="R270"/>
 </element>
 <element name="U$11" library="Felicia_force_logger" package="MICROSD" value="MICROSD" x="16.51" y="27.94" smashed="yes" rot="R270"/>
 <element name="U$12" library="Felicia_force_logger" package="CR1220_BATTERY_HOLDER_SMD" value="CR1220_BATTERY_HOLDERSMD" x="6.35" y="35.56" smashed="yes" rot="MR270">
 <attribute name="NAME" x="15.24" y="38.1" size="1.27" layer="26" rot="MR270"/>
 </element>
 <element name="5H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="60.96" y="17.78" smashed="yes">
-<attribute name="NAME" x="58.674" y="19.05" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="57.785" y="19.05" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="5L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="64.77" y="20.32" smashed="yes">
-<attribute name="NAME" x="62.484" y="21.59" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="66.294" y="21.59" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="2H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="45.72" y="17.78" smashed="yes">
-<attribute name="NAME" x="43.434" y="19.05" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="42.672" y="19.05" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="2L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="20.32" smashed="yes">
-<attribute name="NAME" x="47.244" y="21.59" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="51.308" y="21.59" size="1.016" layer="25" font="vector" ratio="14"/>
 </element>
 <element name="4H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="60.96" y="12.7" smashed="yes">
-<attribute name="NAME" x="58.674" y="13.97" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="57.785" y="13.97" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="4L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="64.77" y="15.24" smashed="yes">
-<attribute name="NAME" x="62.484" y="16.51" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="66.294" y="16.51" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="1H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="45.72" y="12.7" smashed="yes">
-<attribute name="NAME" x="43.434" y="13.97" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="42.545" y="13.97" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="90" library="miller" package="R-TRIMMER_67W_TT_ELEC" value="100k ohm" x="89.662" y="14.224" smashed="yes" rot="R180">
-<attribute name="NAME" x="94.615" y="11.557" size="0.8128" layer="25" font="vector" ratio="14" rot="R180"/>
+<attribute name="NAME" x="91.694" y="12.827" size="0.8128" layer="25" font="vector" ratio="14" rot="R180"/>
 <attribute name="VALUE" x="92.71" y="16.129" size="0.8128" layer="27" font="vector" ratio="14" rot="R180"/>
 </element>
 <element name="1L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="15.24" smashed="yes">
-<attribute name="NAME" x="47.244" y="16.51" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="51.181" y="16.383" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="3H" library="Felicia_force_logger" package="DO35-7" value="3.6V_DIODE" x="60.96" y="7.62" smashed="yes">
-<attribute name="NAME" x="58.674" y="8.89" size="1.27" layer="25" ratio="10"/>
-<attribute name="VALUE" x="58.674" y="4.953" size="1.27" layer="27" ratio="10"/>
+<attribute name="NAME" x="57.658" y="8.89" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="3L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="64.77" y="10.16" smashed="yes">
-<attribute name="NAME" x="62.484" y="11.43" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="66.548" y="11.43" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="0H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="45.72" y="7.62" smashed="yes">
-<attribute name="NAME" x="43.434" y="8.89" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="42.291" y="8.89" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="0L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="10.16" smashed="yes">
-<attribute name="NAME" x="47.244" y="11.43" size="1.27" layer="25" ratio="10"/>
+<attribute name="NAME" x="51.308" y="11.43" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="INPUT" library="Felicia_force_logger" package="PUSHBUTTON_DPST_SMD" value="PUSHBUTTON_DPST_SMD" x="42.164" y="42.418" smashed="yes" rot="R180">
 <attribute name="NAME" x="44.958" y="38.608" size="1.27" layer="25" font="vector" ratio="13" rot="R180"/>
@@ -1658,15 +1719,15 @@ Please make sure your boards conform to these design rules.</description>
 <element name="U$3" library="Felicia_force_logger" package="DCDC_CONVERTOR-MEV1D" value="DC-DC_CONVERTER_DUAL_SUPPLY" x="31.75" y="16.51" smashed="yes" rot="R90"/>
 <element name="70" library="miller" package="R-TRIMMER_67W_TT_ELEC" value="100k ohm" x="80.645" y="49.53" smashed="yes" rot="R180">
 <attribute name="NAME" x="84.074" y="50.673" size="0.8128" layer="25" font="vector" ratio="14" rot="R270"/>
-<attribute name="VALUE" x="74.676" y="52.832" size="0.8128" layer="27" font="vector" ratio="14" rot="R270"/>
+<attribute name="VALUE" x="77.851" y="46.101" size="0.8128" layer="27" font="vector" ratio="14"/>
 </element>
-<element name="DPINS_2ND" library="Felicia_force_logger" package="1X10-BIG" value="PINHD-1X10" x="30.48" y="48.26" smashed="yes"/>
+<element name="DPINS_2ND" library="Felicia_force_logger" package="1X10-CLEANBIG" value="PINHD-1X10CLEAN" x="30.48" y="48.26" smashed="yes"/>
 <element name="BEAM" library="Felicia_force_logger" package="1X04_LOCK" value="PINHD-1X4" x="99.06" y="45.212" smashed="yes" rot="R270">
-<attribute name="NAME" x="95.6818" y="51.6382" size="1.27" layer="25" font="vector" ratio="12" rot="R270"/>
+<attribute name="NAME" x="95.1738" y="50.3682" size="1.27" layer="25" font="vector" ratio="12" rot="R270"/>
 </element>
-<element name="IND+" library="Felicia_force_logger" package="I_0805" value="10uH" x="38.735" y="23.495" smashed="yes" rot="R270">
-<attribute name="NAME" x="39.735" y="25.495" size="0.6096" layer="25" font="vector" rot="R270"/>
-<attribute name="VALUE" x="36.735" y="25.495" size="0.6096" layer="25" font="vector" rot="R270"/>
+<element name="IND+" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="23.495" smashed="yes" rot="R270">
+<attribute name="NAME" x="39.735" y="25.495" size="1.016" layer="25" font="vector" rot="R270"/>
+<attribute name="VALUE" x="38.259" y="28.162" size="0.8128" layer="25" font="vector" ratio="12" rot="R270"/>
 </element>
 <element name="U$2" library="Felicia_force_logger" package="SWITCH_SMD_RA_SPDT" value="SWITCH_SLIDE_SMD_SPDT" x="21.971" y="2.286" smashed="yes"/>
 <element name="RC92" library="Felicia_force_logger" package="R0805" value="33kΩ" x="82.169" y="21.717" smashed="yes" rot="R270">
@@ -1677,9 +1738,9 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="82.296" y="3.937" size="0.8128" layer="25" font="vector" ratio="14" rot="R90"/>
 <attribute name="VALUE" x="83.439" y="3.937" size="0.8128" layer="25" font="vector" ratio="14" rot="R90"/>
 </element>
-<element name="RC72" library="Felicia_force_logger" package="R0805" value="33k ohm" x="69.596" y="23.368" smashed="yes" rot="R270">
-<attribute name="NAME" x="70.612" y="24.13" size="1.27" layer="25" rot="R270"/>
-<attribute name="VALUE" x="67.31" y="24.13" size="1.27" layer="27" rot="R270"/>
+<element name="RC72" library="Felicia_force_logger" package="R0805" value="33kΩ" x="69.596" y="23.368" smashed="yes" rot="R270">
+<attribute name="NAME" x="68.58" y="28.321" size="0.8128" layer="25" font="vector" ratio="12" rot="R270"/>
+<attribute name="VALUE" x="69.596" y="28.194" size="0.8128" layer="25" font="vector" ratio="13" rot="R270"/>
 </element>
 <element name="STANDOFF1" library="miller" package="STAND-OFF" value="STAND-OFF" x="15.24" y="50.8" smashed="yes"/>
 <element name="STANDOFF2" library="miller" package="STAND-OFF" value="STAND-OFF" x="66.04" y="35.433" smashed="yes"/>
@@ -2920,8 +2981,8 @@ Please make sure your boards conform to these design rules.</description>
 <approved hash="6,1,7810d818efb1346c"/>
 <approved hash="6,1,d155891c859dae2b"/>
 <approved hash="6,1,9629201306839d55"/>
-<approved hash="6,1,c85c4501df5a85e3"/>
 <approved hash="6,1,5c2fc00e0d964653"/>
+<approved hash="6,1,c85c4501df5a85e3"/>
 <approved hash="6,1,485d16faffa87ce2"/>
 <approved hash="6,1,0e2e41fcf56d6752"/>
 <approved hash="6,1,7831d9f7ba60104c"/>
@@ -2948,4 +3009,10 @@ Please make sure your boards conform to these design rules.</description>
 </errors>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>
