@@ -11,7 +11,7 @@
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="16" fill="1" visible="yes" active="yes"/>
@@ -143,7 +143,8 @@
 <text x="28.321" y="33.655" size="1.016" layer="25" font="vector" ratio="13" rot="R90">SWDIO</text>
 <text x="30.988" y="33.401" size="1.016" layer="25" font="vector" ratio="13" rot="R90">SWCLK</text>
 <text x="33.528" y="35.179" size="1.016" layer="25" font="vector" ratio="13" rot="R90">GND</text>
-<text x="75.057" y="45.72" size="1.016" layer="25" font="vector" ratio="13">BEAM Vref ADJ</text>
+<text x="74.168" y="49.149" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">BEAM
+Vref ADJ</text>
 <text x="76.327" y="4.953" size="0.8128" layer="25" font="vector" ratio="13" align="center">2nd STAGE 
 AMP</text>
 <text x="72.263" y="1.397" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">TMP102</text>
@@ -165,6 +166,55 @@ Vref ADJ</text>
 <text x="59.309" y="25.527" size="1.016" layer="25" font="vector" ratio="13" align="center">RESET</text>
 <text x="68.834" y="30.353" size="1.016" layer="25" font="vector" ratio="13" align="center">5V</text>
 <text x="69.342" y="28.829" size="1.016" layer="25" font="vector" ratio="13" align="center">MOSI</text>
+<text x="100.965" y="40.513" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-5V</text>
+<text x="100.965" y="43.561" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+5V</text>
+<text x="97.282" y="46.482" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="100.711" y="48.133" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">output</text>
+<text x="100.965" y="22.352" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+5V</text>
+<text x="100.965" y="25.4" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-5V</text>
+<text x="100.838" y="13.335" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Xout</text>
+<text x="100.838" y="18.542" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Yout</text>
+<text x="97.282" y="20.066" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+</text>
+<text x="97.409" y="17.526" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="97.536" y="14.732" size="1.016" layer="25" font="vector" ratio="13" align="center">+</text>
+<text x="97.536" y="12.319" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
+<text x="97.282" y="49.276" size="1.016" layer="25" font="vector" ratio="13" align="center">+</text>
+<text x="50.927" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">5</text>
+<text x="53.34" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">4</text>
+<text x="55.88" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">3</text>
+<text x="58.42" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">2</text>
+<text x="60.833" y="52.959" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">1</text>
+<text x="63.5" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">0</text>
+<text x="48.26" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">6</text>
+<text x="45.847" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">7</text>
+<text x="41.91" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">8</text>
+<text x="39.37" y="52.832" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">9</text>
+<text x="17.272" y="48.387" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">SCL1</text>
+<text x="26.797" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="29.337" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">13</text>
+<text x="31.877" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">12</text>
+<text x="34.417" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">11</text>
+<text x="36.957" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">10</text>
+<text x="39.497" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">9</text>
+<text x="42.037" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">8</text>
+<text x="38.1" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">5V</text>
+<text x="35.687" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">3V3</text>
+<text x="40.767" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="43.307" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">GND</text>
+<text x="45.847" y="0.635" size="0.8128" layer="25" font="vector" ratio="13" rot="R180" align="center">Vin</text>
+<text x="47.625" y="2.794" size="0.8128" layer="25" font="vector" ratio="13" rot="R270" align="center">Vin</text>
+<text x="50.927" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A0</text>
+<text x="53.467" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A1</text>
+<text x="56.007" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A2</text>
+<text x="58.039" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A3</text>
+<text x="66.04" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A6</text>
+<text x="68.707" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A7</text>
+<text x="64.135" y="6.477" size="0.8128" layer="25" font="vector" ratio="13" align="center">A5</text>
+<text x="60.96" y="45.72" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">TX0</text>
+<text x="63.5" y="45.72" size="0.8128" layer="25" font="vector" ratio="13" rot="R90" align="center">RX0</text>
+<text x="45.72" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">7</text>
+<text x="48.26" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">6</text>
+<text x="50.927" y="46.482" size="0.8128" layer="25" font="vector" ratio="13" align="center">5</text>
 </plain>
 <libraries>
 <library name="Felicia_force_logger">
@@ -1145,11 +1195,8 @@ Digikey PN: 811-2272-ND</description>
 <wire x1="9.8552" y1="-5.0038" x2="9.8552" y2="5.0038" width="0.127" layer="51"/>
 <wire x1="9.8552" y1="5.0038" x2="-9.8552" y2="5.0038" width="0.127" layer="51"/>
 </package>
-<package name="1X10-BIG">
-<wire x1="-12.7" y1="1.27" x2="12.7" y2="1.27" width="0.127" layer="21"/>
-<wire x1="12.7" y1="1.27" x2="12.7" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="12.7" y1="-1.27" x2="-12.7" y2="-1.27" width="0.127" layer="21"/>
-<wire x1="-12.7" y1="-1.27" x2="-12.7" y2="1.27" width="0.127" layer="21"/>
+<package name="1X10-CLEANBIG">
+<description>1x10 pin header 0.1" spacing (2.54mm) straight, no silkscreen</description>
 <pad name="1" x="-11.43" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
 <pad name="2" x="-8.89" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
 <pad name="3" x="-6.35" y="0" drill="1.016" diameter="1.778" shape="octagon" rot="R90"/>
@@ -1508,7 +1555,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="MPN" value="AD620AN" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="ALTERA CORPORATION" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="1523782" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="96.52" y="10.922" size="1.27" layer="25" font="vector" ratio="13" rot="R270"/>
+<attribute name="NAME" x="96.647" y="9.144" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
 <attribute name="VALUE" x="92.075" y="2.286" size="1.27" layer="25" font="vector" ratio="13" rot="R90"/>
 </element>
 <element name="JOY_Y" library="Felicia_force_logger" package="DIL08" value="AD620N" x="91.44" y="22.86" smashed="yes" rot="R90">
@@ -1672,11 +1719,11 @@ Please make sure your boards conform to these design rules.</description>
 <element name="U$3" library="Felicia_force_logger" package="DCDC_CONVERTOR-MEV1D" value="DC-DC_CONVERTER_DUAL_SUPPLY" x="31.75" y="16.51" smashed="yes" rot="R90"/>
 <element name="70" library="miller" package="R-TRIMMER_67W_TT_ELEC" value="100k ohm" x="80.645" y="49.53" smashed="yes" rot="R180">
 <attribute name="NAME" x="84.074" y="50.673" size="0.8128" layer="25" font="vector" ratio="14" rot="R270"/>
-<attribute name="VALUE" x="74.676" y="52.832" size="0.8128" layer="27" font="vector" ratio="14" rot="R270"/>
+<attribute name="VALUE" x="77.851" y="46.101" size="0.8128" layer="27" font="vector" ratio="14"/>
 </element>
-<element name="DPINS_2ND" library="Felicia_force_logger" package="1X10-BIG" value="PINHD-1X10" x="30.48" y="48.26" smashed="yes"/>
+<element name="DPINS_2ND" library="Felicia_force_logger" package="1X10-CLEANBIG" value="PINHD-1X10CLEAN" x="30.48" y="48.26" smashed="yes"/>
 <element name="BEAM" library="Felicia_force_logger" package="1X04_LOCK" value="PINHD-1X4" x="99.06" y="45.212" smashed="yes" rot="R270">
-<attribute name="NAME" x="95.6818" y="51.6382" size="1.27" layer="25" font="vector" ratio="12" rot="R270"/>
+<attribute name="NAME" x="95.1738" y="50.3682" size="1.27" layer="25" font="vector" ratio="12" rot="R270"/>
 </element>
 <element name="IND+" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="23.495" smashed="yes" rot="R270">
 <attribute name="NAME" x="39.735" y="25.495" size="1.016" layer="25" font="vector" rot="R270"/>
