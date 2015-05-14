@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.0.0">
+<eagle version="7.2.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -75,6 +75,7 @@
 <layer number="112" name="tSilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="113" name="IDFDebug" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="116" name="Patch_BOT" color="9" fill="4" visible="yes" active="yes"/>
+<layer number="118" name="Rect_Pads" color="7" fill="1" visible="no" active="no"/>
 <layer number="121" name="_tsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="122" name="_bsilk" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="123" name="tTestmark" color="7" fill="1" visible="yes" active="yes"/>
@@ -118,6 +119,9 @@
 <layer number="222" name="222bmp" color="23" fill="1" visible="no" active="no"/>
 <layer number="223" name="223bmp" color="24" fill="1" visible="no" active="no"/>
 <layer number="224" name="224bmp" color="25" fill="1" visible="no" active="no"/>
+<layer number="231" name="Eagle3D_PG1" color="7" fill="1" visible="no" active="no"/>
+<layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="no" active="no"/>
+<layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="no" active="no"/>
 <layer number="248" name="Housing" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
@@ -711,23 +715,32 @@ Source: http://www.analog.com/UploadedFiles/Data_Sheets/703465986AD8611_2_0.pdf<
 <rectangle x1="2.295" y1="2" x2="2.785" y2="3.1" layer="51"/>
 <rectangle x1="1.025" y1="2" x2="1.515" y2="3.1" layer="51"/>
 </package>
-<package name="R-TRIMMER-BOURNS-3386P">
-<description>&lt;b&gt;Trimmer Potentiometer - Bourns 3386P&lt;/b&gt;&lt;br&gt;
-Digikey PN 3386P-104LF-ND for example</description>
-<wire x1="-4.7625" y1="-4.7625" x2="-4.7625" y2="4.7625" width="0.127" layer="21"/>
-<wire x1="-4.7625" y1="4.7625" x2="4.7625" y2="4.7625" width="0.127" layer="21"/>
-<wire x1="4.7625" y1="4.7625" x2="4.7625" y2="-4.7625" width="0.127" layer="21"/>
-<wire x1="-3.81" y1="-4.7625" x2="-3.81" y2="-4.445" width="0.127" layer="21"/>
-<wire x1="-3.81" y1="-4.445" x2="3.81" y2="-4.445" width="0.127" layer="21"/>
-<wire x1="3.81" y1="-4.445" x2="3.81" y2="-4.7625" width="0.127" layer="21"/>
-<wire x1="-4.7625" y1="-4.7625" x2="-3.81" y2="-4.7625" width="0.127" layer="21"/>
-<wire x1="3.81" y1="-4.7625" x2="4.7625" y2="-4.7625" width="0.127" layer="21"/>
-<circle x="0" y="0.8763" radius="1.5748" width="0.127" layer="51"/>
-<pad name="P$1" x="-2.54" y="0" drill="0.7"/>
-<pad name="P$3" x="2.54" y="0" drill="0.7"/>
-<pad name="P$2-WIPER" x="0" y="-2.54" drill="0.7"/>
-<text x="-5.08" y="5.08" size="1.27" layer="25">&gt;NAME</text>
-<text x="-5.08" y="-6.35" size="1.27" layer="27">&gt;VALUE</text>
+<package name="R-TRIMMER_67W_TT_ELEC">
+<description>TT Electronics series 67W trimmer potentiometer&lt;br&gt;
+Example: TT Elec PN 67WR100KLF,  Digikey PN 987-1086-ND&lt;br&gt;
+0.1" pin spacing</description>
+<pad name="P$1" x="-2.54" y="0" drill="0.54101875" diameter="1.27"/>
+<pad name="P$2" x="0" y="0" drill="0.54101875" diameter="1.27"/>
+<pad name="P$3" x="2.54" y="0" drill="0.54101875" diameter="1.27"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="-4.953" y1="2.54" x2="4.953" y2="2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="2.54" x2="4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="-2.54" x2="-4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="-4.953" y1="-2.54" x2="-4.953" y2="2.54" width="0.127" layer="39"/>
+<circle x="-3.81" y="1.524" radius="0.5388125" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="1.016" x2="-3.81" y2="2.032" width="0.127" layer="21"/>
+<text x="-2.667" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">1</text>
+<text x="-0.127" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">2</text>
+<text x="2.413" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">3</text>
+<text x="-4.953" y="2.667" size="0.8128" layer="25" font="vector" ratio="14">&gt;NAME</text>
+<text x="-5.08" y="-3.556" size="0.8128" layer="27" font="vector" ratio="14">&gt;VALUE</text>
 </package>
 <package name="CAP-PTH-SMALL">
 <wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.2032" layer="21"/>
@@ -1673,6 +1686,33 @@ chip</description>
 <rectangle x1="0.3302" y1="-0.4699" x2="0.8303" y2="0.4801" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
 </package>
+<package name="R-TRIMMER-67Y_TT_ELEC">
+<description>TT Electronics series 67Y trimmer potentiometer&lt;br&gt;
+Example: TT Elec PN 67YR100KLF,  Digikey PN 987-1501-ND&lt;br&gt;
+0.1" pin spacing</description>
+<pad name="P$1" x="-2.54" y="1.27" drill="0.6" diameter="1.27"/>
+<pad name="P$2" x="0" y="-1.27" drill="0.6" diameter="1.27"/>
+<pad name="P$3" x="2.54" y="1.27" drill="0.6" diameter="1.27"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="-4.953" y1="2.54" x2="4.953" y2="2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="2.54" x2="4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="-2.54" x2="-4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="-4.953" y1="-2.54" x2="-4.953" y2="2.54" width="0.127" layer="39"/>
+<text x="-5.08" y="2.667" size="0.8128" layer="25" font="vector" ratio="14">&gt;NAME</text>
+<text x="-5.08" y="-3.683" size="0.8128" layer="27" font="vector" ratio="14">&gt;VALUE</text>
+<circle x="-3.937" y="1.651" radius="0.635" width="0.127" layer="21"/>
+<wire x1="-3.937" y1="1.016" x2="-3.937" y2="2.286" width="0.127" layer="21"/>
+<text x="-3.175" y="0" size="0.6096" layer="51">1</text>
+<text x="1.905" y="0" size="0.6096" layer="51">3</text>
+<text x="-0.635" y="0" size="0.6096" layer="51">2</text>
+</package>
 </packages>
 <symbols>
 <symbol name="DUE_HALF_SHIELD_A7-ANALOG">
@@ -1836,8 +1876,8 @@ Half Shield</text>
 <wire x1="-2.159" y1="-2.032" x2="-3.429" y2="-2.667" width="0.1524" layer="94"/>
 <wire x1="-3.429" y1="-2.667" x2="-3.429" y2="-1.397" width="0.1524" layer="94"/>
 <wire x1="-3.429" y1="-1.397" x2="-2.159" y2="-2.032" width="0.1524" layer="94"/>
-<text x="-2.54" y="5.08" size="1.778" layer="95">&gt;NAME</text>
-<text x="-2.54" y="2.54" size="1.778" layer="96">&gt;VALUE</text>
+<text x="-2.54" y="5.08" size="1.4224" layer="95" font="vector">&gt;NAME</text>
+<text x="-2.54" y="2.54" size="1.4224" layer="96">&gt;VALUE</text>
 <pin name="P$1" x="-7.62" y="0" visible="off" length="short" direction="pas"/>
 <pin name="P$3" x="7.62" y="0" visible="off" length="short" direction="pas" rot="R180"/>
 <pin name="P$2" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
@@ -2397,18 +2437,27 @@ Digikey PN 296-1391-5-ND 14-PDIP</description>
 </device>
 </devices>
 </deviceset>
-<deviceset name="TRIM-POT">
-<description>&lt;b&gt;Trimmer potentiometer&lt;/b&gt;&lt;br&gt;
-Example: &lt;br&gt;
-Digikey PN 3386P-104LF-ND</description>
+<deviceset name="TRIMMER_POTENTIOMETER_TT_ELEC">
+<description>Trimmer potentiometer (variable resistor)&lt;br&gt;
+TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&gt;http://www.bitechnologies.com/pdfs/67.pdf&lt;/a&gt;</description>
 <gates>
 <gate name="G$1" symbol="TRIM-POT" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="R-TRIMMER-BOURNS-3386P">
+<device name="67W" package="R-TRIMMER_67W_TT_ELEC">
 <connects>
 <connect gate="G$1" pin="P$1" pad="P$1"/>
-<connect gate="G$1" pin="P$2" pad="P$2-WIPER"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="67Y" package="R-TRIMMER-67Y_TT_ELEC">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
 <connect gate="G$1" pin="P$3" pad="P$3"/>
 </connects>
 <technologies>
@@ -3233,10 +3282,92 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <circle x="0" y="0" radius="2.794" width="0.127" layer="39"/>
 <hole x="0" y="0" drill="3.048"/>
 </package>
+<package name="R-TRIMMER_67W_TT_ELEC">
+<description>TT Electronics series 67W trimmer potentiometer&lt;br&gt;
+Example: TT Elec PN 67WR100KLF,  Digikey PN 987-1086-ND&lt;br&gt;
+0.1" pin spacing</description>
+<pad name="P$1" x="-2.54" y="0" drill="0.54101875" diameter="1.27"/>
+<pad name="P$2" x="0" y="0" drill="0.54101875" diameter="1.27"/>
+<pad name="P$3" x="2.54" y="0" drill="0.54101875" diameter="1.27"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="-4.953" y1="2.54" x2="4.953" y2="2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="2.54" x2="4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="-2.54" x2="-4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="-4.953" y1="-2.54" x2="-4.953" y2="2.54" width="0.127" layer="39"/>
+<circle x="-3.81" y="1.524" radius="0.5388125" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="1.016" x2="-3.81" y2="2.032" width="0.127" layer="21"/>
+<text x="-2.667" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">1</text>
+<text x="-0.127" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">2</text>
+<text x="2.413" y="1.143" size="0.4064" layer="51" font="vector" ratio="14">3</text>
+<text x="-4.953" y="2.667" size="0.8128" layer="25" font="vector" ratio="14">&gt;NAME</text>
+<text x="-5.08" y="-3.556" size="0.8128" layer="27" font="vector" ratio="14">&gt;VALUE</text>
+</package>
+<package name="R-TRIMMER-67Y_TT_ELEC">
+<description>TT Electronics series 67Y trimmer potentiometer&lt;br&gt;
+Example: TT Elec PN 67YR100KLF,  Digikey PN 987-1501-ND&lt;br&gt;
+0.1" pin spacing</description>
+<pad name="P$1" x="-2.54" y="1.27" drill="0.6" diameter="1.27"/>
+<pad name="P$2" x="0" y="-1.27" drill="0.6" diameter="1.27"/>
+<pad name="P$3" x="2.54" y="1.27" drill="0.6" diameter="1.27"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="51"/>
+<wire x1="-4.7625" y1="2.4765" x2="4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="2.4765" x2="4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="4.7625" y1="-2.4765" x2="-4.7625" y2="-2.4765" width="0.127" layer="21"/>
+<wire x1="-4.7625" y1="-2.4765" x2="-4.7625" y2="2.4765" width="0.127" layer="21"/>
+<wire x1="-4.953" y1="2.54" x2="4.953" y2="2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="2.54" x2="4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="4.953" y1="-2.54" x2="-4.953" y2="-2.54" width="0.127" layer="39"/>
+<wire x1="-4.953" y1="-2.54" x2="-4.953" y2="2.54" width="0.127" layer="39"/>
+<text x="-5.08" y="2.667" size="0.8128" layer="25" font="vector" ratio="14">&gt;NAME</text>
+<text x="-5.08" y="-3.683" size="0.8128" layer="27" font="vector" ratio="14">&gt;VALUE</text>
+<circle x="-3.937" y="1.651" radius="0.635" width="0.127" layer="21"/>
+<wire x1="-3.937" y1="1.016" x2="-3.937" y2="2.286" width="0.127" layer="21"/>
+<text x="-3.175" y="0" size="0.6096" layer="51">1</text>
+<text x="1.905" y="0" size="0.6096" layer="51">3</text>
+<text x="-0.635" y="0" size="0.6096" layer="51">2</text>
+</package>
 </packages>
 <symbols>
 <symbol name="STAND-OFF">
 <circle x="0" y="0" radius="1.27" width="0.254" layer="94"/>
+</symbol>
+<symbol name="TRIM-POT">
+<description>&lt;b&gt;Trimmer potentiometer&lt;/b&gt;</description>
+<wire x1="-5.08" y1="0" x2="-4.572" y2="0" width="0.1524" layer="94"/>
+<wire x1="-4.572" y1="0" x2="-3.81" y2="1.016" width="0.254" layer="94"/>
+<wire x1="-3.81" y1="1.016" x2="-2.54" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-1.27" x2="-1.27" y2="1.016" width="0.254" layer="94"/>
+<wire x1="-1.27" y1="1.016" x2="0" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="0" y1="-1.27" x2="1.27" y2="1.016" width="0.254" layer="94"/>
+<wire x1="1.27" y1="1.016" x2="2.54" y2="-1.27" width="0.254" layer="94"/>
+<wire x1="2.54" y1="-1.27" x2="3.81" y2="1.016" width="0.254" layer="94"/>
+<wire x1="3.81" y1="1.016" x2="4.572" y2="0" width="0.254" layer="94"/>
+<wire x1="4.572" y1="0" x2="5.08" y2="0" width="0.1524" layer="94"/>
+<wire x1="0" y1="-1.27" x2="1.27" y2="-2.54" width="0.2032" layer="94"/>
+<wire x1="-1.27" y1="-2.54" x2="0" y2="-1.27" width="0.2032" layer="94"/>
+<wire x1="1.27" y1="-2.54" x2="-1.27" y2="-2.54" width="0.2032" layer="94"/>
+<wire x1="-4.699" y1="-2.032" x2="-2.159" y2="-2.032" width="0.1524" layer="94"/>
+<wire x1="-2.159" y1="-2.032" x2="-3.429" y2="-2.667" width="0.1524" layer="94"/>
+<wire x1="-3.429" y1="-2.667" x2="-3.429" y2="-1.397" width="0.1524" layer="94"/>
+<wire x1="-3.429" y1="-1.397" x2="-2.159" y2="-2.032" width="0.1524" layer="94"/>
+<text x="-2.54" y="5.08" size="1.4224" layer="95">&gt;NAME</text>
+<text x="-2.54" y="2.54" size="1.4224" layer="96">&gt;VALUE</text>
+<pin name="P$1" x="-7.62" y="0" visible="off" length="short" direction="pas"/>
+<pin name="P$3" x="7.62" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+<pin name="P$2" x="0" y="-5.08" visible="off" length="short" direction="pas" rot="R90"/>
+<text x="-7.62" y="0" size="1.778" layer="97">1</text>
+<text x="7.62" y="0" size="1.778" layer="97">3</text>
+<text x="0" y="-5.08" size="1.778" layer="97">2</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -3253,6 +3384,35 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 </technologies>
 </device>
 <device name="TIGHT" package="STAND-OFF-TIGHT">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="TRIMMER_POTENTIOMETER_TT_ELEC">
+<description>Trimmer potentiometer (variable resistor)&lt;br&gt;
+TT Electronics Series 67 &lt;a href="http://www.bitechnologies.com/pdfs/67.pdf"&gt;http://www.bitechnologies.com/pdfs/67.pdf&lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="TRIM-POT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="67W" package="R-TRIMMER_67W_TT_ELEC">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="67Y" package="R-TRIMMER-67Y_TT_ELEC">
+<connects>
+<connect gate="G$1" pin="P$1" pad="P$1"/>
+<connect gate="G$1" pin="P$2" pad="P$2"/>
+<connect gate="G$1" pin="P$3" pad="P$3"/>
+</connects>
 <technologies>
 <technology name=""/>
 </technologies>
@@ -3276,9 +3436,9 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <part name="JOY_Y" library="Felicia_force_logger" deviceset="AD620" device="N"/>
 <part name="BEAM_Z" library="Felicia_force_logger" deviceset="AD620" device="N"/>
 <part name="REF" library="Felicia_force_logger" deviceset="LM324" device="N"/>
-<part name="90" library="Felicia_force_logger" deviceset="TRIM-POT" device=""/>
-<part name="80" library="Felicia_force_logger" deviceset="TRIM-POT" device=""/>
-<part name="70" library="Felicia_force_logger" deviceset="TRIM-POT" device=""/>
+<part name="90" library="miller" deviceset="TRIMMER_POTENTIOMETER_TT_ELEC" device="67W" value="100k ohm"/>
+<part name="TRIMMER" library="Felicia_force_logger" deviceset="TRIMMER_POTENTIOMETER_TT_ELEC" device="67W" value="100k ohm"/>
+<part name="70" library="miller" deviceset="TRIMMER_POTENTIOMETER_TT_ELEC" device="67W" value="100k ohm"/>
 <part name="AMP" library="Felicia_force_logger" deviceset="LM324" device="N"/>
 <part name="GND4" library="Felicia_force_logger" deviceset="AGND" device=""/>
 <part name="GND35" library="Felicia_force_logger" deviceset="AGND" device=""/>
@@ -3336,7 +3496,7 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <part name="1L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="+3V4" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND13" library="Felicia_force_logger" deviceset="AGND" device=""/>
-<part name="3H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
+<part name="3H" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL" value="3.6V_DIODE"/>
 <part name="3L" library="Felicia_force_logger" deviceset="DIODE_ZENER" device="DO-35_AXIAL"/>
 <part name="+3V5" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND14" library="Felicia_force_logger" deviceset="AGND" device=""/>
@@ -3423,7 +3583,7 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <instance part="REF" gate="B" x="55.88" y="119.38" rot="R180"/>
 <instance part="REF" gate="C" x="73.66" y="33.02" rot="R180"/>
 <instance part="90" gate="G$1" x="73.66" y="106.68" rot="R270"/>
-<instance part="80" gate="G$1" x="154.94" y="134.62" rot="R270"/>
+<instance part="TRIMMER" gate="G$1" x="154.94" y="134.62" rot="R270"/>
 <instance part="70" gate="G$1" x="91.44" y="20.32" rot="R270"/>
 <instance part="AMP" gate="A" x="152.4" y="198.12"/>
 <instance part="AMP" gate="B" x="68.58" y="157.48"/>
@@ -3685,7 +3845,7 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <label x="200.66" y="132.08" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="80" gate="G$1" pin="P$2"/>
+<pinref part="TRIMMER" gate="G$1" pin="P$2"/>
 <pinref part="3L" gate="G$1" pin="C"/>
 <junction x="167.64" y="162.56"/>
 <wire x1="167.64" y1="162.56" x2="175.26" y2="162.56" width="0.1524" layer="91"/>
@@ -3827,7 +3987,7 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <wire x1="73.66" y1="91.44" x2="73.66" y2="99.06" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="80" gate="G$1" pin="P$3"/>
+<pinref part="TRIMMER" gate="G$1" pin="P$3"/>
 <pinref part="P+3" gate="1" pin="+5V"/>
 <wire x1="154.94" y1="116.84" x2="154.94" y2="127" width="0.1524" layer="91"/>
 </segment>
@@ -4232,6 +4392,16 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <wire x1="309.88" y1="81.28" x2="307.34" y2="81.28" width="0.1524" layer="91"/>
 <label x="299.72" y="81.28" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="U$1" gate="G$1" pin="10"/>
+<wire x1="269.24" y1="152.4" x2="276.86" y2="152.4" width="0.1524" layer="91"/>
+<label x="276.86" y="152.4" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="DPINS_2ND" gate="G$1" pin="8"/>
+<wire x1="345.44" y1="160.02" x2="332.74" y2="160.02" width="0.1524" layer="91"/>
+<label x="332.74" y="160.02" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="GND" class="0">
 <segment>
@@ -4629,18 +4799,6 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <label x="332.74" y="157.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="D10" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="10"/>
-<wire x1="269.24" y1="152.4" x2="276.86" y2="152.4" width="0.1524" layer="91"/>
-<label x="276.86" y="152.4" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="DPINS_2ND" gate="G$1" pin="8"/>
-<wire x1="345.44" y1="160.02" x2="332.74" y2="160.02" width="0.1524" layer="91"/>
-<label x="332.74" y="160.02" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="D11" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="11"/>
@@ -4852,7 +5010,7 @@ This is the mechanical footprint for a #4 phillips button head screw. Use the ke
 <wire x1="73.66" y1="116.84" x2="73.66" y2="114.3" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="80" gate="G$1" pin="P$1"/>
+<pinref part="TRIMMER" gate="G$1" pin="P$1"/>
 <pinref part="P-1" gate="G$2" pin="VNEG"/>
 <wire x1="154.94" y1="144.78" x2="154.94" y2="142.24" width="0.1524" layer="91"/>
 </segment>
