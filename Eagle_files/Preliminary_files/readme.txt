@@ -1,0 +1,1 @@
+Felicia's original schematics created in ExpressSch program (from ExpressPCB). 
