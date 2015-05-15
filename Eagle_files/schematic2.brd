@@ -218,9 +218,10 @@ Vref ADJ</text>
 <text x="1.27" y="35.56" size="1.016" layer="26" font="vector" ratio="13" rot="MR270" align="center">CR1220</text>
 <text x="70.104" y="40.132" size="1.016" layer="21" font="vector" ratio="13" rot="R90" align="center">LM324N</text>
 <text x="70.358" y="18.034" size="1.016" layer="21" font="vector" ratio="13" rot="R90" align="center">LM324N</text>
-<text x="37.211" y="35.306" size="1.27" layer="25" font="vector" ratio="13">Limpet force meter Rev A</text>
-<text x="37.211" y="33.528" size="1.016" layer="25" font="vector" ratio="13">Felicia King 2015</text>
-<text x="37.211" y="30.48" size="1.016" layer="25" font="vector" ratio="13">With additional poor design
+<text x="34.671" y="35.179" size="1.27" layer="25" font="vector" ratio="13">Limpet force meter Rev A</text>
+<text x="34.671" y="31.623" size="1.27" layer="25" font="vector" ratio="13">Designed by Felicia King 
+(2015)</text>
+<text x="34.798" y="27.686" size="1.016" layer="25" font="vector" ratio="13">With additional poor design
 choices by Luke Miller</text>
 </plain>
 <libraries>
@@ -1666,7 +1667,7 @@ Please make sure your boards conform to these design rules.</description>
 <element name="U$1" library="Felicia_force_logger" package="DUE_HALF_SHIELD_A7-ANALOG" value="DUE_HALF_SHIELD_A7-ANALOG" x="0" y="0" smashed="yes"/>
 <element name="IND-" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="19.685" smashed="yes" rot="R270">
 <attribute name="NAME" x="39.862" y="21.812" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
-<attribute name="VALUE" x="38.64" y="18.129" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
+<attribute name="VALUE" x="41.18" y="21.558" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
 </element>
 <element name="U$11" library="Felicia_force_logger" package="MICROSD" value="MICROSD" x="16.51" y="27.94" smashed="yes" rot="R270"/>
 <element name="U$12" library="Felicia_force_logger" package="CR1220_BATTERY_HOLDER_SMD" value="CR1220_BATTERY_HOLDERSMD" x="6.35" y="35.56" smashed="yes" rot="MR270"/>
@@ -1732,7 +1733,7 @@ Please make sure your boards conform to these design rules.</description>
 </element>
 <element name="IND+" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="23.495" smashed="yes" rot="R270">
 <attribute name="NAME" x="39.862" y="25.622" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
-<attribute name="VALUE" x="38.259" y="28.162" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
+<attribute name="VALUE" x="41.18" y="25.368" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
 </element>
 <element name="U$2" library="Felicia_force_logger" package="SWITCH_SMD_RA_SPDT" value="SWITCH_SLIDE_SMD_SPDT" x="21.971" y="2.286" smashed="yes"/>
 <element name="R8" library="Felicia_force_logger" package="R0805" value="33kΩ" x="82.169" y="21.717" smashed="yes" rot="R270">
