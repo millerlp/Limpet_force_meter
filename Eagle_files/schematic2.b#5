@@ -146,7 +146,7 @@
 <text x="74.168" y="49.149" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">BEAM
 Vref ADJ</text>
 <text x="70.104" y="13.97" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">2nd STAGE AMP</text>
-<text x="72.263" y="1.397" size="0.8128" layer="25" font="vector" ratio="16" rot="R180" align="center">TMP102</text>
+<text x="72.39" y="2.159" size="0.8128" layer="25" font="vector" ratio="16" rot="R180" align="center">TMP102</text>
 <text x="83.439" y="31.75" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">JOY Y
 Vref ADJ</text>
 <text x="83.566" y="14.224" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">JOY X

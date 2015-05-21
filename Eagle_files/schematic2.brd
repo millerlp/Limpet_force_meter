@@ -164,7 +164,7 @@ Vref ADJ</text>
 <text x="60.198" y="28.067" size="1.016" layer="25" font="vector" ratio="13" align="center">SCK</text>
 <text x="59.309" y="25.527" size="1.016" layer="25" font="vector" ratio="13" align="center">RESET</text>
 <text x="68.834" y="30.353" size="1.016" layer="25" font="vector" ratio="13" align="center">5V</text>
-<text x="69.342" y="28.829" size="1.016" layer="25" font="vector" ratio="13" align="center">MOSI</text>
+<text x="69.342" y="27.94" size="1.016" layer="25" font="vector" ratio="13" align="center">MOSI</text>
 <text x="100.965" y="40.513" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-5V</text>
 <text x="100.965" y="43.561" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">+5V</text>
 <text x="97.282" y="46.482" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">-</text>
@@ -208,8 +208,8 @@ Vref ADJ</text>
 <text x="58.039" y="6.477" size="0.8128" layer="25" font="vector" ratio="16" align="center">A3</text>
 <text x="66.04" y="6.477" size="0.8128" layer="25" font="vector" ratio="16" align="center">A6</text>
 <text x="68.707" y="6.477" size="0.8128" layer="25" font="vector" ratio="16" align="center">A7</text>
-<text x="60.96" y="45.72" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">TX0</text>
-<text x="63.5" y="45.72" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">RX0</text>
+<text x="60.96" y="45.72" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">TX0&gt;</text>
+<text x="63.5" y="45.72" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">RX0&lt;</text>
 <text x="45.72" y="46.482" size="0.8128" layer="25" font="vector" ratio="16" align="center">7</text>
 <text x="48.26" y="46.482" size="0.8128" layer="25" font="vector" ratio="16" align="center">6</text>
 <text x="50.927" y="46.482" size="0.8128" layer="25" font="vector" ratio="16" align="center">5</text>
@@ -223,6 +223,8 @@ Vref ADJ</text>
 choices by Luke Miller</text>
 <text x="69.215" y="37.973" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Reference 
 Voltage Buffer</text>
+<text x="14.859" y="9.525" size="1.9304" layer="26" font="vector" ratio="10" rot="MR0">+</text>
+<text x="11.176" y="9.525" size="1.9304" layer="26" font="vector" ratio="11" rot="MR0">GND</text>
 </plain>
 <libraries>
 <library name="Felicia_force_logger">
@@ -1564,7 +1566,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="MPN" value="AD620AN" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="ALTERA CORPORATION" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="1523782" x="91.44" y="5.842" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="96.647" y="9.144" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
+<attribute name="NAME" x="96.52" y="9.144" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
 <attribute name="VALUE" x="92.075" y="2.286" size="1.27" layer="25" font="vector" ratio="13" rot="R90"/>
 </element>
 <element name="JOY_Y" library="Felicia_force_logger" package="DIL08" value="AD620N" x="91.44" y="22.86" smashed="yes" rot="R90">
@@ -1580,7 +1582,7 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="MPN" value="AD620AN" x="91.44" y="40.64" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MF" value="ALTERA CORPORATION" x="91.44" y="40.64" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="1523782" x="91.44" y="40.64" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="94.361" y="35.433" size="1.016" layer="25" font="vector" ratio="14" rot="R180"/>
+<attribute name="NAME" x="94.107" y="47.498" size="1.016" layer="25" font="vector" ratio="14" rot="R180"/>
 <attribute name="VALUE" x="92.075" y="37.084" size="1.27" layer="25" font="vector" ratio="13" rot="R90"/>
 </element>
 <element name="REF" library="Felicia_force_logger" package="DIL14" value="LM324N" x="75.946" y="34.544" smashed="yes" rot="R90">

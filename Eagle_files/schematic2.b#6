@@ -151,9 +151,9 @@ Vref ADJ</text>
 Vref ADJ</text>
 <text x="83.566" y="14.224" size="0.8128" layer="25" font="vector" ratio="16" rot="R90" align="center">JOY X
 Vref ADJ</text>
-<text x="76.454" y="0.635" size="0.8128" layer="25" font="vector" ratio="16" align="center">A7</text>
-<text x="79.121" y="0.635" size="0.8128" layer="25" font="vector" ratio="16" align="center">GND</text>
-<text x="81.661" y="0.635" size="0.8128" layer="25" font="vector" ratio="16" align="center">3V3</text>
+<text x="78.994" y="4.191" size="0.8128" layer="25" font="vector" ratio="16" align="center">A7</text>
+<text x="76.454" y="4.191" size="0.8128" layer="25" font="vector" ratio="16" align="center">GND</text>
+<text x="81.534" y="4.191" size="0.8128" layer="25" font="vector" ratio="16" align="center">3V3</text>
 <text x="9.525" y="21.463" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">microSD</text>
 <text x="25.781" y="17.018" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">MEV1D1205DC</text>
 <text x="24.13" y="17.399" size="1.27" layer="25" font="vector" ratio="13" rot="R90" align="center">DC-DC 5V Dual Supply</text>
@@ -218,7 +218,7 @@ Vref ADJ</text>
 <text x="75.946" y="24.765" size="1.016" layer="21" font="vector" ratio="13" rot="R180" align="center">LM324N</text>
 <text x="34.671" y="35.179" size="1.27" layer="25" font="vector" ratio="13">Limpet force meter Rev A</text>
 <text x="34.671" y="31.623" size="1.27" layer="25" font="vector" ratio="13">Designed by Felicia King 
-(2015)</text>
+2015</text>
 <text x="34.798" y="27.686" size="1.016" layer="25" font="vector" ratio="13">With additional poor design
 choices by Luke Miller</text>
 <text x="69.215" y="37.973" size="1.016" layer="25" font="vector" ratio="13" rot="R90" align="center">Reference 
@@ -1650,25 +1650,25 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="32.385" y="29.845" size="0.4064" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="32.385" y="26.67" size="0.4064" layer="28" rot="MR0"/>
 </element>
-<element name="TMP102" library="Felicia_force_logger" package="SOT23" value="LM62" x="72.39" y="3.429" smashed="yes" rot="R270"/>
+<element name="TMP102" library="Felicia_force_logger" package="SOT23" value="LM62" x="72.39" y="4.318" smashed="yes" rot="R270"/>
 <element name="U$1" library="Felicia_force_logger" package="DUE_HALF_SHIELD_A7-ANALOG" value="DUE_HALF_SHIELD_A7-ANALOG" x="0" y="0" smashed="yes"/>
 <element name="IND-" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="19.685" smashed="yes" rot="R270">
-<attribute name="NAME" x="39.862" y="21.812" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
-<attribute name="VALUE" x="41.18" y="21.558" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
+<attribute name="NAME" x="37.497" y="17.002" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="VALUE" x="39.91" y="21.177" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
 </element>
 <element name="U$11" library="Felicia_force_logger" package="MICROSD" value="MICROSD" x="16.51" y="27.94" smashed="yes" rot="R270"/>
 <element name="U$12" library="Felicia_force_logger" package="CR1220_BATTERY_HOLDER_SMD" value="CR1220_BATTERY_HOLDERSMD" x="6.35" y="35.56" smashed="yes" rot="MR270"/>
 <element name="5H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="62.611" y="17.78" smashed="yes">
-<attribute name="NAME" x="55.753" y="17.145" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="NAME" x="55.88" y="17.145" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="5L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="62.611" y="20.32" smashed="yes">
 <attribute name="NAME" x="55.88" y="19.812" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="2H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="17.78" smashed="yes">
-<attribute name="NAME" x="42.545" y="17.399" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="NAME" x="42.672" y="17.399" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="2L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="20.32" smashed="yes">
-<attribute name="NAME" x="42.799" y="19.812" size="1.016" layer="25" font="vector" ratio="14"/>
+<attribute name="NAME" x="42.672" y="19.812" size="1.016" layer="25" font="vector" ratio="14"/>
 </element>
 <element name="4H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="62.611" y="12.7" smashed="yes">
 <attribute name="NAME" x="55.626" y="12.192" size="1.016" layer="25" font="vector" ratio="13"/>
@@ -1677,17 +1677,17 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="55.88" y="14.605" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="1H" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="12.7" smashed="yes">
-<attribute name="NAME" x="42.545" y="12.192" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="NAME" x="42.672" y="12.192" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="90" library="miller" package="R-TRIMMER_67W_TT_ELEC" value="100k ohm" x="89.662" y="14.224" smashed="yes" rot="R180">
 <attribute name="NAME" x="91.694" y="12.827" size="0.8128" layer="25" font="vector" ratio="14" rot="R180"/>
 <attribute name="VALUE" x="92.71" y="16.129" size="0.8128" layer="27" font="vector" ratio="14" rot="R180"/>
 </element>
 <element name="1L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="49.53" y="15.24" smashed="yes">
-<attribute name="NAME" x="42.545" y="14.732" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="NAME" x="42.672" y="14.732" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="3H" library="Felicia_force_logger" package="DO35-7" value="3.6V_DIODE" x="62.611" y="7.747" smashed="yes">
-<attribute name="NAME" x="55.753" y="7.239" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="NAME" x="55.88" y="7.239" size="1.016" layer="25" font="vector" ratio="13"/>
 </element>
 <element name="3L" library="Felicia_force_logger" package="DO35-7" value="DIODE_ZENERDO-35_AXIAL" x="62.611" y="10.16" smashed="yes">
 <attribute name="NAME" x="55.88" y="9.525" size="1.016" layer="25" font="vector" ratio="13"/>
@@ -1719,8 +1719,8 @@ Please make sure your boards conform to these design rules.</description>
 <attribute name="NAME" x="95.1738" y="50.3682" size="1.27" layer="25" font="vector" ratio="12" rot="R270"/>
 </element>
 <element name="IND+" library="Felicia_force_logger" package="I_0805" value="10µH" x="38.735" y="23.495" smashed="yes" rot="R270">
-<attribute name="NAME" x="39.862" y="25.622" size="1.016" layer="25" font="vector" ratio="13" rot="R270"/>
-<attribute name="VALUE" x="41.18" y="25.368" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
+<attribute name="NAME" x="37.497" y="25.257" size="1.016" layer="25" font="vector" ratio="13"/>
+<attribute name="VALUE" x="39.783" y="24.987" size="0.8128" layer="25" font="vector" ratio="16" rot="R270"/>
 </element>
 <element name="U$2" library="Felicia_force_logger" package="SWITCH_SMD_RA_SPDT" value="SWITCH_SLIDE_SMD_SPDT" x="21.971" y="2.286" smashed="yes"/>
 <element name="R8" library="Felicia_force_logger" package="R0805" value="33kΩ" x="82.169" y="21.717" smashed="yes" rot="R270">
@@ -2371,7 +2371,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="57.15" y1="1.27" x2="57.785" y2="0.635" width="0.4064" layer="1"/>
 <wire x1="57.785" y1="0.635" x2="79.756" y2="0.635" width="0.4064" layer="1"/>
 <wire x1="79.756" y1="0.635" x2="81.407" y2="2.286" width="0.4064" layer="1"/>
-<wire x1="71.29" y1="4.379" x2="79.314" y2="4.379" width="0.254" layer="1"/>
 <wire x1="79.314" y1="4.379" x2="81.407" y2="2.286" width="0.4064" layer="1"/>
 <wire x1="53.594" y1="16.637" x2="46.863" y2="16.637" width="0.4064" layer="1"/>
 <wire x1="46.863" y1="16.637" x2="45.72" y2="17.78" width="0.4064" layer="1"/>
@@ -2398,6 +2397,10 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="58.928" y1="7.62" x2="58.801" y2="7.747" width="0.4064" layer="1"/>
 <wire x1="27.813" y1="17.78" x2="27.813" y2="12.827" width="0.3048" layer="1"/>
 <wire x1="27.813" y1="12.827" x2="35.56" y2="5.08" width="0.3048" layer="1"/>
+<wire x1="79.314" y1="4.379" x2="78.933" y2="4.379" width="0.3048" layer="1"/>
+<wire x1="78.933" y1="4.379" x2="77.978" y2="5.334" width="0.3048" layer="1"/>
+<wire x1="77.978" y1="5.334" x2="71.356" y2="5.334" width="0.3048" layer="1"/>
+<wire x1="71.356" y1="5.334" x2="71.29" y2="5.268" width="0.3048" layer="1"/>
 </signal>
 <signal name="VBAT">
 <contactref element="IC6" pad="14"/>
@@ -2715,22 +2718,23 @@ Please make sure your boards conform to these design rules.</description>
 <contactref element="U$1" pad="A6"/>
 <contactref element="TMP102" pad="2"/>
 <wire x1="66.04" y1="2.54" x2="66.04" y2="5.08" width="0.4064" layer="1"/>
-<wire x1="71.29" y1="2.479" x2="70.292" y2="2.479" width="0.254" layer="1"/>
-<wire x1="70.292" y1="2.479" x2="70.104" y2="2.667" width="0.254" layer="1"/>
-<wire x1="70.104" y1="2.667" x2="70.104" y2="5.842" width="0.4064" layer="1"/>
 <wire x1="70.104" y1="5.842" x2="69.596" y2="6.35" width="0.4064" layer="1"/>
 <wire x1="69.596" y1="6.35" x2="67.31" y2="6.35" width="0.4064" layer="1"/>
 <wire x1="67.31" y1="6.35" x2="66.04" y2="5.08" width="0.4064" layer="1"/>
+<wire x1="70.104" y1="5.842" x2="70.104" y2="4.554" width="0.4064" layer="1"/>
+<wire x1="70.104" y1="4.554" x2="71.29" y2="3.368" width="0.3048" layer="1"/>
 </signal>
 <signal name="A7">
 <contactref element="ANALOG_IN" pad="1"/>
 <contactref element="U$1" pad="A7"/>
-<contactref element="ANALOG7_HEADER" pad="1"/>
 <wire x1="68.58" y1="2.54" x2="68.58" y2="5.08" width="0.4064" layer="1"/>
-<wire x1="68.58" y1="2.54" x2="69.723" y2="2.54" width="0.254" layer="16"/>
-<wire x1="69.723" y1="2.54" x2="70.866" y2="1.397" width="0.254" layer="16"/>
-<wire x1="70.866" y1="1.397" x2="75.438" y2="1.397" width="0.254" layer="16"/>
-<wire x1="75.438" y1="1.397" x2="76.327" y2="2.286" width="0.254" layer="16"/>
+<wire x1="68.58" y1="2.54" x2="69.723" y2="2.54" width="0.4064" layer="16"/>
+<wire x1="69.723" y1="2.54" x2="70.866" y2="1.397" width="0.4064" layer="16"/>
+<contactref element="ANALOG7_HEADER" pad="2"/>
+<wire x1="70.866" y1="1.397" x2="72.517" y2="1.397" width="0.4064" layer="16"/>
+<wire x1="72.517" y1="1.397" x2="75.184" y2="4.064" width="0.4064" layer="16"/>
+<wire x1="75.184" y1="4.064" x2="77.089" y2="4.064" width="0.4064" layer="16"/>
+<wire x1="77.089" y1="4.064" x2="78.867" y2="2.286" width="0.3048" layer="16"/>
 </signal>
 <signal name="IOREF">
 <contactref element="PWR_PINS" pad="7"/>
@@ -2808,7 +2812,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="24.13" y1="50.8" x2="24.13" y2="48.26" width="0.4064" layer="1"/>
 </signal>
 <signal name="AGND">
-<contactref element="ANALOG7_HEADER" pad="2"/>
 <contactref element="0L" pad="A"/>
 <contactref element="3L" pad="A"/>
 <contactref element="C1" pad="1"/>
@@ -2830,8 +2833,6 @@ Please make sure your boards conform to these design rules.</description>
 <contactref element="TMP102" pad="3"/>
 <contactref element="AMP" pad="3"/>
 <contactref element="C4" pad="2"/>
-<wire x1="53.34" y1="20.32" x2="58.42" y2="20.32" width="0.4064" layer="16"/>
-<wire x1="58.42" y1="20.32" x2="59.563" y2="21.463" width="0.4064" layer="16"/>
 <wire x1="59.563" y1="21.463" x2="62.484" y2="21.463" width="0.4064" layer="16"/>
 <wire x1="62.484" y1="21.463" x2="63.627" y2="20.32" width="0.4064" layer="16"/>
 <wire x1="63.627" y1="20.32" x2="66.421" y2="20.32" width="0.4064" layer="16"/>
@@ -2876,10 +2877,6 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="91.059" y1="38.481" x2="91.567" y2="38.989" width="0.254" layer="16"/>
 <wire x1="91.567" y1="38.989" x2="91.567" y2="40.016" width="0.254" layer="16"/>
 <wire x1="91.567" y1="40.016" x2="90.424" y2="41.159" width="0.254" layer="16"/>
-<wire x1="73.49" y1="3.429" x2="77.724" y2="3.429" width="0.254" layer="1"/>
-<wire x1="77.724" y1="3.429" x2="78.867" y2="2.286" width="0.4064" layer="1"/>
-<wire x1="78.867" y1="2.286" x2="78.867" y2="3.429" width="0.254" layer="16"/>
-<wire x1="78.867" y1="3.429" x2="83.82" y2="8.382" width="0.254" layer="16"/>
 <polygon width="0.4064" layer="16" isolate="0.3048">
 <vertex x="69.469" y="22.479"/>
 <vertex x="69.469" y="50.53415" curve="-90.234845"/>
@@ -2901,6 +2898,13 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="53.34" y1="20.32" x2="50.038" y2="20.32" width="0.4064" layer="16"/>
 <wire x1="50.038" y1="20.32" x2="41.783" y2="28.575" width="0.4064" layer="16"/>
 <wire x1="41.783" y1="28.575" x2="31.9278" y2="28.575" width="0.4064" layer="16"/>
+<contactref element="ANALOG7_HEADER" pad="1"/>
+<wire x1="73.49" y1="4.318" x2="74.295" y2="4.318" width="0.3048" layer="1"/>
+<wire x1="74.295" y1="4.318" x2="76.327" y2="2.286" width="0.3048" layer="1"/>
+<wire x1="73.49" y1="4.318" x2="73.49" y2="3.513" width="0.3048" layer="1"/>
+<wire x1="73.49" y1="3.513" x2="73.025" y2="3.048" width="0.3048" layer="1"/>
+<via x="73.025" y="3.048" extent="1-16" drill="0.3302" diameter="0.6858"/>
+<wire x1="73.025" y1="3.048" x2="72.771" y2="2.794" width="0.3048" layer="16"/>
 </signal>
 <signal name="VNEG">
 <contactref element="JOY_Y" pad="4"/>
@@ -3458,16 +3462,16 @@ Please make sure your boards conform to these design rules.</description>
 <approved hash="6,1,542fe0a766b03cd3"/>
 <approved hash="6,1,1e2c4091ed865dd0"/>
 <approved hash="6,1,482dc88cd49906d2"/>
-<approved hash="6,1,4a34cb9bb7edbdaf"/>
 <approved hash="6,1,99b222143a036a63"/>
+<approved hash="6,1,4a34cb9bb7edbdaf"/>
 <approved hash="6,1,7e2f507b936c3fd2"/>
 <approved hash="6,1,143563694e17e4ae"/>
 <approved hash="6,1,8c2ed0763262d8d1"/>
 <approved hash="6,1,4e32e37275028fa8"/>
 <approved hash="6,1,c85b556b973f5de5"/>
 <approved hash="6,1,462fd065197239d3"/>
-<approved hash="6,1,a85f6758b60e14e0"/>
 <approved hash="6,1,7c3783433c31aeac"/>
+<approved hash="6,1,a85f6758b60e14e0"/>
 <approved hash="6,1,1820585fe04862dc"/>
 <approved hash="6,1,205e915601018be1"/>
 <approved hash="6,1,7629c04acf5b0bd2"/>
@@ -3478,8 +3482,8 @@ Please make sure your boards conform to these design rules.</description>
 <approved hash="6,1,8eb067dfd774d3ee"/>
 <approved hash="6,1,8e292034052495d5"/>
 <approved hash="6,1,0e716ccdcec8e22b"/>
-<approved hash="6,1,7810d818efb1346c"/>
 <approved hash="6,1,d0636126ad4c67dc"/>
+<approved hash="6,1,7810d818efb1346c"/>
 <approved hash="6,1,9629201306839d55"/>
 <approved hash="6,1,c85c4501df5a85e3"/>
 <approved hash="6,1,5c2fc00e0d964653"/>
@@ -3487,14 +3491,14 @@ Please make sure your boards conform to these design rules.</description>
 <approved hash="6,1,485d16faffa87ce2"/>
 <approved hash="6,1,d04360f788a333fd"/>
 <approved hash="6,1,7831d9f7ba60104c"/>
-<approved hash="6,1,d85f56e4a1b25ae0"/>
 <approved hash="6,1,4e2cd1e6d3733950"/>
+<approved hash="6,1,d85f56e4a1b25ae0"/>
 <approved hash="6,1,be59a6759d664e9a"/>
 <approved hash="6,1,585e9cd23a85b1e1"/>
 <approved hash="6,1,842d51d13845a251"/>
 <approved hash="6,1,aceabbc2867d4618"/>
-<approved hash="6,1,462fd1cc01584353"/>
 <approved hash="6,1,d85c5ecfdb9888e3"/>
+<approved hash="6,1,462fd1cc01584353"/>
 <approved hash="6,1,4fb532d60bc25f5b"/>
 <approved hash="19,16,34e7ed01891d48b5"/>
 <approved hash="19,16,7977f259e6571199"/>
