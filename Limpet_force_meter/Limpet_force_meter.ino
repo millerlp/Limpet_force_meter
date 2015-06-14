@@ -1,6 +1,6 @@
-/* limpet_force_meter.ino
+/* Limpet_force_meter.ino
 
-      Last edit: 2015 05 13 FAK
+      Last edit: 2015 06 13 LPM
       
       Software to run one joystick force transducer and associated cantilever forve transducer on 
       battery power to measure forces of oystercatcher predatory strike on a model limpet. 
@@ -110,11 +110,7 @@ void setup() {
   Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
   rtc.begin(); // start real time clock
   
-  // check that rtc is running
-  if(! rtc.isrunning()) {
-    Serial.println("RTC is NOT running!");
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //sets the RTC to the date & time this sketch was compiled
-  }
+
   startT = rtc.now();
   if(startT.year() == 2000) {
     digitalWrite(ERROR_LED1, HIGH);
