@@ -2099,7 +2099,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="52.324" y1="6.604" x2="50.8" y2="5.08" width="0.4064" layer="16"/>
 <wire x1="50.8" y1="6.477" x2="51.943" y2="7.62" width="0.4064" layer="1"/>
 </signal>
-<signal name="N$19">
+<signal name="XOUT-">
 <contactref element="JOY_X" pad="2"/>
 <contactref element="JOYSTICK" pad="1"/>
 <wire x1="98.933" y1="12.192" x2="99.06" y2="8.382" width="0.4064" layer="1"/>
@@ -2162,7 +2162,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="53.34" y1="5.08" x2="55.118" y2="6.858" width="0.4064" layer="1"/>
 <wire x1="55.118" y1="11.176" x2="55.118" y2="6.858" width="0.4064" layer="1"/>
 </signal>
-<signal name="N$23">
+<signal name="YOUT-">
 <contactref element="JOYSTICK" pad="3"/>
 <contactref element="JOY_Y" pad="2"/>
 <wire x1="98.933" y1="17.272" x2="99.06" y2="17.653" width="0.254" layer="1"/>
@@ -2171,7 +2171,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="97.155" y1="20.574" x2="96.139" y2="21.59" width="0.4064" layer="1"/>
 <wire x1="96.139" y1="21.59" x2="95.25" y2="21.59" width="0.4064" layer="1"/>
 </signal>
-<signal name="N$24">
+<signal name="YOUT+">
 <contactref element="JOYSTICK" pad="4"/>
 <contactref element="JOY_Y" pad="3"/>
 <wire x1="99.187" y1="19.812" x2="97.536" y2="21.336" width="0.4064" layer="1"/>
@@ -2948,7 +2948,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="25.146" y1="5.969" x2="23.038" y2="5.969" width="0.6096" layer="1"/>
 <wire x1="23.038" y1="5.969" x2="22.971" y2="6.036" width="0.254" layer="1"/>
 </signal>
-<signal name="N$1">
+<signal name="XOUT+">
 <contactref element="JOYSTICK" pad="2"/>
 <contactref element="JOY_X" pad="3"/>
 <wire x1="99.187" y1="14.732" x2="99.06" y2="14.732" width="0.254" layer="1"/>
