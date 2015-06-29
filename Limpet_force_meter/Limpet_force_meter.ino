@@ -325,7 +325,7 @@ void recordMeasures() {
 		}
 	}
   
-  
+  digitalWrite(ERROR_LED2, HIGH);
   for (int i = WRITE_BUFFER; i < SAMPLE_LEN - WRITE_BUFFER; i++) {
     logfile.print( Time_Values[i] );
     logfile.print(F(", "));
@@ -341,8 +341,8 @@ void recordMeasures() {
     logfile.print(F(", "));
     logfile.println( ref_Values[i][3] );
   }
-  digitalWrite(ERROR_LED2, HIGH);
-  logfile.sync();
+  
+  // logfile.sync();
   digitalWrite(ERROR_LED2, LOW);
   if (ECHO){
     Serial.println(" recording complete.");
