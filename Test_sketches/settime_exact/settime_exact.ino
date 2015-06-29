@@ -1,4 +1,8 @@
 /*
+	settime_exact.ino
+	Use this sketch to set the DS3231M real time clock on the
+	Limpet Force meter. 
+	
 	Code contributed by Robert Lozyniak
 	
 	This sketch sets the date and time of a DS1307 or DS3231 real
