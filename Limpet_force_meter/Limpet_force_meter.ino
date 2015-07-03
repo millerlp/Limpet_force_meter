@@ -1,14 +1,16 @@
 /* Limpet_force_meter.ino
 
-      Last edit: 2015 06 26 LPM
+      Last edit: 2015 07 03 LPM
       
       Software to run one joystick force transducer and associated cantilever force transducer on 
       battery power to measure forces of oystercatcher predatory strike on a model limpet. 
       
       Burst samples at a rate set by SAMPLE_INTERVAL_MS for SAMPLE_LEN milliseconds then pauses to
       write to card. Opens a file then repeats burst sampling, going through FILE_CYCLES_TOT number 
-      of cycles before closing current file and then opening a new one. Output file name is set by 
-      FILE_BASE_NAME with a 3 digit count that automatically increments to the next available file name.
+      of cycles before closing current file and then opening a new one. 
+      Output filename is in the format YYYYMMDD_HHMM_xx.csv where xx is a counter from
+      0-99 to avoid filename collisions. 
+      
       
       Designed to burst sample at 100Hz and make single files of 5 min length each.
       
@@ -114,11 +116,14 @@ void setup() {
   digitalWrite(ERROR_LED2, LOW);
   
   // Briefly flash both LEDs to let user know we're alive
-  digitalWrite(ERROR_LED1, HIGH);
-  digitalWrite(ERROR_LED2, HIGH);
-  delay(200);
-  digitalWrite(ERROR_LED1, LOW);
-  digitalWrite(ERROR_LED2, LOW);
+  for (byte i = 0; i < 3; i++){
+    digitalWrite(ERROR_LED1, HIGH);
+    digitalWrite(ERROR_LED2, HIGH);
+    delay(200);
+    digitalWrite(ERROR_LED1, LOW);
+    digitalWrite(ERROR_LED2, LOW);
+    delay(200);
+  }
   
   // ---------- RTC SETUP ----------
   Wire1.begin(); // Shield I2C pins connect to alt I2C bus on Arduino Due
