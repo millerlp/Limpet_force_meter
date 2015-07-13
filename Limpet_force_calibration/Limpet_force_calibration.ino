@@ -1,21 +1,21 @@
 /* Limpet_force_calibration.ino
 
-      Last edit: 2015 07 03 LPM
+      Last edit: 2015 07 13 LPM
       
       Software to run one joystick force transducer and associated cantilever force transducer on 
       battery power to measure forces of oystercatcher predatory strike on a model limpet. 
       
       Burst samples at a rate set by SAMPLE_INTERVAL_MS for SAMPLE_LEN milliseconds then pauses to
       write to card. Opens a file then repeats burst sampling, going through FILE_CYCLES_TOT number 
-      of cycles before closing current file and then opening a new one. Output file name is set by 
-      FILE_BASE_NAME with a 3 digit count that automatically increments to the next available file name.
+      of cycles before closing current file and then opening a new one. Output file name in the form "YYYYMMDD_HHMM_00.CSV" where the 00 value automatically 
+	  increments to avoid overwriting old files. 
       
       Designed to burst sample at 100Hz and make single files of 5 min length each.
       
       To enter calibration mode, open the serial monitor, then
       hold button 1 down for ~3 seconds. Both red and green LEDs will 
       flash 5 times, and the serial monitor will let you choose which
-      axis you want to calibrate. 
+      axis you want to calibrate.
       
       
       Components:
@@ -97,11 +97,6 @@ const uint32_t SAMPLE_INTERVAL_MS = 10; // units of milliseconds
 #define SAMPLE_LEN (1000 + 2*WRITE_BUFFER) //sets number of readings to make in a single burst
 #define FILE_CYCLES_TOT 30 //number of sampling bursts to save in one file
 
-// Cases
-//#define NEWFILE 1
-//#define READ 2
-//#define RECORD 3
-
 // Analog pins
 #define JOY_X_sig 0         //analog pin for the signal of the x axis from the joystick
 #define JOY_Y_sig 1         //               "                 y axis      "
@@ -113,11 +108,9 @@ const uint32_t SAMPLE_INTERVAL_MS = 10; // units of milliseconds
 // Book keeping variables
 int oldT; // units of milliseconds
 int newT; // units of milliseconds
-//int state;
-//int nextState;
 DateTime startT; // timestamp
-int ind;
-int cycle;
+int ind;	// index variable to keep count
+int cycle;	// variable to keep count of cycles
 
 // Data Arrays
 int Time_Values[SAMPLE_LEN];
@@ -132,7 +125,7 @@ long button1Time; // hold the initial button press millis() value
 byte debounceTime = 20; // milliseconds to wait for debounce
 long pressTime = 2000; // time required to count as a real button press
 volatile bool buttonFlag = false; // Flag to mark when button was pressed
-int mass; // calibration mass
+float mass; // calibration mass
 char choice; // user's entry from serial monitor
 bool continueAxisCalib; // flag to continue calibrating on the same axis
 
@@ -355,7 +348,8 @@ void loop() {
                 Serial.println("X axis, Please enter a mass in grams when ready: ");
                 while  (!Serial.available()); // wait for user response
                 if (Serial.available() > 0){
-                  mass = Serial.parseInt();
+                  // mass = Serial.parseInt();		// read an integer value
+				  mass = Serial.parseFloat();	// read a floating point value
                   Serial.print("\t");
                   Serial.print(mass);
                   Serial.println(" grams");
@@ -370,11 +364,11 @@ void loop() {
                 }               
                 // Write axis, grams, and analogreadings to datafile
                 // Reopen logfile in case it is closed for some reason
-  	        if (!calibfile.isOpen()) {
-  		  if (!calibfile.open(calibFilename, O_RDWR | O_CREAT | O_AT_END)) {
-  			digitalWrite(ERROR_LED1, HIGH); // turn on error LED
-  		  }
-  	        }
+				if (!calibfile.isOpen()) {
+					if (!calibfile.open(calibFilename, O_RDWR | O_CREAT | O_AT_END)) {
+						digitalWrite(ERROR_LED1, HIGH); // turn on error LED
+					}
+				}
                 digitalWrite(ERROR_LED2, HIGH);
                 for (int i = WRITE_BUFFER; i < SAMPLE_LEN - WRITE_BUFFER; i++) {
                     calibfile.print(F("X,"));
@@ -407,8 +401,9 @@ void loop() {
                 Serial.println("Y axis, Please enter a mass in grams when ready: ");
                 while  (!Serial.available()); // wait for user response
                 if (Serial.available() > 0){
-                  mass = Serial.parseInt();
-                  Serial.print("\t");
+                  // mass = Serial.parseInt();	// read an integer value
+				  mass = Serial.parseFloat();	// read a floating point value (decimal)
+                  Serial.print("\t");	
                   Serial.print(mass);
                   Serial.println(" grams");                  
                 }
@@ -422,12 +417,12 @@ void loop() {
                 }                
                 // Write axis, grams, and analogreadings to datafile
                 	// Reopen logfile in case it is closed for some reason
-  	        if (!calibfile.isOpen()) {
-  		  if (!calibfile.open(calibFilename, O_RDWR | O_CREAT | O_AT_END)) {
-  			digitalWrite(ERROR_LED1, HIGH); // turn on error LED
-  		  }
-  	        }
-                digitalWrite(ERROR_LED2, HIGH);
+				if (!calibfile.isOpen()) {
+					if (!calibfile.open(calibFilename, O_RDWR | O_CREAT | O_AT_END)) {
+						digitalWrite(ERROR_LED1, HIGH); // turn on error LED
+					}
+				}
+                digitalWrite(ERROR_LED2, HIGH);	// turn on the LED to indicate writing
                 for (int i = WRITE_BUFFER; i < SAMPLE_LEN - WRITE_BUFFER; i++) {
                     calibfile.print(F("Y,"));
                     calibfile.print(mass);
@@ -435,7 +430,7 @@ void loop() {
                     calibfile.println( F_Values[i][1] );
                 }
                 calibfile.close();
-                digitalWrite(ERROR_LED2, LOW);
+                digitalWrite(ERROR_LED2, LOW);	// turn off LED
                 Serial.println(F("Data saved"));
                 Serial.println(F("Continue with same axis (or quit)? y, n, q"));
                 while (!Serial.available()) ; // wait for response
@@ -459,8 +454,9 @@ void loop() {
                 Serial.println("Z axis, Please enter a mass in grams when ready: ");
                 while  (!Serial.available()); // wait for user response
                 if (Serial.available() > 0){
-                  mass = Serial.parseInt();
-                  Serial.print("\t");
+                  // mass = Serial.parseInt();	// read an integer value
+				  mass = Serial.parseFloat();	// read a floating point value (decimal)
+                  Serial.print("\t");	
                   Serial.print(mass);
                   Serial.println(" grams");                 
                 }
@@ -509,8 +505,8 @@ void loop() {
         } // end of switch (calibState)
       } // end of while (leaveCalib ==false) loop
         
-        // If we have reached this point, start a new data file
-        state = NEWFILE;
+      // If we have reached this point, start a new data file
+      state = NEWFILE;
    
       break; // end of case STATE_ENTER_CALIB
 
@@ -673,8 +669,10 @@ void readSensors(int index) {
 //------------ recordMeasures -------------------------------------------------------
 
 // Write sensor readings to SD card
-// SD line format: Time (millis since program started), JOY_X_sig (analog read, 3.3V = 2095), JOY_Y_sig (analog read), ...
-//                 BEAM_Z_sig (analog read), JOY_X_ref (analog read), JOY_Y_ref (analog read), BEAM_Z_ref (analog read)
+// SD line format: Time (millis since program started), JOY_X_sig (analog read, where
+// a value of 4096 should equal 3.3 volts, and a value of 0 should equal 0 volts), 
+// JOY_Y_sig (analog read), BEAM_Z_sig (analog read), JOY_X_ref (analog read), 
+// JOY_Y_ref (analog read), BEAM_Z_ref (analog read)
 
 void recordMeasures() {
  
@@ -713,6 +711,7 @@ void recordMeasures() {
 // This function will make sure there isn't already a file of the same name
 // in existence, then create a new file and call the writeHeader function to 
 // insert the standard header into the csv file. 
+// The filename is in the format "YYYYMMDD_HHMM_00.CSV"
 void initFileName(DateTime time1){
 		char buf[5];
 		// integer to ascii function itoa(), supplied with numeric year value,
@@ -826,7 +825,7 @@ void writeHeader() {
 
 
   logfile.println(fileName);
-  logfile.println(F("Software version LimpetForcemeter.ino"));
+  logfile.println(F("Software version Limpet_force_calibration.ino"));
   logfile.print(F("Start time "));
   logfile.print(startT.year());
   logfile.print(F("-"));
@@ -976,6 +975,6 @@ void initCalibFile(DateTime time1){
         calibfile.timestamp(T_ACCESS, time1.year(), time1.month(), time1.day(), 
                                     time1.hour(), time1.minute(), time1.second());        
         // Write column headers
-        calibfile.println(F("axis,mass,analogValue"));
+        calibfile.println(F("axis,mass.grams,analogValue"));
         calibfile.close();
 }
