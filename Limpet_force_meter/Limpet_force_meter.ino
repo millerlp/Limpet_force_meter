@@ -262,12 +262,12 @@ void clearMeasures() {
   //wipe arrays
   for (int i = 0; i < SAMPLE_LEN; i++) {
     Time_Values[i] = -99;
+    F_Values[i][0] = -99;
     F_Values[i][1] = -99;
     F_Values[i][2] = -99;
-    F_Values[i][3] = -99;
+    ref_Values[i][0] = -99;
     ref_Values[i][1] = -99;
     ref_Values[i][2] = -99;
-    ref_Values[i][3] = -99;
   }
 }
 
@@ -281,14 +281,14 @@ void readSensors(int index) {
     Time_Values[index] = millis();
     
     //read x and y axes of sensor 1 and record data in SENS1_Values
-    F_Values[index][1] = analogRead(JOY_X_sig);
-    F_Values[index][2] = analogRead(JOY_Y_sig);
-    F_Values[index][3] = analogRead(BEAM_Z_sig);
+    F_Values[index][0] = analogRead(JOY_X_sig);
+    F_Values[index][1] = analogRead(JOY_Y_sig);
+    F_Values[index][2] = analogRead(BEAM_Z_sig);
     
     //read x and y axes of sensor 1 and record data in SENS1_Values
-    ref_Values[index][1] = analogRead(JOY_X_ref);
-    ref_Values[index][2] = analogRead(JOY_Y_ref);
-    ref_Values[index][3] = analogRead(BEAM_Z_ref);
+    ref_Values[index][0] = analogRead(JOY_X_ref);
+    ref_Values[index][1] = analogRead(JOY_Y_ref);
+    ref_Values[index][2] = analogRead(BEAM_Z_ref);
     
     
     //if using Serial to set zeros, set the zero while there is no force being exerted onto the meters
@@ -298,17 +298,17 @@ void readSensors(int index) {
       Serial.print(".\t");
       Serial.print(Time_Values[index]);
       Serial.print("msec\tJOY X: ");
-      Serial.print(F_Values[index][1]);
+      Serial.print(F_Values[index][0]);
       Serial.print("\tJOY Y: ");
-      Serial.print(F_Values[index][2]);
+      Serial.print(F_Values[index][1]);
       Serial.print("\tBEAM Z: ");
-      Serial.print(F_Values[index][3]);
+      Serial.print(F_Values[index][2]);
 	  Serial.print("\tRefs:\t");
+	  Serial.print(ref_Values[index][0]);
+	  Serial.print("\t");
 	  Serial.print(ref_Values[index][1]);
 	  Serial.print("\t");
-	  Serial.print(ref_Values[index][2]);
-	  Serial.print("\t");
-	  Serial.println(ref_Values[index][3]);
+	  Serial.println(ref_Values[index][2]);
     }  
 }
 
@@ -334,17 +334,17 @@ void recordMeasures() {
   for (int i = WRITE_BUFFER; i < SAMPLE_LEN - WRITE_BUFFER; i++) {
     logfile.print( Time_Values[i] );
     logfile.print(F(", "));
+    logfile.print( F_Values[i][0] );
+    logfile.print(F(", "));
     logfile.print( F_Values[i][1] );
     logfile.print(F(", "));
     logfile.print( F_Values[i][2] );
     logfile.print(F(", "));
-    logfile.print( F_Values[i][3] );
+    logfile.print( ref_Values[i][0] );
     logfile.print(F(", "));
     logfile.print( ref_Values[i][1] );
     logfile.print(F(", "));
-    logfile.print( ref_Values[i][2] );
-    logfile.print(F(", "));
-    logfile.println( ref_Values[i][3] );
+    logfile.println( ref_Values[i][2] );
   }
   
   // logfile.sync();
