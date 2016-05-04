@@ -106,8 +106,8 @@ const uint32_t SAMPLE_INTERVAL_MS = 10; // units of milliseconds
 #define BEAM_Z_ref 5        //               "                                                        z axis from the beam force transducer
 
 // Book keeping variables
-int oldT; // units of milliseconds
-int newT; // units of milliseconds
+unsigned int oldT; // units of milliseconds
+unsigned int newT; // units of milliseconds
 DateTime startT; // timestamp
 int ind;	// index variable to keep count
 int cycle;	// variable to keep count of cycles
@@ -121,7 +121,7 @@ int ref_Values[SAMPLE_LEN][3];
 #define error(msg) sd.errorHalt(F(msg));
 
 DateTime calibEnterTime; // hold the time stamp when calibration mode is entered
-long button1Time; // hold the initial button press millis() value
+unsigned long button1Time; // hold the initial button press millis() value
 byte debounceTime = 20; // milliseconds to wait for debounce
 long pressTime = 2000; // time required to count as a real button press
 volatile bool buttonFlag = false; // Flag to mark when button was pressed
@@ -356,11 +356,11 @@ void loop() {
                 }
                 // Take measurements on X-axis
                 for (int index = 0; index < SAMPLE_LEN; index++) {
-                  F_Values[index][1] = analogRead(JOY_X_sig);
+                  F_Values[index][0] = analogRead(JOY_X_sig);
                   delayMicroseconds(50);
                 }
                  for (int i = 0; i < SAMPLE_LEN / 10; i= i+10){
-                   Serial.println(F_Values[i][1]); 
+                   Serial.println(F_Values[i][0]); 
                 }               
                 // Write axis, grams, and analogreadings to datafile
                 // Reopen logfile in case it is closed for some reason
@@ -374,7 +374,7 @@ void loop() {
                     calibfile.print(F("X,"));
                     calibfile.print(mass);
                     calibfile.print(F(", "));
-                    calibfile.println( F_Values[i][1] );
+                    calibfile.println( F_Values[i][0] );
                 }
                 calibfile.close();
                 digitalWrite(ERROR_LED2, LOW);
@@ -409,11 +409,11 @@ void loop() {
                 }
                 // Take measurements on Y-axis
                 for (int index = 0; index < SAMPLE_LEN; index++) {
-                  F_Values[index][1] = analogRead(JOY_Y_sig);
+                  F_Values[index][0] = analogRead(JOY_Y_sig);
                   delayMicroseconds(50);
                 }
                 for (int i = 0; i < SAMPLE_LEN / 10; i= i+10){
-                   Serial.println(F_Values[i][1]); 
+                   Serial.println(F_Values[i][0]); 
                 }                
                 // Write axis, grams, and analogreadings to datafile
                 	// Reopen logfile in case it is closed for some reason
@@ -427,7 +427,7 @@ void loop() {
                     calibfile.print(F("Y,"));
                     calibfile.print(mass);
                     calibfile.print(F(", "));
-                    calibfile.println( F_Values[i][1] );
+                    calibfile.println( F_Values[i][0] );
                 }
                 calibfile.close();
                 digitalWrite(ERROR_LED2, LOW);	// turn off LED
@@ -462,11 +462,11 @@ void loop() {
                 }
                 // Take measurements on Z-axis
                 for (int index = 0; index < SAMPLE_LEN; index++) {
-                  F_Values[index][1] = analogRead(BEAM_Z_sig);
+                  F_Values[index][0] = analogRead(BEAM_Z_sig);
                   delayMicroseconds(50);
                 }
                 for (int i = 0; i < SAMPLE_LEN / 10; i= i+10){
-                   Serial.println(F_Values[i][1]); 
+                   Serial.println(F_Values[i][0]); 
                 }
                 // Write axis, grams, and analogreadings to datafile
                 	// Reopen logfile in case it is closed for some reason
@@ -480,7 +480,7 @@ void loop() {
                     calibfile.print(F("Z,"));
                     calibfile.print(mass);
                     calibfile.print(F(", "));
-                    calibfile.println( F_Values[i][1] );
+                    calibfile.println( F_Values[i][0] );
                 }
                 calibfile.close();
                 digitalWrite(ERROR_LED2, LOW);
@@ -616,12 +616,12 @@ void clearMeasures() {
   //wipe arrays
   for (int i = 0; i < SAMPLE_LEN; i++) {
     Time_Values[i] = -99;
+    F_Values[i][0] = -99;
     F_Values[i][1] = -99;
     F_Values[i][2] = -99;
-    F_Values[i][3] = -99;
+    ref_Values[i][0] = -99;
     ref_Values[i][1] = -99;
     ref_Values[i][2] = -99;
-    ref_Values[i][3] = -99;
   }
 }
 
@@ -635,14 +635,14 @@ void readSensors(int index) {
     Time_Values[index] = millis();
     
     //read x and y axes of sensor 1 and record data in SENS1_Values
-    F_Values[index][1] = analogRead(JOY_X_sig);
-    F_Values[index][2] = analogRead(JOY_Y_sig);
-    F_Values[index][3] = analogRead(BEAM_Z_sig);
+    F_Values[index][0] = analogRead(JOY_X_sig);
+    F_Values[index][1] = analogRead(JOY_Y_sig);
+    F_Values[index][2] = analogRead(BEAM_Z_sig);
     
     //read x and y axes of sensor 1 and record data in SENS1_Values
-    ref_Values[index][1] = analogRead(JOY_X_ref);
-    ref_Values[index][2] = analogRead(JOY_Y_ref);
-    ref_Values[index][3] = analogRead(BEAM_Z_ref);
+    ref_Values[index][0] = analogRead(JOY_X_ref);
+    ref_Values[index][1] = analogRead(JOY_Y_ref);
+    ref_Values[index][2] = analogRead(BEAM_Z_ref);
     
     
     //if using Serial to set zeros, set the zero while there is no force being exerted onto the meters
@@ -652,17 +652,17 @@ void readSensors(int index) {
       Serial.print(".\t");
       Serial.print(Time_Values[index]);
       Serial.print("msec\tJOY X: ");
-      Serial.print(F_Values[index][1]);
+      Serial.print(F_Values[index][0]);
       Serial.print("\tJOY Y: ");
-      Serial.print(F_Values[index][2]);
+      Serial.print(F_Values[index][1]);
       Serial.print("\tBEAM Z: ");
-      Serial.print(F_Values[index][3]);
+      Serial.print(F_Values[index][2]);
 	  Serial.print("\tRefs:\t");
+	  Serial.print(ref_Values[index][0]);
+	  Serial.print("\t");
 	  Serial.print(ref_Values[index][1]);
 	  Serial.print("\t");
-	  Serial.print(ref_Values[index][2]);
-	  Serial.print("\t");
-	  Serial.println(ref_Values[index][3]);
+	  Serial.println(ref_Values[index][2]);
     }  
 }
 
@@ -687,17 +687,17 @@ void recordMeasures() {
   for (int i = WRITE_BUFFER; i < SAMPLE_LEN - WRITE_BUFFER; i++) {
     logfile.print( Time_Values[i] );
     logfile.print(F(", "));
+    logfile.print( F_Values[i][0] );
+    logfile.print(F(", "));
     logfile.print( F_Values[i][1] );
     logfile.print(F(", "));
     logfile.print( F_Values[i][2] );
     logfile.print(F(", "));
-    logfile.print( F_Values[i][3] );
+    logfile.print( ref_Values[i][0] );
     logfile.print(F(", "));
     logfile.print( ref_Values[i][1] );
     logfile.print(F(", "));
-    logfile.print( ref_Values[i][2] );
-    logfile.print(F(", "));
-    logfile.println( ref_Values[i][3] );
+    logfile.println( ref_Values[i][2] );
   }
   
    logfile.sync();
