@@ -1,6 +1,6 @@
 /* Limpet_force_calibration.ino
 
-      Last edit: 2015 07 13 LPM
+      Last edit: 2016 05 04 LPM
       
       Software to run one joystick force transducer and associated cantilever force transducer on 
       battery power to measure forces of oystercatcher predatory strike on a model limpet. 
