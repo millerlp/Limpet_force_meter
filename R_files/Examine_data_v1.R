@@ -21,11 +21,15 @@ calib = read.csv(paste0(fdir,fnameCalib))
 # This function is defined in the script Calib_data_process.R
 calibCoefs = calibCoefficients(calib)
 
+# To show the plots directly in R, instead of outputting to a png image file,
+# comment out the png line and the dev.off() lines below, and just execute
+# the plotSeparateAxesCalib() line in the middle. 
 png(file='Calib_raw_data.png',height=2100,width=2100,res=300)
 plotSeparateAxesCalib(calib) # function defined in Calib_data_process.R
 dev.off()
 
-
+# Show the calibration data for each axis altogether, with the regression line
+# fit to the positive and negative direction data.
 png(file='Calib_fits.png',height=2100,width=2100,res=300)
 plotAxesCalib(calib) # function defined in Calib_data_process.R
 dev.off()
@@ -39,7 +43,7 @@ df = read.csv(paste0(fdir,fname))
 df$Time.sec = df$Time.ms / 1000
 
 #############################################
-# Plot the raw data
+# Plot the raw field data
 par(mfrow = c(3,1))
 plot(JOY_X_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
@@ -50,13 +54,15 @@ plot(JOY_Y_signal~Time.sec, data = df, type = 'l', las = 1,
 plot(BEAM_Z_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
 		ylab = 'Z-axis raw counts')
-# Note the jump in the 'zero' value around 90 seconds into the run. Not sure
-# what happened here, but it probably throws the calibration off after that 
-# point.
+# Note the jump in the baseline value around 90 seconds into the run. Not sure
+# what happened here, but it requires a different zero-offset from that point
+# forward.
 # Also note that the Z-axis shows no real signal, just random noise around 
 # the baseline. It's either too stiff, or there's something else amiss here. The
 # calibration data look fine, so it is responsive, even though the field data
-# don't show any real forces. 
+# don't show any real forces. It's possible that this is a result of the 
+# off-by-one error in the array addressing in the older version of the 
+# Limpet_force_calibration.ino program, but I'm not sure. 
 
 ##############################################
 # Convert raw count data to forces
