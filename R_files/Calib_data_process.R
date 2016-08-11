@@ -5,29 +5,29 @@
 ###############################################################################
 
 
-################################################################################
-# Function loadCalibFile
-# This function imports a calibration data file (.csv) with 4 columns of data
-# that should be titled 'axis', 'direction', 'mass.grams', 'analogValue'.
-# The input should be the file name and directory of the file
-# The output will be a dataframe holding the data. 
-loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
-		fdir = 'Dropbox/Limpet_force_meter/'){
-	# Determine which computer we're working on so we can put the appropriate
-	# file path prefix on the Dropbox file directory
-	platform = .Platform$OS.type
-	if (platform == 'unix'){
-		prefixDrive = '~/'
-	} else if (platform == 'windows'){
-		prefixDrive = 'D:/'
-	}
-	
-	fdir = paste0(prefixDrive,fdir)
-	
-	# Import the calibration data file
-	calib = read.csv(paste0(fdir,fname))	
-}
-################################################################################
+#################################################################################
+## Function loadCalibFile
+## This function imports a calibration data file (.csv) with 4 columns of data
+## that should be titled 'axis', 'direction', 'mass.grams', 'analogValue'.
+## The input should be the file name and directory of the file
+## The output will be a dataframe holding the data. 
+#loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
+#		fdir = 'Dropbox/Limpet_force_meter/'){
+#	# Determine which computer we're working on so we can put the appropriate
+#	# file path prefix on the Dropbox file directory
+#	platform = .Platform$OS.type
+#	if (platform == 'unix'){
+#		prefixDrive = '~/'
+#	} else if (platform == 'windows'){
+#		prefixDrive = 'D:/'
+#	}
+#	
+#	fdir = paste0(prefixDrive,fdir)
+#	
+#	# Import the calibration data file
+#	calib = read.csv(paste0(fdir,fname))	
+#}
+#################################################################################
 
 
 ################################################################################
@@ -36,7 +36,7 @@ loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
 # each of the axes (X, Y, Z). This includes the zero values for a particular 
 # axis in each plot of the positive or negative direction. Note that the Z 
 # axis only has one direction (positive = downwards)
-# Input a data frame produced by the function loadCalibFile() above
+# Input a data frame imported from the raw calibration data file
 
 plotSeparateAxesCalib = function(calib = calib){
 # Pull apart the separate axes calibration data, and include the zero values
@@ -166,14 +166,14 @@ calibCoefficients = function(calib = calib){
 	r2X =  modXSum$adj.r.squared
 	################
 	modY = lm(Force.N~analogValue, data = yax)
-	modXYSum = summary(modY)
+	modYSum = summary(modY)
 	# Extract intercept, slope, R^2 of regression
 	myinterceptY = coef(modYSum)[1,1]
 	myslopeY = coef(modYSum)[2,1]
 	r2Y =  modYSum$adj.r.squared
 	################
 	modZ = lm(Force.N~analogValue, data = zax)
-	modXZSum = summary(modZ)
+	modZSum = summary(modZ)
 	# Extract intercept, slope, R^2 of regression
 	myinterceptZ = coef(modZSum)[1,1]
 	myslopeZ = coef(modZSum)[2,1]
@@ -195,8 +195,8 @@ calibCoefficients = function(calib = calib){
 # analogValue as the x-axis, and force in newtons (converted from mass in grams)
 # for the y-axis. 
 # Input should be a data frame of calibration data, with a column 'axis', 
-# 'direction', 'mass.grams', and 'analogValue', as produced by the 
-# loadCalibFile() function above. 
+# 'direction', 'mass.grams', and 'analogValue', produced by importing the
+# raw calibration data file 
 
 plotAxesCalib = function(calib = calib){
 	######################################################
