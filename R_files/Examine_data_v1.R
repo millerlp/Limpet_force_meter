@@ -10,22 +10,14 @@ source("Calib_data_process.R")
 # Filename with calibration data inside (.csv file)
 fnameCalib = 'CalibrationFiles_Apr202016.csv'
 
-# Put the name of the data folder here, and the D:/ or ~/ will be added next
-fdir = 'Dropbox/Limpet_force_meter/'
+# Put the name of the data folder here (both calib and real data file live here)
+fdir = 'D:/Dropbox/Limpet_force_meter/'
 
-# Determine which computer we're working on so we can put the appropriate
-# file path prefix on the Dropbox file directory
-platform = .Platform$OS.type
-if (platform == 'unix'){
-	prefixDrive = '~/'
-} else if (platform == 'windows'){
-	prefixDrive = 'D:/'
-}
-# Stick the prefix on the drive path
-fdir = paste0(prefixDrive,fdir)
-
+# Load the calibration data file
 calib = read.csv(paste0(fdir,fnameCalib))
 
+# Use the function calibCoefficients to produce a set of regression coefficients
+# that can be used to convert analogValue into force estimates (Newtons)
 calibCoefs = calibCoefficients(calib)
 
 #########################
@@ -53,7 +45,8 @@ plot(BEAM_Z_signal~Time.sec, data = df, type = 'l', las = 1,
 # point.
 # Also note that the Z-axis shows no real signal, just random noise around 
 # the baseline. It's either too stiff, or there's something else amiss here. The
-# calibration data look fine, so it is responsive. 
+# calibration data look fine, so it is responsive, even though the field data
+# don't show any real forces. 
 
 ##############################################
 # Convert raw count data to forces
@@ -74,7 +67,7 @@ df$Z.force.N.off = df$Z.force.N - zoffset
 # This estimates the Euclidean length of the 3 force vectors, essentially the
 # overall force across the 3 axes, removing any positive/negative information
 df$norm.N = NA
-dfmatrix = as.matrix(df[,9:11])
+dfmatrix = as.matrix(df[,c('X.force.N.off','Y.force.N.off','Z.force.N.off')])
 for (i in 1:nrow(dfmatrix)){
 	# norm() function computes the norm. Needs to work on one row of data at
 	# a time
@@ -83,29 +76,151 @@ for (i in 1:nrow(dfmatrix)){
 
 ###############################################
 # Plot a small section of time using forces
-startSec = 1
-endSec = 30
+startSec = 0 # define start time for plot
+endSec = 30 # define end time for plot
 ylims = c(-15,15)
-par(mfrow= c(4,1))
+
+png(file='1st_half_of_trial.png', height = 2100, width = 2100,res = 300)
+par(mfrow= c(4,1), mar = c(4,4,2,1)) # make a 4-panel plot
+# X-axis
 plot(X.force.N.off~Time.sec,data=df[df$Time.sec > startSec & 
 						df$Time.sec < endSec,], ylab = 'Force, N',
-		type = 'l', ylim = ylims, main = 'X axis', xlab = 'Time, sec', las = 1)
-abline(h = 0, lty = 2)
+		type = 'l', ylim = ylims, main = 'X axis', xlab = 'Time, sec', las = 1,
+		xaxs = 'i', xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL)
+# Y-axis
 plot(Y.force.N.off~Time.sec,data=df[df$Time.sec > startSec & 
 						df$Time.sec < endSec,], ylab = 'Force, N',
-		type = 'l', ylim = ylims, main = 'Y axis', xlab = 'Time, sec', las = 1)
-abline(h = 0, lty = 2)
+		type = 'l', ylim = ylims, main = 'Y axis', xlab = 'Time, sec', las = 1,
+		xaxs = 'i', xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+# Z-axis
 plot(Z.force.N.off~Time.sec,data=df[df$Time.sec > startSec & 
 						df$Time.sec < endSec,], ylab = 'Force, N',
-		type = 'l', ylim = ylims, main = 'Z axis', xlab = 'Time, sec', las = 1)
-abline(h = 0, lty = 2)
-##################
+		type = 'l', ylim = ylims, main = 'Z axis', xlab = 'Time, sec', las = 1,
+		xaxs = 'i', xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+
 # Plot the norm'd force
 plot(norm.N~Time.sec, data = df[df$Time.sec > startSec & 
 						df$Time.sec < endSec,], 
-		ylab = 'Force, N', type = 'l', main = 'Euclidean norm (3 axes combined)',
-		xlab = 'Time, sec', las = 1)
-abline(h = 0, lty = 2)
+		ylab = 'Force, N', type = 'l', 
+		main = 'Euclidean norm (3 axes combined)',
+		xlab = 'Time, sec', las = 1,
+		xaxs = 'i', xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+dev.off()
+####################################################################
+# Produce a different offset for the time after the baseline shifted on all 
+# the axes, starting just before second 100
+xoffset2 = mean(df$X.force.N[df$Time.sec > 100 & df$Time.sec < 120])
+df$X.force.N.off2 = df$X.force.N - xoffset2
+yoffset2 = mean(df$Y.force.N[df$Time.sec > 100 & df$Time.sec < 120])
+df$Y.force.N.off2 = df$Y.force.N - yoffset2
+zoffset2 = mean(df$Z.force.N[df$Time.sec > 100 & df$Time.sec < 120])
+df$Z.force.N.off2 = df$Z.force.N - zoffset2
+# Calculate 2-norm for force for the 3 axes
+# This estimates the Euclidean length of the 3 force vectors, essentially the
+# overall force across the 3 axes, removing any positive/negative information
+df$norm.N2 = NA
+dfmatrix2 = as.matrix(df[,c('X.force.N.off2','Y.force.N.off2','Z.force.N.off2')])
+for (i in 1:nrow(dfmatrix2)){
+	# norm() function computes the norm. Needs to work on one row of data at
+	# a time
+	df$norm.N2[i] = norm(dfmatrix2[i],"2")	
+}
 
+###############################################
+# Plot the later section of time using forces and the later offset value
+startSec = 175 # define start time for plot
+endSec = 275 # define end time for plot
+ylims = c(-5,5)
+
+png(file='2nd_half_of_trial.png', height = 2100, width = 2100,res = 300)
+par(mfrow= c(4,1), mar = c(4,4,2,1)) # make a 4-panel plot
+# X-axis
+plot(X.force.N.off2~Time.sec,data=df[df$Time.sec > startSec & 
+						df$Time.sec < endSec,], ylab = 'Force, N',
+		type = 'l', ylim = ylims, main = 'X axis', xlab = 'Time, sec', las = 1,
+		xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+
+# Y-axis
+plot(Y.force.N.off2~Time.sec,data=df[df$Time.sec > startSec & 
+						df$Time.sec < endSec,], ylab = 'Force, N',
+		type = 'l', ylim = ylims, main = 'Y axis', xlab = 'Time, sec', las = 1,
+		xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+# Z-axis
+plot(Z.force.N.off2~Time.sec,data=df[df$Time.sec > startSec & 
+						df$Time.sec < endSec,], ylab = 'Force, N',
+		type = 'l', ylim = ylims, main = 'Z axis', xlab = 'Time, sec', las = 1,
+		xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+# Plot the norm'd force
+plot(norm.N2~Time.sec, data = df[df$Time.sec > startSec & 
+						df$Time.sec < endSec,], 
+		ylab = 'Force, N', type = 'l', 
+		main = 'Euclidean norm (3 axes combined)',
+		xlab = 'Time, sec', las = 1,
+		xaxt = 'n')
+axis(side = 1, at = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		labels = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10))
+abline(v = pretty(df$Time.sec[df$Time.sec>startSec & 
+								df$Time.sec < endSec], n = 10), 
+		col='grey70',lty = 2)
+grid(nx = NA, ny = NULL, col = 'grey70')
+dev.off()
 
 
