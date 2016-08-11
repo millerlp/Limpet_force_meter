@@ -18,7 +18,17 @@ calib = read.csv(paste0(fdir,fnameCalib))
 
 # Use the function calibCoefficients to produce a set of regression coefficients
 # that can be used to convert analogValue into force estimates (Newtons)
+# This function is defined in the script Calib_data_process.R
 calibCoefs = calibCoefficients(calib)
+
+png(file='Calib_raw_data.png',height=2100,width=2100,res=300)
+plotSeparateAxesCalib(calib) # function defined in Calib_data_process.R
+dev.off()
+
+
+png(file='Calib_fits.png',height=2100,width=2100,res=300)
+plotAxesCalib(calib) # function defined in Calib_data_process.R
+dev.off()
 
 #########################
 # Load the raw field data file
