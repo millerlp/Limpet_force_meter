@@ -4,10 +4,6 @@
 # Author: Luke Miller  Aug 11, 2016
 ###############################################################################
 
-# Filename with calibration data inside (.csv file)
-fname = 'CalibrationFiles_Apr202016.csv'
-# Put the name of the data folder here, and the D:/ or ~/ will be added next
-fdir = 'Dropbox/Limpet_force_meter/'
 
 ################################################################################
 # Function loadCalibFile
