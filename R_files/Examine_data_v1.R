@@ -44,6 +44,7 @@ df$Time.sec = df$Time.ms / 1000
 
 #############################################
 # Plot the raw field data
+png(file='Raw_field_data.png',height=2100,width=2100,res=300)
 par(mfrow = c(3,1))
 plot(JOY_X_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
@@ -54,6 +55,7 @@ plot(JOY_Y_signal~Time.sec, data = df, type = 'l', las = 1,
 plot(BEAM_Z_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
 		ylab = 'Z-axis raw counts')
+dev.off()
 # Note the jump in the baseline value around 90 seconds into the run. Not sure
 # what happened here, but it requires a different zero-offset from that point
 # forward.
