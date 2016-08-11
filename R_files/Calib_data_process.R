@@ -121,7 +121,7 @@ plotSeparateAxesCalib = function(calib = calib){
 	abline(mod)
 	r2 =  modSum$adj.r.squared
 	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
-	legend('topright', legend = mylabel, bty = 'n')	
+	legend('topleft', legend = mylabel, bty = 'n')	
 }  # end of plotSeparateAxesCalib
 
 #############################################################################
@@ -216,6 +216,7 @@ plotAxesCalib = function(calib = calib){
 			xlab = 'Analog Count',
 			ylab = 'Force, N',
 			main = 'X axis')
+	abline(h = 0, lty = 2, col = 'grey70')
 	# Fit regression
 	modX = lm(Force.N~analogValue, data = xax)
 	modXSum = summary(modX)
@@ -253,6 +254,7 @@ plotAxesCalib = function(calib = calib){
 			xlab = 'Analog Count',
 			ylab = 'Force, N',
 			main = 'Y axis')
+	abline(h = 0, lty = 2, col = 'grey70')
 	# Fit regression
 	modY = lm(Force.N~analogValue, data = yax)
 	modYSum = summary(modY)
@@ -290,6 +292,7 @@ plotAxesCalib = function(calib = calib){
 			xlab = 'Analog Count',
 			ylab = 'Force, N',
 			main = 'Z axis')
+	abline(h = 0, lty = 2, col = 'grey70')
 	# Fit regression
 	modZ = lm(Force.N~analogValue, data = zax)
 	modZSum = summary(modZ)
