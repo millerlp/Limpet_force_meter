@@ -2,6 +2,8 @@
 # 
 # Author: Luke Miller  Aug 11, 2016
 ###############################################################################
+setwd("D:/Dropbox/Eagle/Eagle_projects/Limpet_force_meter/R_files")  # On Luke's computer
+
 
 # Make sure this Calib_data_process.R file is in the current R working directory
 source("Calib_data_process.R")
