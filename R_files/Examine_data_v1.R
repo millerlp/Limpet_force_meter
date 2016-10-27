@@ -40,6 +40,8 @@ dev.off()
 # Load the raw field data file
 
 fname = 'ForceMeterData_Apr26106.csv'
+fname = 'ForceMeterData_May182016.csv'
+fname = 'ForceMeterData_May192016.csv'
 df = read.csv(paste0(fdir,fname))
 # Convert milliseconds to seconds
 df$Time.sec = df$Time.ms / 1000
@@ -47,6 +49,7 @@ df$Time.sec = df$Time.ms / 1000
 #############################################
 # Plot the raw field data
 png(file='Raw_field_data.png',height=2100,width=2100,res=300)
+
 par(mfrow = c(3,1))
 plot(JOY_X_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
@@ -57,6 +60,7 @@ plot(JOY_Y_signal~Time.sec, data = df, type = 'l', las = 1,
 plot(BEAM_Z_signal~Time.sec, data = df, type = 'l', las = 1,
 		xlab = 'Time, s', 
 		ylab = 'Z-axis raw counts')
+
 dev.off()
 # Note the jump in the baseline value around 90 seconds into the run. Not sure
 # what happened here, but it requires a different zero-offset from that point
@@ -96,11 +100,12 @@ for (i in 1:nrow(dfmatrix)){
 
 ###############################################
 # Plot a small section of time using forces
-startSec = 0 # define start time for plot
-endSec = 30 # define end time for plot
+startSec = 30 # define start time for plot
+endSec =32 # define end time for plot
 ylims = c(-15,15)
 
 png(file='1st_half_of_trial.png', height = 2100, width = 2100,res = 300)
+
 par(mfrow= c(4,1), mar = c(4,4,2,1)) # make a 4-panel plot
 # X-axis
 plot(X.force.N.off~Time.sec,data=df[df$Time.sec > startSec & 
@@ -157,6 +162,8 @@ abline(v = pretty(df$Time.sec[df$Time.sec>startSec &
 								df$Time.sec < endSec], n = 10), 
 		col='grey70',lty = 2)
 grid(nx = NA, ny = NULL, col = 'grey70')
+
+
 dev.off()
 ####################################################################
 # Produce a different offset for the time after the baseline shifted on all 
