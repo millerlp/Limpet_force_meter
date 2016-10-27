@@ -1,5 +1,7 @@
 *.s#*
 *.b#*
 
+R_files/*.png
+
 *.DS_Store
 *.project
