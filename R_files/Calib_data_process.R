@@ -11,22 +11,22 @@
 ## that should be titled 'axis', 'direction', 'mass.grams', 'analogValue'.
 ## The input should be the file name and directory of the file
 ## The output will be a dataframe holding the data. 
-#loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
-#		fdir = 'Dropbox/Limpet_force_meter/'){
-#	# Determine which computer we're working on so we can put the appropriate
-#	# file path prefix on the Dropbox file directory
-#	platform = .Platform$OS.type
-#	if (platform == 'unix'){
-#		prefixDrive = '~/'
-#	} else if (platform == 'windows'){
-#		prefixDrive = 'D:/'
-#	}
-#	
-#	fdir = paste0(prefixDrive,fdir)
-#	
-#	# Import the calibration data file
-#	calib = read.csv(paste0(fdir,fname))	
-#}
+loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
+		fdir = 'Dropbox/Limpet_force_meter/'){
+	# Determine which computer we're working on so we can put the appropriate
+	# file path prefix on the Dropbox file directory
+	platform = .Platform$OS.type
+	if (platform == 'unix'){
+		prefixDrive = '~/'
+	} else if (platform == 'windows'){
+		prefixDrive = 'D:/'
+	}
+	
+	fdir = paste0(prefixDrive,fdir)
+	
+	# Import the calibration data file
+	calib = read.csv(paste0(fdir,fname))	
+}
 #################################################################################
 
 
