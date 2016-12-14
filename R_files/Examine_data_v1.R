@@ -100,8 +100,8 @@ for (i in 1:nrow(dfmatrix)){
 
 ###############################################
 # Plot a small section of time using forces
-startSec = 30 # define start time for plot
-endSec =32 # define end time for plot
+startSec = 1193 # define start time for plot
+endSec =1230 # define end time for plot
 ylims = c(-15,15)
 
 png(file='1st_half_of_trial.png', height = 2100, width = 2100,res = 300)
