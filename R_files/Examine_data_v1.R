@@ -71,6 +71,9 @@ dev.off()
 # don't show any real forces. It's possible that this is a result of the 
 # off-by-one error in the array addressing in the older version of the 
 # Limpet_force_calibration.ino program, but I'm not sure. 
+# NOTE: In May 2016 we found that the connection for the Z-axis was flaky,
+# so the Apr 2016 field data don't have real z-axis information, although the
+# calibration on Apr 20, 2016 did have a functional z-axis signal. 
 
 ##############################################
 # Convert raw count data to forces
