@@ -1,0 +1,453 @@
+---
+title: "Limpet force meter analysis code"
+author: ""
+date: "2017-10-27"
+output: word_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+options(replace.assign=TRUE,width=60)
+knitr::opts_chunk$set(tidy=FALSE)
+```
+
+```{r calibrationFunctions}
+#################################################################################
+## Function loadCalibFile
+## This function imports a calibration data file (.csv) with 4 columns of data
+## that should be titled 'axis', 'direction', 'mass.grams', 'analogValue'.
+## The input should be the file name and directory of the file
+## The output will be a dataframe holding the data. 
+loadCalibFile = function(fname = 'CalibrationFiles_Apr202016.csv' ,
+		fdir = 'Dropbox/Limpet_force_meter/'){
+	# Determine which computer we're working on so we can put the appropriate
+	# file path prefix on the Dropbox file directory
+	platform = .Platform$OS.type
+	if (platform == 'unix'){
+		prefixDrive = '~/'
+	} else if (platform == 'windows'){
+		prefixDrive = 'D:/'
+	}
+	
+	fdir = paste0(prefixDrive,fdir)
+	
+	# Import the calibration data file
+	calib = read.csv(paste0(fdir,fname))	
+}
+#################################################################################
+
+
+################################################################################
+# Function plotSeparateAxesCalib
+# A function to plot the individual positive and negative calibration data for
+# each of the axes (X, Y, Z). This includes the zero values for a particular 
+# axis in each plot of the positive or negative direction. Note that the Z 
+# axis only has one direction (positive = downwards)
+# Input a data frame imported from the raw calibration data file
+
+plotSeparateAxesCalib = function(calib = calib){
+# Pull apart the separate axes calibration data, and include the zero values
+	xpos = calib[calib$axis == 'X' & (calib$direction == 'zero' | 
+						calib$direction == 'positive'),]
+	xpos = droplevels(xpos)
+	
+	xneg = calib[calib$axis == 'X' & (calib$direction == 'zero' | 
+						calib$direction == 'negative'),]
+	xneg = droplevels(xneg)
+	
+	ypos = calib[calib$axis == 'Y' & (calib$direction == 'zero' | 
+						calib$direction == 'positive'),]
+	ypos = droplevels(ypos)
+	
+	yneg = calib[calib$axis == 'Y' & (calib$direction == 'zero' | 
+						calib$direction == 'negative'),]
+	yneg = droplevels(yneg)
+	
+	zneg = calib[calib$axis == 'Z' & (calib$direction == 'zero' | 
+						calib$direction == 'negative'),]
+	zneg = droplevels(zneg)
+
+# Plot the raw data for each axis
+	par(mfrow = c(3,2))
+	#############################
+# Positive X-axis
+	plot(x = xpos$analogValue, y = xpos$mass.grams, type='p', 
+			xlab = 'Analog count',
+			ylab = 'Mass, g',
+			main = 'X axis positive')
+	mod = lm(mass.grams~analogValue, data = xpos)
+	modSum = summary(mod)
+	abline(mod)
+	r2 = modSum$adj.r.squared
+	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
+	legend('topleft', legend = mylabel, bty = 'n')
+	###########################
+# Negative X-axis
+	plot(x = xneg$analogValue, y = xneg$mass.grams, type='p', 
+			xlab = 'Analog count',
+			ylab = 'Mass, g',
+			main = 'X axis negative')
+	mod = lm(mass.grams~analogValue, data = xneg)
+	modSum = summary(mod)
+	abline(mod)
+	r2 = modSum$adj.r.squared
+	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
+	legend('topright', legend = mylabel, bty = 'n')
+	#######################
+# Positive Y axis
+	plot(x = ypos$analogValue, y = ypos$mass.grams, type='p', 
+			xlab = 'Analog count',
+			ylab = 'Mass, g',
+			main = 'Y axis positive')
+	mod = lm(mass.grams~analogValue, data = ypos)
+	modSum = summary(mod)
+	abline(mod)
+	r2 = modSum$adj.r.squared
+	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
+	legend('topleft', legend = mylabel, bty = 'n')
+	###########################
+# Negative Y-axis
+	plot(x = yneg$analogValue, y = yneg$mass.grams, type='p', 
+			xlab = 'Analog count',
+			ylab = 'Mass, g',
+			main = 'Y axis negative')
+	mod = lm(mass.grams~analogValue, data = yneg)
+	modSum = summary(mod)
+	abline(mod)
+	r2 =  modSum$adj.r.squared
+	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
+	legend('topright', legend = mylabel, bty = 'n')
+	#######################
+# Z-axis
+	plot(x = zneg$analogValue, y = zneg$mass.grams, type='p', 
+			xlab = 'Analog count',
+			ylab = 'Mass, g',
+			main = 'Z axis negative')
+	mod = lm(mass.grams~analogValue, data = zneg)
+	modSum = summary(mod)
+	abline(mod)
+	r2 =  modSum$adj.r.squared
+	mylabel = bquote(italic(R)^2 == .(format(r2, digits = 3)))
+	legend('topleft', legend = mylabel, bty = 'n')	
+}  # end of plotSeparateAxesCalib
+
+#############################################################################
+# Produce a list of calibration coefficients for the three axes. 
+# The output will be a list with entries X, Y, Z, each containing a field
+# 'intercept','slope', and 'R2' (R-squared)
+# The regression coefficients intercept and slope will convert an input 
+# analogValue into an estimate of Force (Newtons), with a positive or negative
+# value depending on the direction of the force application. 
+
+calibCoefficients = function(calib = calib){
+	#########################################
+	xax = calib[calib$axis == 'X',]
+# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	xax$Force.N = (xax$mass.grams/1000) * 9.8066
+# Make negative-direction values into negative forces
+	xax$Force.N[xax$direction == 'negative'] = -1 * 
+			xax$Force.N[xax$direction=='negative']
+	#########################################
+# Y-axis all data, converted to force in Newtons
+	yax = calib[calib$axis == 'Y',]
+# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	yax$Force.N = (yax$mass.grams/1000) * 9.8066
+# Make negative-direction values into negative forces
+	yax$Force.N[yax$direction == 'negative'] = -1 * 
+			yax$Force.N[yax$direction=='negative']	
+	############################################
+# Z-axis all data, converted to force in Newtons
+	zax = calib[calib$axis == 'Z',]
+# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	zax$Force.N = (zax$mass.grams/1000) * 9.8066
+# Make negative-direction values into negative forces
+	zax$Force.N[zax$direction == 'negative'] = -1 * 
+			zax$Force.N[zax$direction=='negative']
+	################################################
+	# Fit regressions for each axis
+	modX = lm(Force.N~analogValue, data = xax)
+	modXSum = summary(modX)
+	# Extract intercept, slope, R^2 of regression
+	myinterceptX = coef(modXSum)[1,1]
+	myslopeX = coef(modXSum)[2,1]
+	r2X =  modXSum$adj.r.squared
+	################
+	modY = lm(Force.N~analogValue, data = yax)
+	modYSum = summary(modY)
+	# Extract intercept, slope, R^2 of regression
+	myinterceptY = coef(modYSum)[1,1]
+	myslopeY = coef(modYSum)[2,1]
+	r2Y =  modYSum$adj.r.squared
+	################
+	modZ = lm(Force.N~analogValue, data = zax)
+	modZSum = summary(modZ)
+	# Extract intercept, slope, R^2 of regression
+	myinterceptZ = coef(modZSum)[1,1]
+	myslopeZ = coef(modZSum)[2,1]
+	r2Z =  modZSum$adj.r.squared
+	###############################################
+	# Combine data into an output list
+	output = list(X = data.frame(intercept = myinterceptX, slope = myslopeX, 
+					R2 = r2X),
+			Y = data.frame(intercept = myinterceptY, slope = myslopeY,R2 = r2Y),
+			Z= data.frame(intercept = myinterceptZ, slope = myslopeZ,R2 = r2Z))
+}
+################################################################################
+
+
+################################################################################
+# Function plotAxesCalib
+# This function will produce three plots (one per axis X, Y, Z) to show the 
+# calibration data and regression fit to those data. The regression will use
+# analogValue as the x-axis, and force in newtons (converted from mass in grams)
+# for the y-axis. 
+# Input should be a data frame of calibration data, with a column 'axis', 
+# 'direction', 'mass.grams', and 'analogValue', produced by importing the
+# raw calibration data file 
+
+plotAxesCalib = function(calib = calib){
+	######################################################
+	# Combine all data for a single axis into one set, convert to force units,
+	# estimate regression fit. 
+	######################################################
+	# X-axis all data, converted to force in Newtons
+	par(mfrow=c(3,1))
+	xax = calib[calib$axis == 'X',]
+	# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	xax$Force.N = (xax$mass.grams/1000) * 9.8066
+	# Make negative-direction values into negative forces
+	xax$Force.N[xax$direction == 'negative'] = -1 * 
+			xax$Force.N[xax$direction=='negative']
+	
+	plot(x = xax$analogValue, y = xax$Force.N,las = 1,
+			xlab = 'Analog Count',
+			ylab = 'Force, N',
+			main = 'X axis')
+	abline(h = 0, lty = 2, col = 'grey70')
+	# Fit regression
+	modX = lm(Force.N~analogValue, data = xax)
+	modXSum = summary(modX)
+	abline(modX)
+	myinterceptX = coef(modXSum)[1,1]
+	myslopeX = coef(modXSum)[2,1]
+	r2 =  modXSum$adj.r.squared
+	
+	# Start by making an expression vector to hold the 2 lines of output:
+	rp = vector('expression',2)
+	
+	# Write the first line, which will give R-squared and 
+	# pull the value from the data frame wt.fits
+	# The double == prints an equal sign when used inside expression()
+	rp[1] = substitute(expression(italic(R)^2 == MYVALUE),
+			list(MYVALUE = format(r2,digits = 4)))[2]
+	
+	# Write the 2nd line, which will pull 2 values from data frame wt.fits:
+	rp[2] = substitute(expression(italic(Y) == MYVALUE2 + MYVALUE3*x),
+			list(MYVALUE2 = format(myinterceptX, digits = 3),
+					MYVALUE3 = format(myslopeX,digits = 3)))[2]
+	# Finally, simply plot with legend() function:
+	legend('topleft', legend = rp, bty = 'n')
+	
+	############################################
+	# Y-axis all data, converted to force in Newtons
+	yax = calib[calib$axis == 'Y',]
+	# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	yax$Force.N = (yax$mass.grams/1000) * 9.8066
+	# Make negative-direction values into negative forces
+	yax$Force.N[yax$direction == 'negative'] = -1 * 
+			yax$Force.N[yax$direction=='negative']
+	
+	plot(x = yax$analogValue, y = yax$Force.N,las = 1,
+			xlab = 'Analog Count',
+			ylab = 'Force, N',
+			main = 'Y axis')
+	abline(h = 0, lty = 2, col = 'grey70')
+	# Fit regression
+	modY = lm(Force.N~analogValue, data = yax)
+	modYSum = summary(modY)
+	abline(modY)
+	myinterceptY = coef(modYSum)[1,1]
+	myslopeY = coef(modYSum)[2,1]
+	r2 =  modYSum$adj.r.squared
+	
+	# Start by making an expression vector to hold the 2 lines of output:
+	rp = vector('expression',2)
+	
+	# Write the first line, which will give R-squared and 
+	# pull the value from the data frame wt.fits
+	# The double == prints an equal sign when used inside expression()
+	rp[1] = substitute(expression(italic(R)^2 == MYVALUE),
+			list(MYVALUE = format(r2,digits = 4)))[2]
+	
+	# Write the 2nd line, which will pull 2 values from data frame wt.fits:
+	rp[2] = substitute(expression(italic(Y) == MYVALUE2 + MYVALUE3*x),
+			list(MYVALUE2 = format(myinterceptY, digits = 3),
+					MYVALUE3 = format(myslopeY,digits = 3)))[2]
+	# Finally, simply plot with legend() function:
+	legend('topleft', legend = rp, bty = 'n')
+	
+	############################################
+	# Z-axis all data, converted to force in Newtons
+	zax = calib[calib$axis == 'Z',]
+	# Convert mass into force (Newtons) by multiplying by gravity acceleration
+	zax$Force.N = (zax$mass.grams/1000) * 9.8066
+	# Make negative-direction values into negative forces
+	zax$Force.N[zax$direction == 'negative'] = -1 * 
+			zax$Force.N[zax$direction=='negative']
+	
+	plot(x = zax$analogValue, y = zax$Force.N, las = 1,
+			xlab = 'Analog Count',
+			ylab = 'Force, N',
+			main = 'Z axis')
+	abline(h = 0, lty = 2, col = 'grey70')
+	# Fit regression
+	modZ = lm(Force.N~analogValue, data = zax)
+	modZSum = summary(modZ)
+	abline(modZ)
+	myinterceptZ = coef(modZSum)[1,1]
+	myslopeZ = coef(modZSum)[2,1]
+	r2 =  modZSum$adj.r.squared
+	
+	# Start by making an expression vector to hold the 2 lines of output:
+	rp = vector('expression',2)
+	
+	# Write the first line, which will give R-squared and 
+	# pull the value from the data frame wt.fits
+	# The double == prints an equal sign when used inside expression()
+	rp[1] = substitute(expression(italic(R)^2 == MYVALUE),
+			list(MYVALUE = format(r2,digits = 4)))[2]
+	
+	# Write the 2nd line, which will pull 2 values from data frame wt.fits:
+	rp[2] = substitute(expression(italic(Y) == MYVALUE2 + MYVALUE3*x),
+			list(MYVALUE2 = format(myinterceptZ, digits = 3),
+					MYVALUE3 = format(myslopeZ,digits = 3)))[2]
+	# Finally, simply plot with legend() function:
+	legend('topright', legend = rp, bty = 'n')	
+}
+###############################################################################
+
+```
+We have the following calibration files and trial files. Note that the 
+April 2016 trial data should not be analyzed, as the z-axis was not working. 
+```{r importData}
+fdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
+fnames = dir(fdir)
+fnames  # print file names
+# Do not bother with Apr 26 2016 data, the Z-axis wasn't working. 
+
+#[1] "CalibrationFiles_Apr202016.csv"
+#[2] "CalibrationFiles_Dec132016.csv"
+#[3] "CalibrationFiles_Dec142016.csv"
+#[4] "CalibrationFiles_Jan42017.csv" 
+#[5] "CalibrationFiles_Jan52017.csv" 
+#[6] "ForceMeterData_Apr262016.csv"  
+#[7] "ForceMeterData_Dec142016.csv"  
+#[8] "ForceMeterData_Dec152016.csv"  
+#[9] "ForceMeterData_Jan52017.csv"   
+#[10] "ForceMeterData_Jan62017csv.csv"
+#[11] "ForceMeterData_May182016.csv"  
+#[12] "ForceMeterData_May192016.csv" 
+
+# subset names by file type (calibration or force trials)
+calibfiles = fnames[grep(x = fnames, pattern = 'Calibration')]
+forcefiles = fnames[grep(x = fnames, pattern = 'ForceMeterData')]
+eventFile = fnames[grep(x = fnames, pattern = 'Pound_ForceData_Final.csv')]
+
+# Load the event file
+events = read.csv(paste0(fdir,eventFile))
+events$Date = as.Date(events$Date, format = '%m/%d/%y')
+
+# Concatenate all calibration data into one data frame
+for (i in 1:length(calibfiles)){
+	temp = read.csv(paste0(fdir,calibfiles[i]))
+	# Extract date from file name
+	locs = regexpr(text = calibfiles[i],
+			pattern='[[:upper:]][[:lower:]]{2}[[:digit:]]*.csv')
+	month = substr(calibfiles[i],start = locs[[1]][1], 
+			stop = locs[[1]][1] + 2)
+	nums = regexpr(text = calibfiles[i],
+			pattern='[[:digit:]]+')
+	if(attr(nums,'match.length')>5){
+		# 2-digit day value
+		day = substr(calibfiles[i],start = nums[[1]][1],
+				stop = nums[[1]][1]+1)
+		yr = substr(calibfiles[i], start = nums[[1]][1]+2,
+				stop = nums[[1]][1]+5)
+	} else {
+		# 1- digit day value
+		day = substr(calibfiles[i],start = nums[[1]][1],
+				stop = nums[[1]][1])
+		yr = substr(calibfiles[i], start = nums[[1]][1]+2,
+				stop = nums[[1]][1]+4)
+	}
+	# Assemble date
+	temp$Date = as.Date(paste0(month,'-',day,'-',yr),format = "%b-%d-%Y")
+	
+	if (i == 1){
+		calibs = temp
+	} else {
+		calibs = rbind(calibs,temp)
+	}
+}
+
+# Concatenate all force data into one data frame
+for (i in 1:length(forcefiles)){
+	temp = read.csv(paste0(fdir,forcefiles[i]))
+
+	
+	# Extract date from file name
+	locs = regexpr(text = forcefiles[i],
+			pattern='[[:upper:]][[:lower:]]{2}[[:digit:]]*.csv')
+	month = substr(forcefiles[i],start = locs[[1]][1], 
+			stop = locs[[1]][1] + 2)
+	nums = regexpr(text = forcefiles[i],
+			pattern='[[:digit:]]+')
+	if(attr(nums,'match.length')>5){
+		# 2-digit day value
+		day = substr(forcefiles[i],start = nums[[1]][1],
+				stop = nums[[1]][1]+1)
+		yr = substr(forcefiles[i], start = nums[[1]][1]+2,
+				stop = nums[[1]][1]+5)
+	} else {
+		# 1- digit day value
+		day = substr(forcefiles[i],start = nums[[1]][1],
+				stop = nums[[1]][1])
+		yr = substr(forcefiles[i], start = nums[[1]][1]+1,
+				stop = nums[[1]][1]+4)
+	}
+	# Assemble date
+	thisDate = as.Date(paste0(month,'-',day,'-',yr),format = "%b-%d-%Y")
+	if (thisDate == as.Date('2016-04-26')){
+		# skip
+	} else {
+		# Remove columns that don't match these names:
+		keepCols = c('Time.msec.','JOY_X_signal','JOY_Y_signal','BEAM_Z_signal')
+		temp = temp[,keepCols]
+		temp$Date = thisDate
+		
+		if (!exists('forces')){
+			forces = temp
+		} else {
+			forces = rbind(forces,temp)
+		}
+	}
+	
+}
+
+
+```
+
+The relevant calibration file for the May 2016 trials is the Apr202016 file.
+
+During the import process, the calibration files and force trial files are 
+concatenated together into two data frames, `calibs` and `forces`, each with a
+`Date` column that can be used to separate different days. The data frame
+`events` contains the identified peck and push events, with dates and
+millisecond timestamps. 
+
+
+The goal is to go through each identified event and extract the X-axis and 
+Y-axis forces (which need to be estimated based on the associated calibration
+values). The `events` data frame currently only has the net euclidean norm (
+total for all 3 axes).
