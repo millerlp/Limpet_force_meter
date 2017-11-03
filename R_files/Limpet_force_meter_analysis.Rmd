@@ -192,6 +192,7 @@ calibCoefficients = function(calib = calib){
 					R2 = r2X),
 			Y = data.frame(intercept = myinterceptY, slope = myslopeY,R2 = r2Y),
 			Z= data.frame(intercept = myinterceptZ, slope = myslopeZ,R2 = r2Z))
+	output
 }
 ################################################################################
 
@@ -331,7 +332,14 @@ plotAxesCalib = function(calib = calib){
 We have the following calibration files and trial files. Note that the 
 April 2016 trial data should not be analyzed, as the z-axis was not working. 
 ```{r importData}
-fdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
+
+if (.Platform$OS.type == 'windows'){
+  fdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
+} else if (.Platform$OS.type == 'unix'){
+  fdir = "~/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
+}
+
+
 fnames = dir(fdir)
 fnames  # print file names
 # Do not bother with Apr 26 2016 data, the Z-axis wasn't working. 
@@ -417,6 +425,8 @@ for (i in 1:length(forcefiles)){
 				stop = nums[[1]][1]+4)
 	}
 	# Assemble date
+	# TODO: The year is coming through wrong for the 2017 calibration dates
+	
 	thisDate = as.Date(paste0(month,'-',day,'-',yr),format = "%b-%d-%Y")
 	if (thisDate == as.Date('2016-04-26')){
 		# skip
@@ -451,3 +461,32 @@ The goal is to go through each identified event and extract the X-axis and
 Y-axis forces (which need to be estimated based on the associated calibration
 values). The `events` data frame currently only has the net euclidean norm (
 total for all 3 axes).
+
+```{r calibDetermination}
+# For each date in the 'calibs' data frame, fit regressions to each axis
+# and determine conversions from raw counts to force in Newtons. 
+
+dates = unique(calibs$Date)
+
+for (i in 1:length(dates)){
+  # subset the calibs by date
+  temp = calibs[calibs$Date == dates[i],]
+  
+  tempCalib = calibCoefficients(temp)
+  # Assemble into a list based on date
+  if (i == 1){
+    calibCoeffs = list()
+    calibCoeffs[[1]] = tempCalib 
+    calibCoeffs[[i]]$Date = dates[i]
+    # names(calibCoeffs[1]) = dates[i]
+  } else if (i > 1) {
+    calibCoeffs[[i]] = tempCalib
+    calibCoeffs[[i]]$Date = dates[i]
+  }
+}
+
+```
+
+
+
+
