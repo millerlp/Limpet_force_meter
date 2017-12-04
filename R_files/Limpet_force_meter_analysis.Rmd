@@ -386,7 +386,7 @@ for (i in 1:length(calibfiles)){
 		# 1- digit day value
 		day = substr(calibfiles[i],start = nums[[1]][1],
 				stop = nums[[1]][1])
-		yr = substr(calibfiles[i], start = nums[[1]][1]+2,
+		yr = substr(calibfiles[i], start = nums[[1]][1]+1,
 				stop = nums[[1]][1]+4)
 	}
 	# Assemble date
@@ -459,8 +459,8 @@ millisecond timestamps.
 
 The goal is to go through each identified event and extract the X-axis and 
 Y-axis forces (which need to be estimated based on the associated calibration
-values). The `events` data frame currently only has the net euclidean norm (
-total for all 3 axes).
+values). The `events` data frame currently only has the net euclidean norm 
+(total for all 3 axes).
 
 ```{r calibDetermination}
 # For each date in the 'calibs' data frame, fit regressions to each axis
