@@ -7,7 +7,7 @@ output: word_document
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
 options(replace.assign=TRUE,width=60)
 knitr::opts_chunk$set(tidy=FALSE)
 ```
@@ -364,7 +364,7 @@ eventFile = fnames[grep(x = fnames, pattern = 'Pound_ForceData_Final.csv')]
 
 # Load the event file
 events = read.csv(paste0(fdir,eventFile))
-events$Date = as.Date(events$Date, format = '%m/%d/%y')
+events$Date = as.Date(events$Date, format = '%m/%d/%Y')
 
 # Concatenate all calibration data into one data frame
 for (i in 1:length(calibfiles)){
@@ -399,11 +399,12 @@ for (i in 1:length(calibfiles)){
 	}
 }
 
+if (!exists('forces')) rm(forces)
+
 # Concatenate all force data into one data frame
 for (i in 1:length(forcefiles)){
 	temp = read.csv(paste0(fdir,forcefiles[i]))
 
-	
 	# Extract date from file name
 	locs = regexpr(text = forcefiles[i],
 			pattern='[[:upper:]][[:lower:]]{2}[[:digit:]]*.csv')
@@ -424,16 +425,15 @@ for (i in 1:length(forcefiles)){
 		yr = substr(forcefiles[i], start = nums[[1]][1]+1,
 				stop = nums[[1]][1]+4)
 	}
-	# Assemble date
-	# TODO: The year is coming through wrong for the 2017 calibration dates
-	
+	# Assemble date	
 	thisDate = as.Date(paste0(month,'-',day,'-',yr),format = "%b-%d-%Y")
 	if (thisDate == as.Date('2016-04-26')){
-		# skip
+		# skip any file from 2016-04-26
 	} else {
 		# Remove columns that don't match these names:
 		keepCols = c('Time.msec.','JOY_X_signal','JOY_Y_signal','BEAM_Z_signal')
 		temp = temp[,keepCols]
+		names(temp)[1] = 'Time.msec'
 		temp$Date = thisDate
 		
 		if (!exists('forces')){
@@ -445,6 +445,8 @@ for (i in 1:length(forcefiles)){
 	
 }
 
+# Rename the Time.msec. column to Time.msec
+#names(forces)[1] = 'Time.msec' 
 
 ```
 
@@ -503,31 +505,69 @@ for (j in 1:length(calibCoeffs)){
 # associated Date. Then go find the relevant rows in the forces data frame
 # to get the raw JOY_X_signal, JOY_Y_signal, and BEAM_Z_signal for a chunk of 
 # just before and after the event. Use the relevant calibration data to convert
-# each channel to forces in Newtons, and store those data in a list for 
-# each event. 
-
-i = 1
-
-dateval = events[i,'Date']
-msecval = events[i,'Time_msec']
-
-
-# Go into `forces` and find the time point
+# each channel to forces in Newtons, 
+events2 = events # make a copy
+events2$X.N = NA  # make empty columns
+events2$Y.N = NA
+events2$Z.N = NA
+for (i in 1:length(events$Event)){
+	dateval = events[i,'Date']
+	msecval = events[i,'Time_msec']
+# Go into forces and find the time point
 # Start by subsetting by Date
-temp = forces[forces$Date == dateval,]
-timeMatch = which.min(abs(temp$Time.msec. - msecval))
-
+	temp = forces[forces$Date == dateval,]
+	timeMatch = which.min(abs(temp$Time.msec - msecval))
 # Grab some rows ahead and after the timeMatch
-temp2 = forces[(timeMatch-100):(timeMatch+100),c('JOY_X_signal','JOY_Y_signal',
-				'BEAM_Z_signal')]
-
+	temp2 = temp[(timeMatch-100):(timeMatch+100),c('JOY_X_signal','JOY_Y_signal',
+					'BEAM_Z_signal','Time.msec','Date')]
 # Use the initial rows as a local zero offset reading to apply the calibration.
 # Recall that the relevant calibration for 201605 dates is Apr202016.
-
-tempcalibs = calibCoeffs[[which.min(abs(calibDates-dateval))]]
-
-
+	tempcalibs = calibCoeffs[[which.min(abs(calibDates-dateval))]]
+	##############################################
+# Convert raw count data to forces
+	temp2$X.N = (temp2$JOY_X_signal * tempcalibs$X$slope) + 
+			tempcalibs$X$intercept
+	temp2$Y.N = (temp2$JOY_Y_signal * tempcalibs$Y$slope) + 
+			tempcalibs$Y$intercept
+	temp2$Z.N = (temp2$BEAM_Z_signal * tempcalibs$Z$slope) + 
+			tempcalibs$Z$intercept
+	##################
+# Calculate an offset from 'zero' for each axis using the first few samples
+# where there is presumably no force being exerted
+	xoffset = mean(temp2$X.N[1:50])
+	temp2$X.N = temp2$X.N - xoffset
+	yoffset = mean(temp2$Y.N[1:50])
+	temp2$Y.N = temp2$Y.N - yoffset
+	zoffset = mean(temp2$Z.N[1:50])
+	temp2$Z.N = temp2$Z.N - zoffset 
+# Take the focal time match and write it into the new columns of the events2 
+	# data frame.
+	events2[i,'X.N'] = temp2$X.N[101]
+	events2[i,'Y.N'] = temp2$Y.N[101]
+	events2[i,'Z.N'] = temp2$Z.N[101]
+}	
+# Save output
+# write.csv(events2,file='Pound_ForceData_withXYZ_forces.csv',row.names=FALSE)
 
 ```
 
+```{r test, eval = FALSE, echo = FALSE}
 
+plot(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$X.N[90:120], 
+		type = 'b', col = 'black', ylim = c(-10,10))
+lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Y.N[90:120], col = 'blue')
+lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Z.N[90:120], col = 'red')
+
+xyz = as.matrix(forceList[[2]][,c('X.N','Y.N','Z.N')])
+for (i in 1:nrow(xyz)){
+	# norm() function computes the norm. Needs to work on one row of data at
+	# a time
+	forceList[[2]]$Norm[i] = norm(xyz[i,],"2")	
+}
+
+lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Norm[90:120],col='green')
+
+abline(v = 506392)
+abline(v = 506402, lty = 2)
+
+```
