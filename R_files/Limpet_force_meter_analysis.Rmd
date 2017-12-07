@@ -12,7 +12,7 @@ options(replace.assign=TRUE,width=60)
 knitr::opts_chunk$set(tidy=FALSE)
 ```
 
-```{r calibrationFunctions}
+```{r calibrationFunctions, cache = TRUE}
 #################################################################################
 ## Function loadCalibFile
 ## This function imports a calibration data file (.csv) with 4 columns of data
@@ -331,7 +331,7 @@ plotAxesCalib = function(calib = calib){
 ```
 We have the following calibration files and trial files. Note that the 
 April 2016 trial data should not be analyzed, as the z-axis was not working. 
-```{r importData}
+```{r importData, cache = TRUE}
 
 if (.Platform$OS.type == 'windows'){
   fdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
@@ -464,11 +464,19 @@ Y-axis forces (which need to be estimated based on the associated calibration
 values). The `events` data frame currently only has the net euclidean norm 
 (total for all 3 axes).
 
-```{r calibDetermination}
+```{r calibDetermination, cache = FALSE}
 # For each date in the 'calibs' data frame, fit regressions to each axis
 # and determine conversions from raw counts to force in Newtons. 
 
+
+
 dates = unique(calibs$Date)
+
+# 2016-04-20 calibration goes with May 18 + 19 2016 ForceMeterData
+# 2016-12-13 calibration goes with Dec 14 2016 ForceMeterData
+# 2016-12-14 calibration goes with Dec 15 2016 ForceMeterData
+# 2017-01-04 calibration goes with Jan 5 2017 ForceMeterData
+# 2017-01-05 calibration goes with Jan 6 2017 ForceMeterData
 
 for (i in 1:length(dates)){
   # subset the calibs by date
@@ -499,7 +507,8 @@ for (j in 1:length(calibCoeffs)){
 ```
 
 
-```{r stepThroughEvents}
+```{r stepThroughEvents, cache = TRUE}
+
 # Go through each events in the events data frame, pull out the relevant time
 # which should be in the Time_msec column and the 
 # associated Date. Then go find the relevant rows in the forces data frame
@@ -521,8 +530,17 @@ for (i in 1:length(events$Event)){
 	temp2 = temp[(timeMatch-100):(timeMatch+100),c('JOY_X_signal','JOY_Y_signal',
 					'BEAM_Z_signal','Time.msec','Date')]
 # Use the initial rows as a local zero offset reading to apply the calibration.
-# Recall that the relevant calibration for 201605 dates is Apr202016.
-	tempcalibs = calibCoeffs[[which.min(abs(calibDates-dateval))]]
+
+# 2016-04-20 calibration goes with May 18 + 19 2016 ForceMeterData
+# 2016-12-13 calibration goes with Dec 14 2016 ForceMeterData
+# 2016-12-14 calibration goes with Dec 15 2016 ForceMeterData
+# 2017-01-04 calibration goes with Jan 5 2017 ForceMeterData
+# 2017-01-05 calibration goes with Jan 6 2017 ForceMeterData
+
+	# Use the calib file from the day before the force dateval (i.e. the
+	# date closest to dateval-1)
+	tempcalibs = calibCoeffs[[which.min(abs(calibDates - (dateval-1)))]]
+	
 	##############################################
 # Convert raw count data to forces
 	temp2$X.N = (temp2$JOY_X_signal * tempcalibs$X$slope) + 
@@ -545,6 +563,22 @@ for (i in 1:length(events$Event)){
 	events2[i,'X.N'] = temp2$X.N[101]
 	events2[i,'Y.N'] = temp2$Y.N[101]
 	events2[i,'Z.N'] = temp2$Z.N[101]
+	
+# Also generate a list containing an entry for each event that will hold the
+	# relevant time points
+	if (i == 1){
+		forceList = list()
+	} 
+	forceList[[i]] = temp2
+	forceList[[i]]$Event = events[i,'Event']
+	# Calculate the euclidean norm of all three axes forces
+	xyz = as.matrix(forceList[[i]][,c('X.N','Y.N','Z.N')])
+	for (k in 1:nrow(xyz)){
+		# norm() function computes the norm. Needs to work on one row of data at
+		# a time
+		forceList[[i]]$Norm[k] = norm(xyz[k,],"2")	
+	}
+	
 }	
 # Save output
 # write.csv(events2,file='Pound_ForceData_withXYZ_forces.csv',row.names=FALSE)
@@ -552,22 +586,264 @@ for (i in 1:length(events$Event)){
 ```
 
 ```{r test, eval = FALSE, echo = FALSE}
-
-plot(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$X.N[90:120], 
-		type = 'b', col = 'black', ylim = c(-10,10))
-lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Y.N[90:120], col = 'blue')
-lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Z.N[90:120], col = 'red')
-
-xyz = as.matrix(forceList[[2]][,c('X.N','Y.N','Z.N')])
-for (i in 1:nrow(xyz)){
-	# norm() function computes the norm. Needs to work on one row of data at
-	# a time
-	forceList[[2]]$Norm[i] = norm(xyz[i,],"2")	
+eNum = 3
+timepts = 90:120
+ylims = range(forceList[[eNum]][,c("X.N","Y.N","Z.N","Norm")])
+ylims[1]=floor(ylims[1])
+ylims[2]=ceiling(ylims[2])
+cexlab = 1.5
+cexaxs = 1.5
+par(mar = c(5,5.5,3,1))
+showEvents = TRUE  # turn the vertical lines marking the event(s) on or off
+# Generate base plot
+plot(x = forceList[[eNum]]$Time.msec[timepts],forceList[[eNum]]$X.N[timepts], 
+		type = 'b', col = 'orange', ylim = ylims, 
+		xlab = 'Elapsed time, milliseconds',
+		ylab = 'Force, N', las = 1, cex.axis = cexaxs, 
+		cex.lab = cexlab)
+rect(par()$usr[1],par()$usr[3],par()$usr[2],par()$usr[4],col='grey90')
+grid(col='white',lty = 2)
+abline(h= 0, lty = 2, col = 'black')
+if(showEvents){
+# Add a vertical line at the event time, which should be entry 101 if we 
+# extracted the 100 time points before and after each event's Time.msec value
+abline(v = forceList[[eNum]]$Time.msec[101])
+# Also plot a marker for the next event, and if it shows up in the plot, it 
+# may indicate that the two events are too close together
+abline(v = forceList[[eNum+1]]$Time.msec[101], lty = 2)
 }
+# Plot the individual force traces
+lines(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$X.N[timepts], col = 'forestgreen')
+points(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$X.N[timepts], col = 'forestgreen', pch = 20, cex = .75)
+lines(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$Y.N[timepts], col = 'blue')
+points(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$Y.N[timepts], col = 'blue', pch = 20, cex = .75)
+lines(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$Z.N[timepts], col = 'red')
+points(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$Z.N[timepts], col = 'red', pch = 20, cex = .75)
+# Plot the norm
+lines(x = forceList[[eNum]]$Time.msec[timepts],
+		forceList[[eNum]]$Norm[timepts],col='orange')
+mtext(side = 3, text = paste0('Event ',forceList[[eNum]]$Event,", ",
+				forceList[[eNum]]$Date[1]), line = 1,
+		cex = 2)
+legend('topleft', legend = c('X','Y','Z','Norm (Net Force)'),
+		col = c('forestgreen','blue','red','orange'), lwd = 2, bty = 'n')
 
-lines(x = forceList[[2]]$Time.msec[90:120],forceList[[2]]$Norm[90:120],col='green')
-
-abline(v = 506392)
-abline(v = 506402, lty = 2)
 
 ```
+
+## DEFINTIONS
+
+* A given force can only be assigned to one category (cannot be a push and peck)
+* Forces discussed below refer to Euclidean forces
+
+### Peck:
+
+* Magnitude: ≥ 2N and MUST BE greater than or equal to two times the
+intensity of the force data points immediately before AND after a given point. 
+* Duration: Force MUST BE sustained for ≤ 2 consecutive milliseconds
+* Both magnitude and duration conditions must be met in order for a force
+to be categorized as a peck
+
+### Push:
+
+* Magnitude: ≥ 2N and may or may not be greater than or equal to two times
+the intensity of the force before and after a given force data point
+* Duration:  May be sustained for any amount of time
+* Forces categorized as pushes do not meet conditions of Peck and Touch
+
+### Touch:
+
+* Magnitude: < 2N  (e.g. the bird seems to be playing with the ‘limpet’
+mimic rather than actively attempting to remove it)
+* We are not considering ‘Touches’ in our force meter analyses
+
+
+```{r PushPeckPick, eval = FALSE}
+# TODO: implement a process to have the user identify the baseline before each
+# peak and then identify 1 or more peak/pushes to be saved as events. 
+
+# Code to run through a data set and have the user identify probable push or 
+# peck events. 
+# All data are in the forces data frame
+
+# Step through rows of forces data frame, plot a chunk of time vs Norm, and
+# have user select any events that look like pecks or pushes. Then categorize
+# the event and write the time values out to a new events data frame. 
+
+# Since forces data frame only has raw signals, we need to apply the 
+# calibration values to each chunk of data to convert to Newtons and calculate
+# the norm. 
+
+myDates = unique(forces$Date)
+
+# Subset by date, since that affects calibration values
+for (dayDate in 1:length(myDates)){
+	# Extract force data for the current date
+	dat = forces[forces$Date == myDates[dayDate],]
+	nsamps = nrow(dat)
+	# Get the relevant calibration data from calibCoeffs list
+	
+	tempcalibs = calibCoeffs[[which.min(abs(calibDates-(myDates[dayDate]-1)))]]
+	
+	
+	dat$X.N = (dat$JOY_X_signal * tempcalibs$X$slope) + 
+			tempcalibs$X$intercept
+	dat$Y.N = (dat$JOY_Y_signal * tempcalibs$Y$slope) + 
+			tempcalibs$Y$intercept
+	dat$Z.N = (dat$BEAM_Z_signal * tempcalibs$Z$slope) + 
+			tempcalibs$Z$intercept
+	
+	
+	# Make a plot of raw sample data to have user select a baseline time period
+	
+	repeatLoop = TRUE
+	for (j in seq(1,nsamps, by = 1000)){
+		while(repeatLoop == TRUE){
+
+			ylims = range(dat$JOY_X_signal)
+			plot(dat$Time.msec[j:(j+999)],y = dat$JOY_X_signal[j:(j+999)],type='l',
+					ylim = ylims, xlab = 'Time, ms', yaxs='i')
+			par(xpd = TRUE)
+#		greenlocsx = c(dat$Time.msec[j],dat$Time.msec[j+200],
+#				dat$Time.msec[j+200],dat$Time.msec[j])
+#		greenlocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
+#		polygon(greenlocsx,greenlocsy,col='green')
+			# Button for skipping ahead to next section
+			bluelocsx = c(dat$Time.msec[j+800],dat$Time.msec[j+1000],
+					dat$Time.msec[j+1000],dat$Time.msec[j+800])
+			bluelocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
+			polygon(bluelocsx,bluelocsy,col='lightblue')
+			text(x = dat$Time.msec[j+900],y = ylims[2]+50, labels='skip ahead')
+			# Put message on plot
+			text(x = par()$usr[1], y = ylims[2]+50,
+					labels = 'Click on peak to zoom in\n or click blue button\n to skip ahead',
+					adj = 0)
+			clickLocation = locator(n = 1)
+			if (clickLocation$x > bluelocsx[1] & 
+					clickLocation$x < bluelocsx[2] &
+					clickLocation$y > bluelocsy[1] & 
+					clickLocation$y < bluelocsy[3]) {
+				# User clicked in the skip ahead box
+				print("skip ahead")
+				skip = TRUE
+				zoom = FALSE
+			} else if (clickLocation$x > par()$usr[1] &
+					clickLocation$x < par()$usr[2] & 
+					clickLocation$y > par()$usr[3] & 
+					clickLocation$y < par()$usr[4]) {
+				# user clicked somewhere else in the figure, decide if it was 
+				# a value location to click
+				print('click in plot')
+				points(x = clickLocation$x, y = clickLocation$y, col = 'red',
+						pch = 20, cex = 1.5)
+				zoom = TRUE
+				skip = FALSE
+			} else {
+				# Trigger a re-plot
+				print('click not in field')
+				clickLocation
+				zoom = FALSE
+				skip = FALSE 			
+			}
+				
+			if (zoom == FALSE & skip == TRUE){
+				# cycle main loop again to move to next chunk of time			
+				break  # break out of while loop
+			} else if (zoom == TRUE & skip == FALSE) { 
+				# zoom in
+				# Find the row of dat closest to the click location
+				clickRow = which.min(abs(clickLocation$x - dat$Time.msec))
+				# Generate a new plot centered around the clickRow
+			    temp = dat[(clickRow-100):(clickRow+100),]
+	
+	
+				# Now the user will choose a time point that represents the
+				# baseline force value for upcoming peaks
+				ylims = range(temp$JOY_X_signal)
+				xlims = range(temp$Time.msec)
+				plot(temp$Time.msec,
+						y = temp$JOY_X_signal,
+						type = 'l')
+				par(xpd=TRUE)
+				bluelocsx = c(xlims[1]+1650,xlims[1]+2200,
+						xlims[1]+2200,xlims[1]+1650)
+				bluelocsy = c(ylims[2]+20,ylims[2]+20,ylims[2]+100,ylims[2]+100)
+				polygon(bluelocsx,bluelocsy,col='lightblue')
+				text(x = xlims[1]+1650,y = ylims[2]+50, 
+						labels='Skip to next section', adj = 0)
+#				pinklocsx = c(xlims[1]+1000,xlims[1]+1600,
+#						xlims[1]+1600,xlims[1]+1000)
+#				pinklocsy = c(ylims[2]+20,ylims[2]+20,ylims[2]+100,ylims[2]+100)
+#				polygon(pinklocsx,pinklocsy,col='pink')
+#				text(x = xlims[1]+1000,y = ylims[2]+50, 
+#						labels='Done selecting', adj = 0)
+				text(x=par()$usr[1], y = par()$usr[4]+10,
+						labels='Click baseline section or hit move', adj = 0)
+
+				clickLocation = locator(n = 1)
+				if (clickLocation$x > bluelocsx[1] & 
+						clickLocation$x < bluelocsx[2] &
+						clickLocation$y > bluelocsy[1] & 
+						clickLocation$y < bluelocsy[3]) {
+					# User clicked in box to move ahead
+					break
+#					} else if (clickLocation$x > pinklocsx[1] & 
+#							clickLocation$x < pinklocsx[2] &
+#							clickLocation$y > pinklocsy[1] & 
+#							clickLocation$y < pinklocsy[3]){
+					# User click
+				} else if (clickLocation$x > par()$usr[1] &
+						clickLocation$x < par()$usr[2] & 
+						clickLocation$y > par()$usr[3] & 
+						clickLocation$y < par()$usr[4]) {
+					# User clicked on baseline plot, find nearest row
+					baseLocRow = which.min(abs(clickLocation$x - 
+											temp$Time.msec))
+					# Use the chosen row value to work out a baseline value
+					# to use with the calibrations
+				}
+				
+				##########################
+				# With a baseline location in hand, calculate calibrated force
+				# values and replot the norm'd forces
+				
+				##################
+				# Calculate an offset from 'zero' for each axis using the first few samples
+				# where there is presumably no force being exerted
+				xoffset = mean(temp$X.N[baseLocRow:(baseLocRow+20)])
+				temp$X.N.off = temp$X.N - xoffset
+				yoffset = mean(temp$Y.N[baseLocRow:(baseLocRow+20)])
+				temp$Y.N.off = temp$Y.N - yoffset
+				zoffset = mean(temp$Z.N[baseLocRow:(baseLocRow+20)])
+				temp$Z.N.off = temp$Z.N - zoffset 
+				# Calculate euclidean norm force
+				for (r in 1:nrow(temp)){
+					xyz = as.matrix(temp[r,c('X.N.off','Y.N.off','Z.N.off')])
+					temp$Norm[r] = norm(xyz,'2')
+				}
+				
+				plot(x = temp$Time.msec, y = temp$Norm,type='l')
+				# TODO: Have user identify peaks here to be classified as peak/push
+				
+
+			} else if (zoom == FALSE & skip == FALSE ){
+				# let the plot loop repeat
+				repeatLoop = TRUE 
+			}
+		}
+
+	}
+
+}
+
+
+
+```
+
+
