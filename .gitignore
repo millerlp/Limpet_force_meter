@@ -3,5 +3,7 @@
 
 R_files/*.png
 
+R_files/Limpet_force_meter_analysis_cache/
+
 *.DS_Store
 *.project
