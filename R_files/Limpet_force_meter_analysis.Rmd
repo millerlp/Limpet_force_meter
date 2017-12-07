@@ -679,6 +679,7 @@ mimic rather than actively attempting to remove it)
 # Since forces data frame only has raw signals, we need to apply the 
 # calibration values to each chunk of data to convert to Newtons and calculate
 # the norm. 
+library(RANN) # for nn2 nearest neighbor search function
 
 myDates = unique(forces$Date)
 
@@ -759,7 +760,7 @@ for (dayDate in 1:length(myDates)){
 				# zoom in
 				# Find the row of dat closest to the click location
 				clickRow = which.min(abs(clickLocation$x - dat$Time.msec))
-				# Generate a new plot centered around the clickRow
+				# subset a new data frame centered around the clickRow
 			    temp = dat[(clickRow-100):(clickRow+100),]
 	
 	
@@ -769,22 +770,23 @@ for (dayDate in 1:length(myDates)){
 				xlims = range(temp$Time.msec)
 				plot(temp$Time.msec,
 						y = temp$JOY_X_signal,
-						type = 'l')
+						type = 'l', 
+						ylab = 'Raw x-axis signal', xlab = 'Time, ms')
 				par(xpd=TRUE)
-				bluelocsx = c(xlims[1]+1650,xlims[1]+2200,
-						xlims[1]+2200,xlims[1]+1650)
-				bluelocsy = c(ylims[2]+20,ylims[2]+20,ylims[2]+100,ylims[2]+100)
+				bluelocsx = c(xlims[1]+1600,xlims[1]+2200,
+						xlims[1]+2200,xlims[1]+1600)
+				bluelocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
 				polygon(bluelocsx,bluelocsy,col='lightblue')
-				text(x = xlims[1]+1650,y = ylims[2]+50, 
-						labels='Skip to next section', adj = 0)
+				text(x = xlims[1]+1600,y = ylims[2], 
+						labels='Skip to next section', adj = c(-0.1,-1))
 #				pinklocsx = c(xlims[1]+1000,xlims[1]+1600,
 #						xlims[1]+1600,xlims[1]+1000)
 #				pinklocsy = c(ylims[2]+20,ylims[2]+20,ylims[2]+100,ylims[2]+100)
 #				polygon(pinklocsx,pinklocsy,col='pink')
 #				text(x = xlims[1]+1000,y = ylims[2]+50, 
 #						labels='Done selecting', adj = 0)
-				text(x=par()$usr[1], y = par()$usr[4]+10,
-						labels='Click baseline section or hit move', adj = 0)
+				text(x=par()$usr[1], y = par()$usr[4],
+						labels='Click a baseline point or hit move', adj = c(0,0))
 
 				clickLocation = locator(n = 1)
 				if (clickLocation$x > bluelocsx[1] & 
@@ -827,16 +829,84 @@ for (dayDate in 1:length(myDates)){
 					xyz = as.matrix(temp[r,c('X.N.off','Y.N.off','Z.N.off')])
 					temp$Norm[r] = norm(xyz,'2')
 				}
-				
-				plot(x = temp$Time.msec, y = temp$Norm,type='l')
-				# TODO: Have user identify peaks here to be classified as peak/push
-				
+				################################################################
+				# Have user identify peaks here to be classified as peak/push
+				xlims = range(temp$Time.msec)
+				ylims = range(temp$Norm)
+				plot(x = temp$Time.msec, y = temp$Norm,type='b', 
+						xlab = 'Time, msec', ylab = 'Norm, Newtons', las = 1)
+				par(xpd=FALSE)
+				grid(col = 'grey70',lty = 2)
+				abline(h = 2, lty = 2, col = 'red')
+				par(xpd=TRUE)
+				bluelocsx = c(xlims[1]+1650,xlims[1]+2200,
+						xlims[1]+2200,xlims[1]+1650)
+				bluelocsy = c(ylims[2]+1,ylims[2]+1,ylims[2]+100,ylims[2]+100)
+				polygon(bluelocsx,bluelocsy,col='lightblue')
+				text(x = xlims[1]+1700,y = ylims[2]+3, 
+						labels='Done choosing', adj = 0)
+				keepChoosing = TRUE
+				while(keepChoosing == TRUE){
+					clickLocation = locator(n = 1) # have user select a point
+					# Draw where the user clicked
+					points(x=clickLocation$x,y=clickLocation$y,col='red',
+							pch = 20)
+					if (clickLocation$x > bluelocsx[1] & 
+							clickLocation$x < bluelocsx[2] &
+							clickLocation$y > bluelocsy[1] & 
+							clickLocation$y < bluelocsy[3]) {
+						# User clicked in box to say they are done choosing
+						break  # kill the while(keepChoosing == TRUE) loop
+					} else if (clickLocation$x > par()$usr[1] &
+							clickLocation$x < par()$usr[2] & 
+							clickLocation$y > par()$usr[3] & 
+							clickLocation$y < par()$usr[4]) {
+						# User clicked on plot, find nearest point
+						# by using a nearest neighbor search algorithm using
+						# the function nn2 from the package 'RANN'
+						# Prepare the data matrix
+						mymatrix = cbind(temp$Time.msec,temp$Norm)
+						# Rescale the x-axis data, since the results of nn2
+						# will be thrown off if the scale of x data is very 
+						# different from the scale of y data
+						mymatrix[,1] = mymatrix[,1]/1000
+						mypoint = cbind(clickLocation$x,clickLocation$y)
+						# Also rescale the clickLocation x-axis value
+						mypoint[,1] = mypoint[,1]/1000
+						# Run the nearest neighbor search. The k=1 argument
+						# should return the 1st-closest nearest neighbor
+						rowIndex = nn2(data=mymatrix,query=mypoint,k = 1)$nn.idx[1,1]
+						# Add the identified point to the plot
+						points(temp$Time.msec[rowIndex],y=temp$Norm[rowIndex],
+								pch = 20, col = 'royalblue')
+						# Use the chosen row value to work out a baseline value
+						# to use with the calibrations
+						keepChoosing = TRUE
+						if(!(exists('peakPushEvents'))){
+							# Get the appropriate row of info out of the
+							# original data frame dat
+							peakPushEvents = temp[rowIndex,]
+							# Also add on the Time.msec value for the baseline
+							# point
+						    peakPushEvents$BaselineTime.msec = temp$Time.msec[baseLocRow]
+						} else {
+							# If peakPushEvents exists, add onto it
+							tempVals = temp[rowIndex,] # extract the peak row
+							# Add on the baseline row Time.msec value
+							tempVals$BaselineTime.msec = temp$Time.msec[baseLocRow]
+							# rbind the new data onto peakPushEvents
+							peakPushEvents = rbind(peakPushEvents,
+									tempVals)
+						}
+						keepChoosing = TRUE # allow while loop to repeat
+					} # end of if (clickLocation$x > bluelocsx[1]... section
+				} # end of while(keepChoosing == TRUE)
 
 			} else if (zoom == FALSE & skip == FALSE ){
-				# let the plot loop repeat
+				# let the main plot loop repeat (plots a wide-angle view)
 				repeatLoop = TRUE 
 			}
-		}
+		} # end of while(repeatLoop == TRUE) 
 
 	}
 
