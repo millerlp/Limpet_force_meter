@@ -399,7 +399,7 @@ for (i in 1:length(calibfiles)){
 	}
 }
 
-if (!exists('forces')) rm(forces)
+if (exists('forces')) rm(forces)
 
 # Concatenate all force data into one data frame
 for (i in 1:length(forcefiles)){
@@ -503,7 +503,7 @@ for (j in 1:length(calibCoeffs)){
 		calibDates = c(calibDates,calibCoeffs[[j]]$Date)
 	}
 }
-
+ 
 ```
 
 
@@ -570,7 +570,7 @@ for (i in 1:length(events$Event)){
 		forceList = list()
 	} 
 	forceList[[i]] = temp2
-	forceList[[i]]$Event = events[i,'Event']
+	forceList[[i]]$Event = events[i,'Event'] 
 	# Calculate the euclidean norm of all three axes forces
 	xyz = as.matrix(forceList[[i]][,c('X.N','Y.N','Z.N')])
 	for (k in 1:nrow(xyz)){
@@ -664,68 +664,133 @@ mimic rather than actively attempting to remove it)
 * We are not considering ‘Touches’ in our force meter analyses
 
 
-```{r PushPeckPick, eval = FALSE}
-# TODO: implement a process to have the user identify the baseline before each
-# peak and then identify 1 or more peak/pushes to be saved as events. 
+I wrote an interactive function to let the user pick a trial date and 
+go through the raw time series data and attempt to identify potential pecks and
+pushes. The script has the user first identify a period of at least 10 samples 
+(100 milliseconds) where the baseline signal appears stable, and then the user
+clicks on each peak above the 2N threshold outlined above. Because the sensors
+tended to drift and take new baseline values, particularly after big hits by
+the bird, the user is identifying a new baseline for each peak or group of
+peaks that happen in quick succession and appear to share a common baseline
+value. The output of the function `peakChooser()` is a data frame that contains
+a row from the original `forces` data frame for each identified peak. As a
+result, the raw X, Y, Z values, time in milliseconds, and calibrated forces in
+the X, Y, and Z axes (plus the euclidean norm of all 3 axes) are available for 
+each peak event, along with the starting time value for the baseline. These data
+could be used to relocate a chunk of the raw timeseries around each peak event
+for further analysis. 
+
+
+```{r PushPeckPickFunction, eval = FALSE}
 
 # Code to run through a data set and have the user identify probable push or 
 # peck events. 
-# All data are in the forces data frame
+# All raw data are in the 'forces' data frame
 
-# Step through rows of forces data frame, plot a chunk of time vs Norm, and
-# have user select any events that look like pecks or pushes. Then categorize
-# the event and write the time values out to a new events data frame. 
+# Step through rows of 'forces' data frame, plot a chunk of time vs Norm, and
+# have user select any events that look like pecks or pushes.  
 
-# Since forces data frame only has raw signals, we need to apply the 
+# Since 'forces' data frame only has raw signals, we need to apply the 
 # calibration values to each chunk of data to convert to Newtons and calculate
 # the norm. 
+
 library(RANN) # for nn2 nearest neighbor search function
 
-myDates = unique(forces$Date)
-
-# Subset by date, since that affects calibration values
-for (dayDate in 1:length(myDates)){
+# Inputs
+# trialdate  - A Date object giving the date of the bird trial
+# forces - a dataframe containing all of the trial data from each day, imported
+# earlier
+# calibs - a list object containing the calibration slopes associated from 
+# each trial date. Created earlier.
+# eventsdf - an optional data frame created from the output of this function. If
+# supplied, this will be used to plot markers on already-identified peaks in the
+# chosen day's timeseries. 
+# baseLength - the number of samples to be averaged together to form the baseline
+# values for X, Y, and Z axes prior to an identified peak. 10 samples at 10ms 
+# interval = 100 milliseconds
+	
+peakChooser = function(trialdate, forces = forces, calibs = calibCoeffs, eventsdf = NULL, baseLength=10){
+	require(RANN)
+	if (!is.null(eventsdf)){
+		peakPushEvents = eventsdf
+	}
+	
 	# Extract force data for the current date
-	dat = forces[forces$Date == myDates[dayDate],]
+#	dat = forces[forces$Date == myDates[dayDate],]
+	dat = forces[forces$Date == trialdate,]
 	nsamps = nrow(dat)
 	# Get the relevant calibration data from calibCoeffs list
+
 	
-	tempcalibs = calibCoeffs[[which.min(abs(calibDates-(myDates[dayDate]-1)))]]
+#	tempcalibs = calibCoeffs[[which.min(abs(calibDates-(myDates[dayDate]-1)))]]
+	tempcalibs = calibCoeffs[[which.min(abs(calibDates-(trialdate-1)))]]
 	
-	
+	# Generate estimates of force (N) on each axis using the calibration data. 
+	# Note however that these force values will have an offset due to the drift
+	# in the baseline value of the transducers. So for each chosen peak, we will
+	# first identify a preceding baseline set of "0" values and correct these
+	# force values by that baseline offset. 
 	dat$X.N = (dat$JOY_X_signal * tempcalibs$X$slope) + 
 			tempcalibs$X$intercept
 	dat$Y.N = (dat$JOY_Y_signal * tempcalibs$Y$slope) + 
 			tempcalibs$Y$intercept
 	dat$Z.N = (dat$BEAM_Z_signal * tempcalibs$Z$slope) + 
 			tempcalibs$Z$intercept
-	
-	
+
 	# Make a plot of raw sample data to have user select a baseline time period
-	
 	repeatLoop = TRUE
 	for (j in seq(1,nsamps, by = 1000)){
 		while(repeatLoop == TRUE){
-
-			ylims = range(dat$JOY_X_signal)
-			plot(dat$Time.msec[j:(j+999)],y = dat$JOY_X_signal[j:(j+999)],type='l',
-					ylim = ylims, xlab = 'Time, ms', yaxs='i')
+			# Create the initial wide-angle plot showing 1000 samples
+			# Calculate an offset for JOY_Y signal so that it's close to 
+			# JOY_X data on the y-axis for plotting purposes 
+			offY = (dat[1,'JOY_X_signal']-dat[1,'JOY_Y_signal'])
+			ylims = range(dat[,'JOY_X_signal'])
+			plot(dat$Time.msec[j:(j+999)],y = dat[j:(j+999),'JOY_X_signal'],
+					type='l',
+					ylim = ylims, xlab = 'Time, ms', yaxs='i', 
+					ylab = paste0('Raw axis signal'), 
+					main = trialdate)
+			# Add the offset Y-axis values to the plot
+			lines(x = dat$Time.msec[j:(j+999)],
+					y = dat[j:(j+999),'JOY_Y_signal']+offY,
+					col = 'blue')
+			# Check and see if peakPushEvents data frame exists
+			if (exists('peakPushEvents')){
+				# If it exists, find any events that might already be 
+				# identified in the current plot
+				peakPushSub = peakPushEvents[which(peakPushEvents$Date == 
+										unique(dat$Date)),]
+				# Subset only rows that are within the current time range
+				peakPushSub = peakPushSub[which( (peakPushSub$Time.msec > 
+										dat$Time.msec[j]) & 
+								(peakPushSub$Time.msec < 
+									dat$Time.msec[j+999])),]
+				# Plot previously identified peaks on the current plot
+				points(x=peakPushSub$Time.msec, 
+						y = peakPushSub[,'JOY_X_signal'],
+						pch = 20, col = 'red')
+				# Plot previously identified peaks on the current plot
+				points(x=peakPushSub$Time.msec, 
+						y = peakPushSub[,'JOY_Y_signal']+offY,
+						pch = 20, col = 'skyblue')
+			}
 			par(xpd = TRUE)
-#		greenlocsx = c(dat$Time.msec[j],dat$Time.msec[j+200],
-#				dat$Time.msec[j+200],dat$Time.msec[j])
-#		greenlocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
-#		polygon(greenlocsx,greenlocsy,col='green')
-			# Button for skipping ahead to next section
-			bluelocsx = c(dat$Time.msec[j+800],dat$Time.msec[j+1000],
-					dat$Time.msec[j+1000],dat$Time.msec[j+800])
+			# Draw button for skipping ahead to next section
+			dist = (par()$usr[2]-par()$usr[1]) * 0.2
+			bluelocsx = c(par()$usr[2]-dist, par()$usr[2],par()$usr[2],
+					par()$usr[2]-dist)
 			bluelocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
 			polygon(bluelocsx,bluelocsy,col='lightblue')
-			text(x = dat$Time.msec[j+900],y = ylims[2]+50, labels='skip ahead')
+			text(x = par()$usr[2],y = par()$usr[4], labels='skip ahead',
+					adj = c(1.5,-1.5))
 			# Put message on plot
 			text(x = par()$usr[1], y = ylims[2]+50,
 					labels = 'Click on peak to zoom in\n or click blue button\n to skip ahead',
 					adj = 0)
+			# Have the user choose either a button or peak to zoom in on
 			clickLocation = locator(n = 1)
+			# Handle the click
 			if (clickLocation$x > bluelocsx[1] & 
 					clickLocation$x < bluelocsx[2] &
 					clickLocation$y > bluelocsy[1] & 
@@ -738,7 +803,7 @@ for (dayDate in 1:length(myDates)){
 					clickLocation$x < par()$usr[2] & 
 					clickLocation$y > par()$usr[3] & 
 					clickLocation$y < par()$usr[4]) {
-				# user clicked somewhere else in the figure, decide if it was 
+				# User clicked somewhere else in the figure, decide if it was 
 				# a value location to click
 				print('click in plot')
 				points(x = clickLocation$x, y = clickLocation$y, col = 'red',
@@ -746,7 +811,7 @@ for (dayDate in 1:length(myDates)){
 				zoom = TRUE
 				skip = FALSE
 			} else {
-				# Trigger a re-plot
+				# User clicked outside the plot or buttons, so trigger a re-plot
 				print('click not in field')
 				clickLocation
 				zoom = FALSE
@@ -757,49 +822,69 @@ for (dayDate in 1:length(myDates)){
 				# cycle main loop again to move to next chunk of time			
 				break  # break out of while loop
 			} else if (zoom == TRUE & skip == FALSE) { 
-				# zoom in
+				##################################################
+				# Create the 2nd plot (the initial zoomed-in plot)
+				# Zoom in for the next phase of peak choosing
 				# Find the row of dat closest to the click location
 				clickRow = which.min(abs(clickLocation$x - dat$Time.msec))
 				# subset a new data frame centered around the clickRow
 			    temp = dat[(clickRow-100):(clickRow+100),]
 	
-	
 				# Now the user will choose a time point that represents the
 				# baseline force value for upcoming peaks
-				ylims = range(temp$JOY_X_signal)
+				ylims = range(c(temp[,'JOY_X_signal'],
+								temp[,'JOY_Y_signal']+offY))
 				xlims = range(temp$Time.msec)
 				plot(temp$Time.msec,
-						y = temp$JOY_X_signal,
+						y = temp[,'JOY_X_signal'],
 						type = 'l', 
-						ylab = 'Raw x-axis signal', xlab = 'Time, ms')
+						ylab = paste0('Raw axis signal'), 
+						xlab = 'Time, ms',
+						ylim = ylims)
+				lines(temp$Time.msec,
+						y = temp[,'JOY_Y_signal']+offY, col = 'blue')
+				if (exists('peakPushEvents')){
+					# If it exists, find any events that might already be 
+					# identified in the current plot
+					peakPushSub = peakPushEvents[which(peakPushEvents$Date == 
+											unique(dat$Date)),]
+					# Subset only rows that are within the current time range
+					peakPushSub = peakPushSub[which( (peakPushSub$Time.msec > 
+												temp$Time.msec[1]) & 
+											(peakPushSub$Time.msec < 
+												temp$Time.msec[nrow(temp)])),]
+					# Plot previously identified peaks on the current plot
+					points(x=peakPushSub$Time.msec, 
+							y = peakPushSub[,'JOY_X_signal'],
+							pch = 20, col = 'red')
+					points(x=peakPushSub$Time.msec, 
+							y = peakPushSub[,'JOY_Y_signal']+offY,
+							pch = 20, col = 'skyblue')
+				}
 				par(xpd=TRUE)
-				bluelocsx = c(xlims[1]+1600,xlims[1]+2200,
-						xlims[1]+2200,xlims[1]+1600)
-				bluelocsy = c(ylims[2],ylims[2],ylims[2]+100,ylims[2]+100)
+				# Plot a button for user to skip ahead
+				dist = (par()$usr[2]-par()$usr[1]) * 0.2
+				bluelocsx = c(par()$usr[2]-dist, par()$usr[2],par()$usr[2],
+						par()$usr[2]-dist)
+				bluelocsy = c(par()$usr[4],par()$usr[4],ylims[2]+100,ylims[2]+100)
 				polygon(bluelocsx,bluelocsy,col='lightblue')
-				text(x = xlims[1]+1600,y = ylims[2], 
-						labels='Skip to next section', adj = c(-0.1,-1))
-#				pinklocsx = c(xlims[1]+1000,xlims[1]+1600,
-#						xlims[1]+1600,xlims[1]+1000)
-#				pinklocsy = c(ylims[2]+20,ylims[2]+20,ylims[2]+100,ylims[2]+100)
-#				polygon(pinklocsx,pinklocsy,col='pink')
-#				text(x = xlims[1]+1000,y = ylims[2]+50, 
-#						labels='Done selecting', adj = 0)
+				text(x = par()$usr[2],y = par()$usr[4], 
+						labels='Skip to next section', adj = c(-0.1,-1.5))
 				text(x=par()$usr[1], y = par()$usr[4],
-						labels='Click a baseline point or hit move', adj = c(0,0))
-
+						labels='Click a baseline point or hit skip', 
+						adj = c(0,-0.3))
+				# The user should click on a baseline point now. 
 				clickLocation = locator(n = 1)
 				if (clickLocation$x > bluelocsx[1] & 
 						clickLocation$x < bluelocsx[2] &
 						clickLocation$y > bluelocsy[1] & 
 						clickLocation$y < bluelocsy[3]) {
-					# User clicked in box to move ahead
+					# User clicked in box to skip ahead
+					# Set zoom and skip so that the wide-angle plot will still
+					# show the same range of time as the previous wide plot
+					zoom = FALSE
+					skip = FALSE
 					break
-#					} else if (clickLocation$x > pinklocsx[1] & 
-#							clickLocation$x < pinklocsx[2] &
-#							clickLocation$y > pinklocsy[1] & 
-#							clickLocation$y < pinklocsy[3]){
-					# User click
 				} else if (clickLocation$x > par()$usr[1] &
 						clickLocation$x < par()$usr[2] & 
 						clickLocation$y > par()$usr[3] & 
@@ -814,15 +899,13 @@ for (dayDate in 1:length(myDates)){
 				##########################
 				# With a baseline location in hand, calculate calibrated force
 				# values and replot the norm'd forces
-				
-				##################
-				# Calculate an offset from 'zero' for each axis using the first few samples
-				# where there is presumably no force being exerted
-				xoffset = mean(temp$X.N[baseLocRow:(baseLocRow+20)])
+				# Calculate an offset from 'zero' for each axis using the first 
+				# few samples where there is presumably no force being exerted
+				xoffset = mean(temp$X.N[baseLocRow:(baseLocRow+baseLength)])
 				temp$X.N.off = temp$X.N - xoffset
-				yoffset = mean(temp$Y.N[baseLocRow:(baseLocRow+20)])
+				yoffset = mean(temp$Y.N[baseLocRow:(baseLocRow+baseLength)])
 				temp$Y.N.off = temp$Y.N - yoffset
-				zoffset = mean(temp$Z.N[baseLocRow:(baseLocRow+20)])
+				zoffset = mean(temp$Z.N[baseLocRow:(baseLocRow+baseLength)])
 				temp$Z.N.off = temp$Z.N - zoffset 
 				# Calculate euclidean norm force
 				for (r in 1:nrow(temp)){
@@ -830,26 +913,53 @@ for (dayDate in 1:length(myDates)){
 					temp$Norm[r] = norm(xyz,'2')
 				}
 				################################################################
+				# Create the 3rd plot, showing Norm'd force
 				# Have user identify peaks here to be classified as peak/push
 				xlims = range(temp$Time.msec)
 				ylims = range(temp$Norm)
 				plot(x = temp$Time.msec, y = temp$Norm,type='b', 
 						xlab = 'Time, msec', ylab = 'Norm, Newtons', las = 1)
+				if (exists('peakPushEvents')){
+					# If it exists, find any events that might already be 
+					# identified in the current plot
+					peakPushSub = peakPushEvents[which(peakPushEvents$Date == 
+											unique(dat$Date)),]
+					# Subset only rows that are within the current time range
+					peakPushSub = peakPushSub[which( (peakPushSub$Time.msec > 
+												temp$Time.msec[1]) & 
+											(peakPushSub$Time.msec < 
+												temp$Time.msec[nrow(temp)])),]
+					# Plot previously identified peaks on the current plot
+					points(x=peakPushSub$Time.msec, y = peakPushSub$Norm,
+							pch = 20, col = 'red')
+				}
+				# Plot the chosen baseline points
+				points(x = temp$Time.msec[baseLocRow:(baseLocRow+baseLength)], 
+						y = temp$Norm[baseLocRow:(baseLocRow+baseLength)], 
+						pch = 20, col = 'orange')
+				text(x = temp$Time.msec[baseLocRow], 
+						y = temp$Norm[baseLocRow]+1, labels = 'Baseline',
+						adj=c(0,0.7))
 				par(xpd=FALSE)
 				grid(col = 'grey70',lty = 2)
 				abline(h = 2, lty = 2, col = 'red')
 				par(xpd=TRUE)
-				bluelocsx = c(xlims[1]+1650,xlims[1]+2200,
-						xlims[1]+2200,xlims[1]+1650)
-				bluelocsy = c(ylims[2]+1,ylims[2]+1,ylims[2]+100,ylims[2]+100)
+				# Add a box to let the user declare they are done choosing
+				dist = (par()$usr[2]-par()$usr[1]) * 0.2
+				bluelocsx = c(par()$usr[2]-dist, par()$usr[2],par()$usr[2],
+						par()$usr[2]-dist)
+				bluelocsy = c(par()$usr[4],par()$usr[4],ylims[2]+100,ylims[2]+100)
 				polygon(bluelocsx,bluelocsy,col='lightblue')
-				text(x = xlims[1]+1700,y = ylims[2]+3, 
-						labels='Done choosing', adj = 0)
+				text(x = par()$usr[2],y = par()$usr[4], 
+						labels='Done choosing', adj = c(1.3,-1))
+				text(x = par()$usr[1],y = par()$usr[4], 
+						labels = 'Click on each peak',
+								adj = c(0,-0.5))
 				keepChoosing = TRUE
 				while(keepChoosing == TRUE){
 					clickLocation = locator(n = 1) # have user select a point
 					# Draw where the user clicked
-					points(x=clickLocation$x,y=clickLocation$y,col='red',
+					points(x=clickLocation$x,y=clickLocation$y,col='blue',
 							pch = 20)
 					if (clickLocation$x > bluelocsx[1] & 
 							clickLocation$x < bluelocsx[2] &
@@ -875,7 +985,8 @@ for (dayDate in 1:length(myDates)){
 						mypoint[,1] = mypoint[,1]/1000
 						# Run the nearest neighbor search. The k=1 argument
 						# should return the 1st-closest nearest neighbor
-						rowIndex = nn2(data=mymatrix,query=mypoint,k = 1)$nn.idx[1,1]
+						rowIndex = RANN::nn2(data=mymatrix,query=mypoint,
+								k = 1)$nn.idx[1,1]
 						# Add the identified point to the plot
 						points(temp$Time.msec[rowIndex],y=temp$Norm[rowIndex],
 								pch = 20, col = 'royalblue')
@@ -907,13 +1018,53 @@ for (dayDate in 1:length(myDates)){
 				repeatLoop = TRUE 
 			}
 		} # end of while(repeatLoop == TRUE) 
-
 	}
-
-}
-
-
+	cat('Finished\n')
+	# Return peakPushEvents data frame
+	peakPushEvents
+	
+} # end of function
 
 ```
 
+```{r choosePeaks, eval = FALSE}
+# After defining the peak choosing function in the previous chunk of code, 
+# now use it to identify potential peak/push events on each trial date. 
+# Run the code in this chunk manually, since it requires a lot of user 
+# interaction. 
 
+# Available trial dates:
+# 2016-05-18
+# 2016-05-19
+# 2016-12-14
+# 2016-12-15
+# 2017-01-05
+# 2017-01-06
+
+mydate = as.Date('2017-01-06')
+
+eventdf = peakChooser(trialdate = mydate, forces = forces, calibs = calibCoeffs,
+		eventsdf = NULL, baseLength = 10)
+
+# events20161214 = eventdf
+# events20161215 = eventdf
+# events20160518 = eventdf
+# events20160519 = eventdf
+# events20170105 = eventdf
+# events20170106 = eventdf
+# output = rbind(events20161214,events20161215,events20160518,
+# 			events20160519,events20170105,events20170106)
+
+#output[,6:12] = round(output[,6:12], digits = 2)
+# write.csv(output, file = 'Events_picker_output_20171208.csv',row.names=FALSE)
+
+```
+The output from the `peakChooser` function was saved to a csv file called
+`Events_picker_output_20171208.csv`. The data in that file next need to be 
+processed to determine if each event was a peck or a push according to the 
+criteria outlined above. 
+
+```{r classifyPeckPush}
+
+
+```
