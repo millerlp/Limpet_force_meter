@@ -1,7 +1,7 @@
 ---
 title: "Limpet force meter analysis code"
 author: ""
-date: "2017-10-27"
+date: ""
 output: word_document
 ---
 
@@ -10,9 +10,10 @@ output: word_document
 knitr::opts_chunk$set(echo = TRUE)
 options(replace.assign=TRUE,width=60)
 knitr::opts_chunk$set(tidy=FALSE)
+showcode = FALSE
 ```
 
-```{r calibrationFunctions, cache = TRUE}
+```{r calibrationFunctions, cache = TRUE, echo = showcode}
 #################################################################################
 ## Function loadCalibFile
 ## This function imports a calibration data file (.csv) with 4 columns of data
@@ -329,17 +330,25 @@ plotAxesCalib = function(calib = calib){
 ###############################################################################
 
 ```
-We have the following calibration files and trial files. Note that the 
-April 2016 trial data should not be analyzed, as the z-axis was not working. 
+  
 
 The calibration data for the positive Y-axis on 2016-12-14 appear to be no 
 good in the summary calibration file. The connector for this transducer axis was
-not functional. No results from the
-2016-12-15 trial should be trusted until this is rectified. 
+not functional. In order to still use the data from the 2016-12-15 trial, we can
+instead use the same calibration from 2016-12-13, which is the closest 
+previous calibration. For some of the other calibration events, data for
+certain masses appear to be erroneous (possibly due to the wrong mass value 
+being entered during calibration). The code removes potentially spurious 
+calibration data points, and the calibration data that end up being used in the
+analysis are plotted below. 
 
+Note that the April 2016 trial data should not be analyzed, as the z-axis was
+not working. For the May 2016 trials, the closest available calibration data
+were from Apr 20 2016, so that calibration is used. The raw data from that
+calibration aren't available currently, so we have to use the summary
+calibration data (means of the analog output value at each mass).
 
-
-```{r importRawCalib20161213, echo=showcode, caption="Calibration data from 2016-12-13"}
+```{r importRawCalib20161213, echo=showcode, cache=TRUE, fig.cap="Calibration data from 2016-12-13",fig.width=8,fig.height=10}
 if (.Platform$OS.type == 'windows'){
 	cdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/CAL files raw data/"
 } else if (.Platform$OS.type == 'unix'){
@@ -428,7 +437,7 @@ plot(mass.grams~analogValue, data = positiveZ, main = 'Z, 2016-12-13')
 ```
 
 
-```{r importRawCalib20170104, echo=showcode,caption="Calibration data from 2016-01-04"}
+```{r importRawCalib20170104, echo=showcode,cache=TRUE,fig.cap="Calibration data from 2016-01-04",fig.width=8,fig.height=10}
 # Repeat for the next calibration file
 rawCal = read.csv(paste0(cdir,'CAL_20170104_1131_00.csv'))
 # Find the mean analogValue when mass.grams == 0, this can be used to split up
@@ -512,7 +521,7 @@ plot(mass.grams~analogValue, data = positiveZ, main = 'Z, 2017-01-04')
 ################################################################################
 ```
 
-```{r importRawCalib20170105, echo=showcode,caption="Calibration data from 2017-01-05"}
+```{r importRawCalib20170105, echo=showcode,cache=TRUE,fig.cap="Calibration data from 2017-01-05",fig.width=8,fig.height=10}
 # Repeat for the next calibration file
 rawCal = read.csv(paste0(cdir,'CAL_20170105_1438_00.csv'))
 # Find the mean analogValue when mass.grams == 0, this can be used to split up
@@ -944,21 +953,25 @@ mimic rather than actively attempting to remove it)
 * We are not considering ‘Touches’ in our force meter analyses
 
 
-I wrote an interactive function to let the user pick a trial date and 
+I wrote an interactive function (`PushPeckPickFunction`) to let the user pick a 
+trial date and 
 go through the raw time series data and attempt to identify potential pecks and
-pushes. The script has the user first identify a period of at least 10 samples 
-(100 milliseconds) where the baseline signal appears stable, and then the user
+pushes. The script has the user first identify a period of at least 8 samples 
+(80 milliseconds) where the baseline signal appears stable, and then the user
 clicks on each peak above the 2N threshold outlined above. Because the sensors
 tended to drift and take new baseline values, particularly after big hits by
 the bird, the user is identifying a new baseline for each peak or group of
 peaks that happen in quick succession and appear to share a common baseline
 value. The output of the function `peakChooser()` is a data frame that contains
 a row from the original `forces` data frame for each identified peak. As a
-result, the raw X, Y, Z values, time in milliseconds, and calibrated forces in
-the X, Y, and Z axes (plus the euclidean norm of all 3 axes) are available for 
-each peak event, along with the starting time value for the baseline. These data
-could be used to relocate a chunk of the raw timeseries around each peak event
-for further analysis. 
+result, the time in milliseconds (`Time.msec`), the raw X, Y, Z values
+(`X.N`,`Y.N`,`Z.N`, units of Newtons), calibrated forces in the X, Y, and Z axes
+(`X.N.off`, `Y.N.off`,`Z.N.off`, units of Newtons), the
+euclidean norm of all 3 axes (`Norm`, units of Newtons), and the timestamp of
+the chosen baseline value (`BaselineTime.msec`) are available for each peak
+event. These data could be
+used to relocate a chunk of the raw timeseries around each peak event for
+further analysis. 
 
 
 
@@ -977,19 +990,28 @@ for further analysis.
 
 library(RANN) # for nn2 nearest neighbor search function
 
-
-# Inputs
-# trialDate  - A Date object giving the date of the bird trial
-# forces - a dataframe containing all of the trial data from each day, imported
-# earlier
-# calibs - a list object containing the calibration slopes associated from 
-# each trial date. Created earlier.
-# eventsdf - an optional data frame created from the output of this function. If
-# supplied, this will be used to plot markers on already-identified peaks in the
-# chosen day's timeseries. 
-# baseLength - the number of samples to be averaged together to form the baseline
-# values for X, Y, and Z axes prior to an identified peak. 8 samples at 10ms 
-# interval = 80 milliseconds
+#' Peck/Push event chooser
+#' 
+#' @param trialDate  - A Date object giving the date of the bird trial
+#' @param forces - a dataframe containing all of the trial data from each day, imported
+#' earlier
+#' @param calibs - a list object containing the calibration slopes associated from 
+#' each trial date. Created earlier.
+#' @param eventsdf - an optional data frame created from the output of this function. If
+#' supplied, this will be used to plot markers on already-identified peaks in the
+#' chosen day's timeseries. 
+#' @param baseLength - the number of samples to be averaged together to form the baseline
+#' values for X, Y, and Z axes prior to an identified peak. 8 samples at 10ms 
+#' interval = 80 milliseconds
+#' 
+#' @return A data frame containing an entry for each identified peak events,
+#' with columns Time.msec, JOY_X_signal, JOY_Y_signal, BEAM_Z_signal,
+#' Date, X.N (raw X axis force in Newtons), Y.N (raw Y-axis force), Z.N (raw
+#' Z-axis force), X.N.off (the estimated actual X-axis force in Newtons, 
+#' after accounting for baseline drift), Y.N.off, Z.N.off, Norm (net force
+#' for all 3 axes (X, Y, Z) after accounting for baseline drift, in Newtons)
+#' and BaselineTime.msec (timestamp for the chosen baseline samples for this
+#' peak.
 	
 peakChooser = function(trialDate, forces = forces, calibs = calibCoeffs, 
 		eventsdf = NULL, baseLength=8){
@@ -1318,7 +1340,7 @@ peakChooser = function(trialDate, forces = forces, calibs = calibCoeffs,
 
 ```
 
-```{r choosePeaks, eval = FALS, echo=showcode}
+```{r choosePeaks, eval = FALSE, echo=showcode}
 # After defining the peak choosing function in the previous chunk of code, 
 # now use it to identify potential peak/push events on each trial date. 
 # Run the code in this chunk manually, since it requires a lot of user 
@@ -1643,7 +1665,7 @@ events data frame does not meet the critera for a peck or a push, these new
 columns will contain NA. 
 
 
-```{r classifyPeckPush, echo=showcode}
+```{r classifyPeckPush, echo=showcode, cache = TRUE}
 # Re-load the events file from the output of the peakChooser function above
 baseLength = 8 # 8 sample baseline
 peakThreshold = 2  # newtons
@@ -1657,8 +1679,19 @@ events3 = peckpushClassify(events = events2, forces = forces,
 
 ```
 
+```{r histPecks, echo=showcode, fig.width = 6, fig.height = 8}
+par(mfrow=c(2,1))
+hist(events3$Norm[events3$PeckPush == 'Peck'], 
+		main = 'Peak forces for all Peck events', col = 'red', 
+		ylim = c(0,80), las = 1, xlab = 'Force, Newtons')
+hist(events3$Norm[events3$PeckPush == 'Push'], 
+		main = 'Peak forces for all Push events', col = 'blue',
+		ylim = c(0,80), las = 1, xlab = 'Force, Newtons')
 
-```{r summaryTable, eval = FALSE, echo=showcode}
+```
+
+
+```{r summaryTable, echo=showcode}
 
 events3 = read.csv(paste0(fdir,'Events_classified_20180122.csv'))
 
@@ -1687,7 +1720,7 @@ meanPeckTop10 =  mean(peck10$Norm)
 meanPushTop10 = mean(push10$Norm)
 sdPeckTop10 = sd(peck10$Norm)
 sdPushTop10 = sd(push10$Norm)
-nPeakTop10 = nrow(peak10)
+nPeckTop10 = nrow(peck10)
 nPushTop10 = nrow(push10)
 
 summaryTable1 = data.frame(Max = c(maxPeck,maxPush), Min = c(minPeck,minPush),
@@ -1695,16 +1728,32 @@ summaryTable1 = data.frame(Max = c(maxPeck,maxPush), Min = c(minPeck,minPush),
 		SD = round(c(sdPeck,sdPush),dig=2), 
 		Median = round(c(medianPeck,medianPush),dig=2),
 		N = c(nPeck,nPush))
+rownames(summaryTable1) = c('Peck','Push')
+cat('Summary data for all identified events. Values are force in Newtons.\n')
 summaryTable1
 
+
+summaryTable2 = data.frame(
+#		Max = c(maxPeck,maxPush), 
+#		Min = c(minPeck,minPush),
+		Mean = round(c(meanPeckTop10,meanPushTop10),dig=2), 
+		SD = round(c(sdPeckTop10,sdPushTop10),dig=2), 
+#		Median = round(c(medianPeck,medianPush),dig=2),
+		N = c(nPeckTop10,nPushTop10))
+rownames(summaryTable2) = c('Peck','Push')
+cat('-----------------------------------\n')
+cat('Summary data for the highest 10% of events. Values are force in Newtons.\n')
+summaryTable2
 
 # Separate horizontal/vertical data
 
 
 ```
 
+Below are some example classified Pecks and Pushes. The figures have guidelines
+showing where the thresholds are for classification as a peck or push. 
 
-```{r plotPeckPushes, fig.height = 10, fig.width=8,dpi=300,dev='png'}
+```{r plotPeckPushes,echo=showcode, fig.height = 10, fig.width=8,dpi=300,dev='png'}
 # Make some example plots
 for (i in seq(1,36,by = 4)){ 
 	par(mfrow = c(3,2) )
