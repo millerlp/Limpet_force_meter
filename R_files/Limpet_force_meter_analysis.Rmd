@@ -564,7 +564,8 @@ negativeY = rawCal[(rawCal$axis == 'Y') & (rawCal$mass.grams > 0) &
 				(rawCal$analogValue < zeroval),]
 negativeY = rbind(negativeY, rawCal[(rawCal$axis == 'Y') & 
 						(rawCal$mass.grams == 0),])
-
+# The 1000g trial appears to be a repeat of the 500g trial
+negativeY = negativeY[negativeY$mass.grams != 1000,]
 #plot(mass.grams~analogValue, data = negativeY)
 #summary(lm(mass.grams~analogValue, data = negativeY))
 
@@ -678,7 +679,7 @@ calibs = rbind(calibs,temp)
 if (exists('forces')) rm(forces)
 
 # Concatenate all force data into one data frame
-for (i in 1:length(forcefiles)){
+for (i in 1:length(forcefiles)){ 
 	temp = read.csv(paste0(fdir,forcefiles[i]))
 
 	# Extract date from file name
@@ -744,7 +745,7 @@ values). The `events` data frame currently only has the net euclidean norm
 # For each date in the 'calibs' data frame, fit regressions to each axis
 # and determine conversions from raw counts to force in Newtons. 
 
-dates = unique(calibs$Date)
+dates = unique(calibs$Date) 
 
 # 2016-04-20 calibration goes with May 18 + 19 2016 ForceMeterData
 # 2016-12-13 calibration goes with Dec 14 + 15 2016 ForceMeterData
@@ -752,7 +753,7 @@ dates = unique(calibs$Date)
 # 2017-01-05 calibration goes with Jan 6 2017 ForceMeterData
 
 for (i in 1:length(dates)){
-  # subset the calibs by date
+  # subset the calibs by date 
   temp = calibs[calibs$Date == dates[i],]
   
   tempCalib = calibCoefficients(temp)
@@ -850,7 +851,7 @@ for (i in 1:length(events$Event)){
 		# a time
 		forceList[[i]]$Norm[k] = norm(xyz[k,],"2")	
 	}
-	
+	 
 }	
 # Save output
 # write.csv(events2,file='Pound_ForceData_withXYZ_forces.csv',row.names=FALSE)
@@ -1365,20 +1366,20 @@ eventdf = peakChooser(trialDate = mydate, forces = forces, calibs = calibCoeffs,
 # events20161215 = eventdf
 # events20170105 = eventdf
 # events20170106 = eventdf
-# output = rbind(events20161214,events20161215,events20160518,
-# 			events20160519,events20170105,events20170106)
+ output = rbind(events20161214,events20161215,events20160518,
+ 			events20160519,events20170105,events20170106)
 #
-#output[,6:12] = round(output[,6:12], digits = 2)
-#output= cbind(seq(1,nrow(output)),output)
-#names(output)[1]= 'EventNumber'
-# write.csv(output, file = 'Events_picker_output_20171211.csv',row.names=FALSE)
+output[,6:12] = round(output[,6:12], digits = 2)
+output= cbind(seq(1,nrow(output)),output)
+names(output)[1]= 'EventNumber'
+write.csv(output, file = 'Events_picker_output_20180213.csv',row.names=FALSE)
 
 ```
 
 # Classifying peaks vs. pushes
 
 The output from the `peakChooser` function was saved to a csv file called
-`Events_picker_output_20180122.csv`. The data in that file next need to be 
+`Events_picker_output_20180213.csv`. The data in that file next need to be 
 processed to determine if each event was a peck or a push according to the 
 criteria outlined above. 
 
@@ -1386,7 +1387,7 @@ criteria outlined above.
 
 #################################
 # Function peckPushAlgo
-#' Classify an event as a peck or push
+#' Classify an event as a peck or push 
 #' @param Norm A vector of forces (euclidean norm = 3-axis net force), units of 
 #' Newtons 
 #' @param peakIndex A row index into the Norm vector that marks the peak to be
@@ -1517,7 +1518,7 @@ peckpushClassify <- function(events, forces, calibs, forceThreshold = 2,
 		temp = forces[forces$Date == trialDate,]
 		# Grab the relevant chunk of data
 		chunk = temp[ (temp$Time.msec >= basetime) & 
-						(temp$Time.msec < (peaktime+500)),]
+						(temp$Time.msec < (peaktime+1000)),]
 		peakIndex = which.min(abs(chunk$Time.msec - peaktime))
 		# Convert to force, Newtons
 		chunk$X.N = (chunk$JOY_X_signal * tempcalibs$X$slope) + 
@@ -1669,7 +1670,7 @@ plotpeckpush = function(eventNum, events = events2, forces=forces,
 			pch = 21, bg = ifelse(chunk$Norm[peakIndex+1] > halfThresh,
 					'yellow','forestgreen'), cex = 1.5)
 	# Draw a line at half the height of the peak
-	abline(h = halfThresh, col = 'forestgreen', lty = 3, lwd = 3)
+	abline(h = halfThresh, col = 'forestgreen', lty = 3, lwd = 3) 
 #	text(x = par()$usr[1], y = halfThresh, 
 #			labels = '2x peck threshold, neighboring points must be below this line',
 #			adj = c(-0.01,-0.5), col = 'forestgreen')
@@ -1716,20 +1717,20 @@ columns will contain NA.
 ```{r classifyPeckPush, echo=showcode, cache = TRUE}
 # Re-load the events file from the output of the peakChooser function above
 baseLength = 8 # 8 sample baseline
-peakThreshold = 2  # newtons
-events2 = read.csv(paste0(fdir,'Events_picker_output_20180122.csv'))
+peakThreshold = 2  # newtons  
+events2 = read.csv(paste0(fdir,'Events_picker_output_20180213.csv'))
 events2$Date = as.Date(events2$Date)   
 events = events2
 events3 = peckpushClassify(events = events2, forces = forces, 
 		calibs = calibCoeffs, forceThreshold = 2, baseLength = baseLength)
 events3$PeckPush = factor(events3$PeckPush)
 # Save the data frame with peck/push classifications as a new csv file. 
-write.csv(events3, file = 'Events_classified_20180212.csv',row.names=FALSE)
+write.csv(events3, file = 'Events_classified_20180213.csv',row.names=FALSE)
 
 ```
 
 ```{r histPecks, echo=showcode, fig.width = 6, fig.height = 8}
-par(mfrow=c(2,1))
+par(mfrow=c(2,1)) 
 hist(events3$Norm[events3$PeckPush == 'Peck'], 
 		main = 'Peak forces for all Peck events', col = 'red', 
 		ylim = c(0,80), las = 1, xlab = 'Force, Newtons')
@@ -1742,13 +1743,13 @@ hist(events3$Norm[events3$PeckPush == 'Push'],
 
 ```{r summaryTable, echo=showcode}
 
-#events3 = read.csv(paste0(fdir,'Events_classified_20180212.csv'))
+#events3 = read.csv(paste0(fdir,'Events_classified_20180213.csv'))
 
 
 # Generate some summary statistics from the events3 data frame for Peck and 
 # Push events
 
-maxPeck = max(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE)
+maxPeck = max(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE) 
 minPeck = min(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE)
 maxPush = max(events3$Norm[events3$PeckPush == 'Push'], na.rm=TRUE)
 minPush = min(events3$Norm[events3$PeckPush == 'Push'], na.rm=TRUE)
@@ -1769,7 +1770,7 @@ push10 = push10[!is.na(push10$PeckPush),] # Remove NA rows
 push10 = push10[push10$Norm >= quantile(push10$Norm,prob=0.9),]
 meanPeckTop10 =  mean(peck10$Norm)
 meanPushTop10 = mean(push10$Norm)
-sdPeckTop10 = sd(peck10$Norm)
+sdPeckTop10 = sd(peck10$Norm) 
 sdPushTop10 = sd(push10$Norm)
 nPeckTop10 = nrow(peck10)
 nPushTop10 = nrow(push10)
@@ -1802,7 +1803,8 @@ summaryTable2
 ```
 
 Below are some example classified Pecks and Pushes. The figures have guidelines
-showing where the thresholds are for classification as a peck or push. 
+showing where the thresholds are for classification as a peck or push. These
+are not all of the events picked out. 
 
 ```{r plotPeckPushes,echo=showcode, fig.height = 10, fig.width=8,dpi=300,dev='png'}
 # Make some example plots
@@ -1814,7 +1816,7 @@ for (i in seq(1,36,by = 6)){
 	}
 	
 }
-par(mfrow=c(1,1)) 
+par(mfrow=c(1,1))  
 
 ```
 
