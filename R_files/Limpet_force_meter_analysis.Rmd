@@ -206,7 +206,7 @@ calibCoefficients = function(calib = calib){
 # for the y-axis. 
 # Input should be a data frame of calibration data, with a column 'axis', 
 # 'direction', 'mass.grams', and 'analogValue', produced by importing the
-# raw calibration data file 
+# raw calibration data file  
 
 plotAxesCalib = function(calib = calib){
 	######################################################
@@ -431,7 +431,7 @@ par(mfrow = c(3,2))
 plot(mass.grams~analogValue, data = negativeX, main = 'X, 2016-12-13')
 plot(mass.grams~analogValue, data = positiveX, main = 'X, 2016-12-13')
 plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2016-12-13')
-plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2016-12-13')
+plot(mass.grams~analogValue, data = positiveY, main = 'Y, 2016-12-13')
 plot(mass.grams~analogValue, data = positiveZ, main = 'Z, 2016-12-13')
 
 ```
@@ -514,7 +514,7 @@ par(mfrow = c(3,2))
 plot(mass.grams~analogValue, data = negativeX, main = 'X, 2017-01-04')
 plot(mass.grams~analogValue, data = positiveX, main = 'X, 2017-01-04')
 plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2017-01-04')
-plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2017-01-04')
+plot(mass.grams~analogValue, data = positiveY, main = 'Y, 2017-01-04')
 plot(mass.grams~analogValue, data = positiveZ, main = 'Z, 2017-01-04')
 
 ################################################################################
@@ -600,7 +600,7 @@ par(mfrow = c(3,2))
 plot(mass.grams~analogValue, data = negativeX, main = 'X, 2017-01-05')
 plot(mass.grams~analogValue, data = positiveX, main = 'X, 2017-01-05')
 plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2017-01-05')
-plot(mass.grams~analogValue, data = negativeY, main = 'Y, 2017-01-05')
+plot(mass.grams~analogValue, data = positiveY, main = 'Y, 2017-01-05')
 plot(mass.grams~analogValue, data = positiveZ, main = 'Z, 2017-01-05')
 #
 ```
@@ -782,12 +782,12 @@ for (j in 1:length(calibCoeffs)){
 
 ```{r stepThroughEvents, cache = TRUE, echo=showcode}
 
-# Go through each events in the events data frame, pull out the relevant time
+# Go through each event in the events data frame, pull out the relevant time
 # which should be in the Time_msec column and the 
 # associated Date. Then go find the relevant rows in the forces data frame
 # to get the raw JOY_X_signal, JOY_Y_signal, and BEAM_Z_signal for a chunk of 
 # just before and after the event. Use the relevant calibration data to convert
-# each channel to forces in Newtons, 
+# each channel to forces in Newtons 
 events2 = events # make a copy
 events2$X.N = NA  # make empty columns
 events2$Y.N = NA
@@ -935,7 +935,7 @@ lines(BEAM_Z_signal~Time.msec,
 
 * Magnitude: ≥ 2N and MUST BE greater than or equal to two times the
 intensity of the force data points immediately before AND after a given point. 
-* Duration: Force MUST BE sustained for ≤ 2 consecutive milliseconds
+* Duration: Force MUST BE sustained for ≤ 20 consecutive milliseconds
 * Both magnitude and duration conditions must be met in order for a force
 to be categorized as a peck
 
@@ -1375,6 +1375,8 @@ eventdf = peakChooser(trialDate = mydate, forces = forces, calibs = calibCoeffs,
 
 ```
 
+# Classifying peaks vs. pushes
+
 The output from the `peakChooser` function was saved to a csv file called
 `Events_picker_output_20180122.csv`. The data in that file next need to be 
 processed to determine if each event was a peck or a push according to the 
@@ -1396,30 +1398,76 @@ criteria outlined above.
 
 peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2){
 # Determine if this was a peck or push
-	nearestN = max(c(Norm[peakIndex-1],Norm[peakIndex+1]))
+	# Start by getting the smaller force either immediately before or after
+	# the peakIndex force
+	nearestN = min(c(Norm[peakIndex-1],Norm[peakIndex+1]))
+	# Now look at the ratio of these two forces, and see if they are
+	# above the forceThreshold ratio of 2
 	if ( (Norm[peakIndex] / nearestN) > forceThreshold) {
 		# If the ratio of the peak force to its nearest neighbors is greater
-		# than 2, it meets the threshold for magnitude of a peck
+		# than 2, it meets one threshold for magnitude of a peck
 		peckThreshMagnitude = TRUE
 	} else {
 		peckThreshMagnitude = FALSE
 	}
-	if (Norm[peakIndex-1] < forceThreshold & 
-			Norm[peakIndex+1] < forceThreshold) {
-		# If the time points immediately before and after the peak are 
-		# both below forceThreshold (in Newtons), the peak meets the criteria 
-		# for peck duration because the time above forceThreshold must not \
-		# exceed 20 ms (= 2 sample intervals)
-		peckThreshTime = TRUE
-	}  else {
-		peckThreshTime = FALSE
+	######################
+	# Now deal with the criterion that if more than 1 neighboring time point
+	# is still above the forceThreshold, then this is a push. But if 0 or 1
+	# neighboring time points are above forceThreshold, then this is a peak.
+	highCount = 0 # Add 1 for each time a neighboring point is above threshold
+	if (Norm[peakIndex-1] < forceThreshold){
+		# In this case, the point immediately before peakIndex is below
+		# the threshold. Keep highCount at 0
+		highCount = highCount + 0
+	} else { # If the point before peakIndex was > forceThreshold
+		highCount = highCount + 1 # increment for one high timepoint neighbor
+		if (Norm[peakIndex-2] < forceThreshold){
+			highCount = highCount + 0 # do not increment 
+		} else {
+			highCount = highCount + 1 # increment
+		}
+	}
+	# Check the 2 time points after peakIndex now
+	if (Norm[peakIndex+1] < forceThreshold){
+		# In this case, the point immediately after peakIndex is already low
+		highCount = highCount + 0  # do not increment in this case
+	} else { # If the point after peakIndex was > forceThreshold
+		highCount = highCount + 1 # increment for one high neighbor point
+		# Check the 2nd time point after peakIndex
+		if (Norm[peakIndex+2] < forceThreshold){
+			highCount = highCount + 0 # do not increment again
+		} else { # 2nd timepoint was also above forceThreshold
+			highCount = highCount + 1 # increment
+		}
 	}
 	
-	if (peckThreshMagnitude == TRUE & peckThreshTime == TRUE){
-		peckPush = 'Peck'
-	} else if (peckThreshMagnitude != TRUE | peckThreshTime != TRUE){
-		peckPush = 'Push'
+	# Now deal with the various flags to classify as a Peck or Push
+	if (peckThreshMagnitude == TRUE){
+		# If peckThreshMagnitude is true, then the peak was 2x larger than
+		# its largest neighbor. Now check if the high force went on for 
+		# more than 2 sample intervals (20ms), including the peak timepoint
+		if (highCount > 1) {
+			# If highCount is greater than 1, then the force was high for at 
+			# least 3 consecutive time points, making it a Push
+			peckPush = 'Push'
+		} else if (highCount <= 1){
+			# If highCount is 0 or 1, the force was only high for 1 or 2 
+		# sample intervals, making it a Peck. 
+			peckPush = 'Peck'
+		}
+	} else if (peckThreshMagnitude != TRUE) {
+		# If the peckThreshMagnitude is not TRUE, this may still be a series
+		# of high forces above the 2N threshold, if highCount is > 1
+		if (highCount > 1) {
+			peckPush = 'Push'
+		} else if (highCount <= 1){
+			# In this case the peak wasn't high enough to meet the 2x ratio
+			# threshold, and also didn't stay above 2N for long enough to be a 
+			# Push, so it should remain NA 
+			peckPush = NA
+		}
 	}
+
 	peckPush  # return peck/push status
 }
 
@@ -1674,8 +1722,9 @@ events2$Date = as.Date(events2$Date)
 events = events2
 events3 = peckpushClassify(events = events2, forces = forces, 
 		calibs = calibCoeffs, forceThreshold = 2, baseLength = baseLength)
+events3$PeckPush = factor(events3$PeckPush)
 # Save the data frame with peck/push classifications as a new csv file. 
-#write.csv(events3, file = 'Events_classified_20180122.csv',row.names=FALSE)
+write.csv(events3, file = 'Events_classified_20180212.csv',row.names=FALSE)
 
 ```
 
@@ -1693,7 +1742,7 @@ hist(events3$Norm[events3$PeckPush == 'Push'],
 
 ```{r summaryTable, echo=showcode}
 
-events3 = read.csv(paste0(fdir,'Events_classified_20180122.csv'))
+#events3 = read.csv(paste0(fdir,'Events_classified_20180212.csv'))
 
 
 # Generate some summary statistics from the events3 data frame for Peck and 
@@ -1713,8 +1762,10 @@ nPeck = length(events3$Norm[events3$PeckPush == 'Peck'])
 nPush = length(events3$Norm[events3$PeckPush == 'Push'])
 # Subset top 10 percent
 peck10 = events3[events3$PeckPush == 'Peck',]
+peck10 = peck10[!is.na(peck10$PeckPush),] # Remove NA rows
 peck10 = peck10[peck10$Norm >= quantile(peck10$Norm,prob=0.9),]
 push10 = events3[events3$PeckPush == 'Push',]
+push10 = push10[!is.na(push10$PeckPush),] # Remove NA rows
 push10 = push10[push10$Norm >= quantile(push10$Norm,prob=0.9),]
 meanPeckTop10 =  mean(peck10$Norm)
 meanPushTop10 = mean(push10$Norm)
@@ -1755,7 +1806,7 @@ showing where the thresholds are for classification as a peck or push.
 
 ```{r plotPeckPushes,echo=showcode, fig.height = 10, fig.width=8,dpi=300,dev='png'}
 # Make some example plots
-for (i in seq(1,36,by = 4)){ 
+for (i in seq(1,36,by = 6)){ 
 	par(mfrow = c(3,2) )
 	for (j in i:(i+5)){
 		plotpeckpush(eventNum = j, events = events2, forces = forces, 
