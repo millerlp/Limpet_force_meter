@@ -9,3 +9,4 @@ R_files/Limpet_force_meter_analysis_cache/
 R_files/Limpet_force_meter_analysis_files/
 *.DS_Store
 *.project
+*.log
