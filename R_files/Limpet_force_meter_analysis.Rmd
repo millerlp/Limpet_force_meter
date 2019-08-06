@@ -736,8 +736,8 @@ concatenated together into two data frames, `calibs` and `forces`, each with a
 millisecond timestamps. 
 
 
-The goal is to go through each identified event and extract the X-axis and 
-Y-axis forces (which need to be estimated based on the associated calibration
+The goal is to go through each identified event and extract the X, Y, and 
+Z-axis forces (which need to be estimated based on the associated calibration
 values). The `events` data frame currently only has the net euclidean norm 
 (total for all 3 axes).
 
@@ -1817,6 +1817,150 @@ for (i in seq(1,36,by = 6)){
 	
 }
 par(mfrow=c(1,1))  
+
+```
+
+
+# Peck/Push direction
+
+We can use the 3-dimensional force data to estimate the direction/angle that
+the bird attacked the mimic limpet at. 
+
+```{r calcDirection,echo=showcode}
+# First calculate net force in X-Y axis, holding on to the positive/negative
+# component of the Y-axis. A positive Y value is a force applied from the
+# rear of the shell towards the anterior, and a negative Y value would indicate
+# a force applied at the anterior end of the shell pushing towards the posterior.
+# We'll ignore directionality in the X axis (left-right) since the animal
+# is mostly symmetrical on either side of the anterior-posterior axis. 
+# So each pair of X-Y forces will be converted into a net horizontal force with
+# a fore-aft direction, and then we'll add on the vertical force to estimate
+# overall net direction in the Y-Z plane. 
+
+# Data are in the data frame events3. The columns X.N.off, Y.N.off, and Z.N.off
+# contain the offset-corrected forces in Newtons for the X, Y, Z axes. First 
+# subset events3 to remove events that were classified as NA instead of Peck 
+# or Push
+events4 = events3[-which(is.na(events3$PeckPush)),]
+
+forceDir = events4[,c('EventNumber','Date','Time.msec','PeckPush','Norm',
+				'X.N.off','Y.N.off','Z.N.off')]
+forceDir$horizForce.N = NA  # net X-Y axis force
+forceDir$horizAngle = NA # direction of force in the horizontal plane
+forceDir$netForce.N = NA # net including z-axis force (3-D force)
+forceDir$vertRadians = NA
+forceDir$vertAngle = NA
+
+for (i in 1:nrow(events4)){
+	# Calculate the 2-norm of the X and Y axes, and multiple by the sign of the 
+	# Y-axis data (keeps negative Y values as negatives, ignores X axis sign)
+	forceDir$horizForce.N[i] = norm(as.matrix(c(events4$X.N.off[i],
+									events4$Y.N.off[i])), '2') * 
+			sign(events4$Y.N.off[i]) 
+	forceDir$horizAngle[i] = atan2(events4$Y.N.off[i], events4$X.N.off[i])* 180/pi
+	
+	# Negative horizontal force values indicate posterior-directed force 
+	# To calculate vertical direction, use the sign from Z.N.off and ignore
+	# the sign from horizForce.N
+	forceDir$netForce.N[i] = norm(as.matrix(c(forceDir$horizForce.N[i],
+									events4$Z.N.off[i])),'2') * 
+			sign(events4$Z.N.off[i])
+	# Calculate angle (in radians) between horizontal plane and the vector 
+	# of Z and horizForce.N
+	forceDir$vertRadians[i] = atan2(events4$Z.N.off[i], forceDir$horizForce.N[i])
+	# Convert to degrees
+	forceDir$vertAngle[i] = (forceDir$vertRadians[i] * 180/pi) 
+	# Note that the value calculated in vertForce.N should be the same as
+	# the value in the Norm column carried over from events4 (ignoring sign)
+	
+}
+```
+
+```{r circularAnglePlot,echo=showcode,dpi=300, fig.width=7,fig.height = 7,fig.cap='Angular distribution of force vectors along the anterior-posterior axis and dorsal-ventral axis of the limpet mimic. Each point represents a single strike event by the black oystercatcher during trials on 6 dates. Forces directed anteriorly are plotted on the right side of the plot. Points lying below the horizontal axis indicate forces with a downwards (ventral) vertical component.'}
+library(circular)
+par(mfrow=c(2,1))
+shrinkval = 0.8
+panelLetterAdj = 0.2
+# Make a simple plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+h <- circular(forceDir$horizAngle, units='degrees',
+		template = 'none')
+thisplot = plot(h, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
+		axes=FALSE, tol = 0.01)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.23)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.35,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.5, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+points.circular(h, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = 0.05)	
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2, adj = panelLetterAdj)
+
+##################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+par(xpd=TRUE)
+f <- circular(forceDir$vertAngle, units='degrees',
+				template = 'none')
+plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+#abline(h = 0, lty = 2)
+#abline(v = 0, lty = 2)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20)
+
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.7,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+
+points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = 0.05)	
+mtext(side = 3, text = 'B', cex = 2, adj = panelLetterAdj)
+
+	
+# Test points
+#points.circular(h[1], col = 'blue',plot.info=thisplot)
+#points.circular(circular(0,units='degrees',template='none'), pch = 16, 
+#		col = 'green',plot.info=thisplot)
+#points.circular(circular(90,units='degrees',template='none'), pch = 16, 
+#		col = 'red',plot.info=thisplot)
+#points.circular(circular(-123,units='degrees',template='none'), pch = 21, 
+#		bg = 'yellow',plot.info=thisplot)
+
+library(png)
+img = readPNG("Lgigantea_profile_cutout.png")
+rasterImage(img,-0.69,-0.01,0.78,0.35)
+# TODO: darken the limpet image, place it better, preserve aspect ratio, make
+# image for the top view also.
+```
+
+
+
+```{r, echo=showcode, eval=FALSE}
+library(ggplot2)
+# circular histogram of force vectors
+ggplot(forceDir, aes(vertAngle)) + geom_histogram(binwidth = 12) + 
+				scale_x_continuous(breaks = seq(0,360, by = 30),lim=c(0,360)) + 
+				coord_polar(start = pi/2) + xlab(NULL)
+
 
 ```
 
