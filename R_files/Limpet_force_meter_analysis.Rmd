@@ -1729,7 +1729,7 @@ write.csv(events3, file = 'Events_classified_20180213.csv',row.names=FALSE)
 
 ```
 
-```{r histPecks, echo=showcode, fig.width = 6, fig.height = 8}
+```{r histPecks, echo=showcode,dpi = 300, fig.width = 6, fig.height = 8}
 par(mfrow=c(2,1)) 
 hist(events3$Norm[events3$PeckPush == 'Peck'], 
 		main = 'Peak forces for all Peck events', col = 'red', 
@@ -1806,7 +1806,7 @@ Below are some example classified Pecks and Pushes. The figures have guidelines
 showing where the thresholds are for classification as a peck or push. These
 are not all of the events picked out. 
 
-```{r plotPeckPushes,echo=showcode, fig.height = 10, fig.width=8,dpi=300,dev='png'}
+```{r plotPeckPushes,echo=showcode,cache=TRUE, fig.height = 10, fig.width=8,dpi=300,dev='png'}
 # Make some example plots
 for (i in seq(1,36,by = 6)){ 
 	par(mfrow = c(3,2) )
@@ -1876,36 +1876,130 @@ for (i in 1:nrow(events4)){
 }
 ```
 
-```{r circularAnglePlot,echo=showcode,dpi=300, fig.width=7,fig.height = 7,fig.cap='Angular distribution of force vectors along the anterior-posterior axis and dorsal-ventral axis of the limpet mimic. Each point represents a single strike event by the black oystercatcher during trials on 6 dates. Forces directed anteriorly are plotted on the right side of the plot. Points lying below the horizontal axis indicate forces with a downwards (ventral) vertical component.'}
+```{r horizForceSummary,echo=showcode}
+# Maximum forces in the horizontal plane (shearing force)
+cat('Strongest overall force in horizontal plane (this was a peck), Newtons\n')
+max(abs(forceDir$horizForce.N))
+
+cat('\nStrongest push force in horizontal plane, Newtons\n')
+max(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
+
+cat('\nFraction of horizontal pecks greater than 14 Newtons\n')
+sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']) > 14) / 
+		length(forceDir$horizForce.N[forceDir$PeckPush == 'Peck'])
+
+cat('\nFraction of horizontal pushes greater than 14 Newtons\n')
+sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']) > 14) / 
+		length(forceDir$horizForce.N[forceDir$PeckPush == 'Push'])
+
+```
+
+
+```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 244), right column shows events classified as pushes (n = 129)'}
+par(mfrow=c(2,2))
+
+mybreaks = seq(0,40,by=5)
+textLine = 1.8
+textadj = -0.3
+textcex = 1.5
+par(family='serif')
+hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']), 
+		main = 'Peck force, horizontal plane',
+		xlab = 'Net force in horizontal plane (N)', ylab = 'Frequency',
+		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		breaks = mybreaks)
+mtext(side = 3, text = 'A', line = textLine, adj = textadj, cex = textcex)
+
+hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']), 
+		main = 'Push force, horizontal plane',
+		xlab = 'Net force in horizontal plane (N)', ylab = 'Frequency',
+		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		breaks = mybreaks)
+mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
+hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']), 
+		main = 'Peck force, 3 dimensions',
+		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
+		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		breaks = mybreaks)
+mtext(side = 3, text = 'C', line = textLine, adj = textadj, cex = textcex)
+hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']), 
+		main = 'Push force, 3 dimensions',
+		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
+		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		breaks = mybreaks)
+mtext(side = 3, text = 'D', line = textLine, adj = textadj, cex = textcex)
+```
+
+
+```{r addImgFunction,echo=showcode}
+# Make a function to help ease adding PNG image into the plots below
+# From: https://stackoverflow.com/questions/27800307/adding-a-picture-to-plot-in-r
+
+addImg <- function(
+		obj, # an image file imported as an array (e.g. png::readPNG, jpeg::readJPEG)
+		x = NULL, # mid x coordinate for image
+		y = NULL, # mid y coordinate for image
+		width = NULL, # width of image (in x coordinate units)
+		interpolate = TRUE # (passed to graphics::rasterImage) A logical vector (or scalar) indicating whether to apply linear interpolation to the image when drawing. 
+){
+	if(is.null(x) | is.null(y) | is.null(width)){stop("Must provide args 'x', 'y', and 'width'")}
+	USR <- par()$usr # A vector of the form c(x1, x2, y1, y2) giving the extremes of the user coordinates of the plotting region
+	PIN <- par()$pin # The current plot dimensions, (width, height), in inches
+	DIM <- dim(obj) # number of x-y pixels for the image
+	ARp <- DIM[1]/DIM[2] # pixel aspect ratio (y/x)
+	WIDi <- width/(USR[2]-USR[1])*PIN[1] # convert width units to inches
+	HEIi <- WIDi * ARp # height in inches
+	HEIu <- HEIi/PIN[2]*(USR[4]-USR[3]) # height in units
+	rasterImage(image = obj, 
+			xleft = x-(width/2), xright = x+(width/2),
+			ybottom = y-(HEIu/2), ytop = y+(HEIu/2), 
+			interpolate = interpolate)
+}
+
+library(png)
+imgTop = readPNG('Lgigantea_top_view_cutout.png')
+imgSide = readPNG("Lgigantea_profile_cutout.png")
+
+```
+
+```{r circularAnglePlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
 library(circular)
+
 par(mfrow=c(2,1))
 shrinkval = 0.8
-panelLetterAdj = 0.2
+sepVal = 0.04
+panelLetterAdj = 0.01
+letterLine = 1.5
 # Make a simple plot of the distribution of fore-aft & left-right directional
 # data for the peaks and pushes together.
 h <- circular(forceDir$horizAngle, units='degrees',
 		template = 'none')
+par(xpd=TRUE)
 thisplot = plot(h, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
 		axes=FALSE, tol = 0.01)
 # Angle labels
 axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		lty = 1, tcl.text = 0.23)
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
 par(xpd=TRUE)
 # Body axis labels
 axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Anterior','Posterior'), tcl.text = -0.35,
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
 		at = c(circular(c(90,270), units='degrees', template='none')))
 axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Right','Left'), tcl.text = -0.5, 
+		labels=c('Right','Left'), tcl.text = -0.25, 
 		at = c(circular(c(0,180), units='degrees', template='none')))
 # Plot the stacked points
 points.circular(h, stack = TRUE, bins = 360, shrink =1.3, 
 		rotation = 'counter', zero = pi/2,
-		pch = 20, sep = 0.05)	
+		pch = 20, sep = sepVal)	
 par(xpd=FALSE)
-mtext(side = 3, text = 'A', cex = 2, adj = panelLetterAdj)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
 
-##################################
+####################################################################
+####################################################################
 # Make a plot of the distribution of vertical and fore-aft directional
 # data for the peaks and pushes together.
 par(xpd=TRUE)
@@ -1917,7 +2011,8 @@ plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0,
 #abline(v = 0, lty = 2)
 # Angle labels
 axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
-		tcl.text = 0.20)
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
 
 # Body axis labels
 axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
@@ -1927,43 +2022,440 @@ axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter',
 
 axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
 		labels=c('Anterior','Posterior'), 
-		tcl.text = -0.7,
+		tcl.text = -0.45,
 		at = c(circular(c(-7,185),units='degrees',template='none')))
-
+ 
 points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
 		rotation = 'counter', zero = 0,
-		pch = 20, plot.info = plot2, sep = 0.05)	
-mtext(side = 3, text = 'B', cex = 2, adj = panelLetterAdj)
+		pch = 20, plot.info = plot2, sep = sepVal)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
+```
 
-	
-# Test points
-#points.circular(h[1], col = 'blue',plot.info=thisplot)
-#points.circular(circular(0,units='degrees',template='none'), pch = 16, 
-#		col = 'green',plot.info=thisplot)
-#points.circular(circular(90,units='degrees',template='none'), pch = 16, 
-#		col = 'red',plot.info=thisplot)
-#points.circular(circular(-123,units='degrees',template='none'), pch = 21, 
-#		bg = 'yellow',plot.info=thisplot)
 
-library(png)
-img = readPNG("Lgigantea_profile_cutout.png")
-rasterImage(img,-0.69,-0.01,0.78,0.35)
-# TODO: darken the limpet image, place it better, preserve aspect ratio, make
-# image for the top view also.
+```{r circularAnglePecksOnlyPlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
+library(circular)
+
+par(mfrow=c(2,1))
+shrinkval = 0.8
+sepVal = 0.04
+panelLetterAdj = 0.01
+letterLine = 1.5
+# Make a simple plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+hpecks <- circular(forceDir$horizAngle[forceDir$PeckPush == 'Peck'], units='degrees',
+		template = 'none')
+par(xpd=TRUE)
+thisplot = plot(hpecks, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
+		axes=FALSE, tol = 0.01)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.25, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+points.circular(hpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal)	
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
+
+####################################################################
+####################################################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+par(xpd=TRUE)
+fpecks <- circular(forceDir$vertAngle[forceDir$PeckPush == 'Peck'], units='degrees',
+				template = 'none')
+plot2 = plot(fpecks, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+
+points.circular(fpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = sepVal)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
+
+```
+
+
+```{r circularPlotFunctions, echo=showcode}
+# Here's some modified functions from the 'circular' package to allow me to 
+# plot stacked points on a circle, but using a color for each point to represent
+# the associated force. 
+
+my.points.circular <- function (x, pch = 16, cex = 1, stack = FALSE, start.sep = 0, 
+		sep = 0.025, shrink = 1, bins = NULL, col = NULL, next.points = NULL, 
+		plot.info = NULL, zero = NULL, rotation = NULL, mycols, ...) 
+{
+	if (is.matrix(x) | is.data.frame(x)) {
+		nseries <- ncol(x)
+	}
+	else {
+		nseries <- 1
+	}
+	xx <- as.data.frame(x)
+	xcircularp <- attr(as.circular(xx[, 1]), "circularp")
+	type <- xcircularp$type
+	modulo <- xcircularp$modulo
+	if (is.null(plot.info)) {
+		if (is.null(zero)) 
+			zero <- xcircularp$zero
+		if (is.null(rotation)) 
+			rotation <- xcircularp$rotation
+		if (is.null(next.points)) 
+			next.points <- 0
+	}
+	else {
+		zero <- plot.info$zero
+		rotation <- plot.info$rotation
+		if (is.null(next.points)) 
+			next.points <- plot.info$next.points
+	}
+	if (is.null(bins)) {
+		bins <- NROW(x)
+	}
+	else {
+		bins <- round(bins)
+		if (bins <= 0) 
+			stop("bins must be non negative")
+	}
+	if (is.null(col)) {
+		col <- seq(nseries)
+	}
+	else {
+		if (length(col) != nseries) {
+			col <- rep(col, nseries)[1:nseries]
+		}
+	}
+	pch <- rep(pch, nseries, length.out = nseries)
+	for (iseries in 1:nseries) {
+		x <- xx[, iseries]
+		x <- na.omit(x)
+		n <- length(x)
+		if (n) {
+			x <- conversion.circular(x, units = "radians")
+			attr(x, "circularp") <- attr(x, "class") <- NULL
+			if (rotation == "clock") 
+				x <- -x
+			x <- x + zero
+			x <- x%%(2 * pi)
+			my.PointsCircularRad(x, bins, stack, col, pch, iseries, 
+					nseries, start.sep, sep, next.points, shrink, 
+					cex, mycols, ...)
+		}
+	}
+	return(invisible(list(zero = zero, rotation = rotation, next.points = next.points + 
+									nseries * sep)))
+}
+## Subfunction my.PointsCircularRad
+# mycols should be a vector of colors sorted in the same order as the 
+# angular data that are in the vector x
+my.PointsCircularRad <- function (x, bins, stack, col, pch, iseries, nseries, start.sep, 
+		sep, next.points, shrink, cex, mycols,...) 
+{
+	if (!stack) {
+		z <- cos(x)
+		y <- sin(x)
+		r <- 1 + ((iseries - 1) * sep + next.points + start.sep) * 
+				shrink
+		points.default(z * r, y * r, cex = cex, pch = pch[iseries], 
+				col = col[iseries], ...)
+	}
+	else {
+		x[x >= 2 * pi] <- 2 * pi - 4 * .Machine$double.eps
+		arc <- (2 * pi)/bins
+		pos.bins <- ((1:nseries) - 1/2) * arc/nseries - arc/2
+		breaks <- seq(0, 2 * pi, length.out = (bins + 1))
+		# Here you call histogram function to generate counts of how many
+		# values fall within each of the bins (breaks). At this point you
+		# lose the direct connection between the original data points and
+		# what gets plotted, since the plotting function just plots based
+		# on the bin's angle and number of points in the bin. 
+		bins.count <- hist.default(x, breaks = breaks, plot = FALSE, 
+				right = TRUE)$counts
+		mids <- seq(arc/2, 2 * pi - pi/bins, length = bins) + 
+				pos.bins[iseries]
+		index <- cex * sep
+		for (i in 1:bins) {
+			if (bins.count[i] != 0) {
+				# If there are values in this bin, do the following:
+				# The current bin runs from breaks[i] to breaks[i+1], so 
+				# we want to find rows in x that are within that interval,
+				# and get their associated force values from the original 
+				# data frame
+				xindex = which(x >= breaks[i] & x < breaks[i+1])
+				# Assume xindex holds row indices in the original data frame
+				# Get color values from the mycols vector of colors, which 
+				# should correspond to the forces for the chosen rows of x
+				colvals = mycols[xindex]
+				
+				for (j in 0:(bins.count[i] - 1)) {
+					r <- 1 + start.sep + j * index
+					z <- r * cos(mids[i])
+					y <- r * sin(mids[i])
+					points.default(z, y, cex = cex, pch = pch[iseries], 
+#							col = col[iseries], ...)
+							col = colvals[j+1], ...) # Plot color from colvals
+				}
+			}
+		}
+	}
+}
+
+```
+
+
+```{r circularAngleColorPlot,echo=showcode,dpi=300, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
+library(circular)
+library(RColorBrewer)
+library(plotrix)
+
+# Set up multiple plotting regions
+split.screen(figs = rbind(c(0,0.85,0.5,1),
+						c(0,0.85,0,0.5),
+						c(0.85,1,0,1)))
+
+
+shrinkval = 0.8
+sepVal = 0.04
+panelLetterAdj = -0.3
+letterLine = 1.2
+mymar = c(5,6,5,8)
+
+cols = brewer.pal(9,'Greys')
+cols = cols[3:9]
+# Create color ramp palette function
+pal = colorRampPalette(cols)
+# subset peck data
+#pecks = forceDir[forceDir$PeckPush == 'Peck',]
+pecks = forceDir # no subset
+# Order the peck data based on the absolute value of the 3-D peck force
+pecks = pecks[order(abs(pecks$Norm)),]
+# Generate a vector of color codes for the ordered force values
+peckcols = pal(nrow(pecks))
+
+
+# Make a plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+# Convert angle data to circular object
+hpecks <- circular(pecks$horizAngle, units='degrees',
+		template = 'none')
+par(xpd=TRUE)
+par(family='serif')
+par(mar = mymar)
+# initial plot
+thisplot = plot(hpecks, type = 'n', shrink = shrinkval, rotation = 'clock', 
+		zero = pi/2, 
+		axes=FALSE, tol = 0.01, control.circle = circle.control(n=5000))
+
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.25, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+my.points.circular(hpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal, mycols = peckcols)
+
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
+
+# Move to next split screen region
+screen(2)
+
+####################################################################
+####################################################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+
+# Order the peck data based on the absolute value of the 3-D peck force
+vpecks = pecks[order(abs(pecks$Norm)),]
+# Generate a vector of color codes for the ordered force values
+vpeckcols = pal(nrow(vpecks))
+
+
+par(xpd=TRUE)
+par(mar = mymar)
+par(family='serif')
+fpecks <- circular(vpecks$vertAngle, units='degrees',
+				template = 'none')
+plot2 = plot(fpecks, type = 'n', shrink = shrinkval, rotation = 'counter', 
+		zero = 0, 
+		axes = FALSE)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+
+my.points.circular(fpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = sepVal, mycols = vpeckcols)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
+
+screen(3)
+################################################################
+# Add color bar
+par(mar=c(6,0.1,6,2))
+par(family='serif')
+plot.new()
+legend_image <- as.raster(matrix(rev(pal(nrow(vpecks)))))
+rasterImage(legend_image, 0, 0, 0.4,1)
+text(x = 0.30,
+		y=plotrix::rescale(seq(2,max(vpecks$Norm),l=6),newrange=c(0,1)), 
+		labels = round(seq(2,max(vpecks$Norm),l=6),dig=1), pos = 4)
+mtext(side=4,text='Force (N)', line = 0.5)
+close.screen(all.screens=TRUE)
 ```
 
 
 
-```{r, echo=showcode, eval=FALSE}
-library(ggplot2)
-# circular histogram of force vectors
-ggplot(forceDir, aes(vertAngle)) + geom_histogram(binwidth = 12) + 
-				scale_x_continuous(breaks = seq(0,360, by = 30),lim=c(0,360)) + 
-				coord_polar(start = pi/2) + xlab(NULL)
+```{r circularAnglePushesOnlyPlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
+library(circular)
 
+par(mfrow=c(2,1))
+shrinkval = 0.8
+sepVal = 0.04
+panelLetterAdj = 0.01
+letterLine = 1.5
+# Make a simple plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+hpush <- circular(forceDir$horizAngle[forceDir$PeckPush == 'Push'], units='degrees',
+		template = 'none')
+par(xpd=TRUE)
+thisplot = plot(hpush, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
+		axes=FALSE, tol = 0.01)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.25, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+points.circular(hpush, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal)	
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
+
+####################################################################
+####################################################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+par(xpd=TRUE)
+fpush <- circular(forceDir$vertAngle[forceDir$PeckPush == 'Push'], units='degrees',
+				template = 'none')
+plot2 = plot(fpush, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+
+points.circular(fpush, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = sepVal)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 
 ```
 
 
+```{r directionAOV, echo=showcode}
+cat('Test of mean angle of attack in the horizontal plane for pecks vs pushes.')
+# Test of the mean angle of attach in the horizontal plane for pecks vs. pushes
+print(aov.circular(h,group = forceDir$PeckPush, method="LRT"))
+
+cat('\n\nTest of mean angle of attack in the vertical and \n 
+anterior-posterior plane for pecks vs pushes.')
+# Test of the mean angle of attack in the horizontal plane for pecks vs. pushes
+print(aov.circular(f,group = forceDir$PeckPush, method="LRT"))
+
+```
+
+```{r angleECDFplot, echo=showcode, dpi=300,fig.height = 7, fig.width = 5,fig.cap='Empirical cumulative density functions for angle (in radians) of pecks vs. pushes in the horizontal plane (top panel) and vertical plane (bottom panel).'}
+par(mfrow=c(2,1))
+# Horizontal plane
+plot.edf(hpecks, col = 'red', main = 'Horizontal plane', xlab = 'Radians',
+		ylab='Cumulative probability', las = 1)
+lines.edf(hpush, col = 'blue')
+legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1,
+		)
+
+## Vertical plane
+plot.edf(fpecks, col = 'red', main = 'Vertical plane',
+		xlab = 'Radians',ylab='Cumulative probability', las = 1)
+lines.edf(fpush, col = 'blue')
+legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1)
+
+
+```
 
 
