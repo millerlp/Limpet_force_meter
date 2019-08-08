@@ -349,11 +349,7 @@ calibration aren't available currently, so we have to use the summary
 calibration data (means of the analog output value at each mass).
 
 ```{r importRawCalib20161213, echo=showcode, cache=TRUE, fig.cap="Calibration data from 2016-12-13",fig.width=8,fig.height=10}
-if (.Platform$OS.type == 'windows'){
-	cdir = "D:/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/CAL files raw data/"
-} else if (.Platform$OS.type == 'unix'){
-	cdir = "~/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/CAL files raw data/"
-}
+cdir = "./Data/CAL files raw data/"
 
 fnames = dir(cdir)
 ################################################################################
@@ -616,7 +612,7 @@ if (.Platform$OS.type == 'windows'){
   fdir = "~/Dropbox/Force Meter Files with Luke/Force Meter Data and Calibration Files/"
 }
 
-
+fdir = './Data/'
 fnames = dir(fdir)
 fnames  # print file names
 # Do not bother with Apr 26 2016 data, the Z-axis wasn't working.
@@ -2459,3 +2455,29 @@ legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1)
 ```
 
 
+```{r}
+# From Denny & Blanchette 2002 JEB
+# Regression coefficients for dislodgement force as a function of aperture area
+# Shear: 
+# alpha = 76301
+# Beta = 0.812
+
+# For the equation F = alpha * aperture area ^ Beta
+# or linearized as ln(F) = ln(alpha) + Beta*ln(aperature area) (Equation 2)
+# 
+# The regression coefs above are based on area measured in METERS^2, so you need
+# to convert measured limpet aperture areas to sq. meters before you plug them
+# into this equation.
+
+alpha = 76301
+Beta = 0.812
+area = seq(0,20, by = 0.5)  # 0 to 20 cm^2 aperture area
+area.m = area / 10000 # convert cm^2 to m^2
+# Predict log forces (Newtons)
+logForces = log(76301) + (Beta*log(area.m))
+# Convert log forces to forces by taking exponent
+Forces = exp(logForces)
+
+plot(x = area.m * 10000, y = Forces, type = 'p', xlab = 'Aperture area (cm^2)',
+		ylab = 'Force (N)')
+```
