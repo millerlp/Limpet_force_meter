@@ -985,6 +985,12 @@ further analysis.
 # calibration values to each chunk of data to convert to Newtons and calculate
 # the norm. 
 
+# The code here is shown for reference, but not evaluated in this document
+# because it requires user interaction. This code was used to produce the 
+# data in the events file 'Events_picker_output_20180213.csv' used elsewhere in this
+# document.
+
+
 library(RANN) # for nn2 nearest neighbor search function
 
 #' Peck/Push event chooser
@@ -1343,6 +1349,10 @@ peakChooser = function(trialDate, forces = forces, calibs = calibCoeffs,
 # Run the code in this chunk manually, since it requires a lot of user 
 # interaction. 
 
+# This chunk is provided for reference but not evaluated in this Rmd document.
+# The results from this code were stored as the events in the
+# file 'Events_picker_output_20180213.csv'
+
 # Available trial dates:
 # 2016-05-18
 # 2016-05-19
@@ -1368,7 +1378,7 @@ eventdf = peakChooser(trialDate = mydate, forces = forces, calibs = calibCoeffs,
 output[,6:12] = round(output[,6:12], digits = 2)
 output= cbind(seq(1,nrow(output)),output)
 names(output)[1]= 'EventNumber'
-write.csv(output, file = 'Events_picker_output_20180213.csv',row.names=FALSE)
+write.csv(output, file = './Data/Events_picker_output_20180213.csv',row.names=FALSE)
 
 ```
 
@@ -1721,7 +1731,7 @@ events3 = peckpushClassify(events = events2, forces = forces,
 		calibs = calibCoeffs, forceThreshold = 2, baseLength = baseLength)
 events3$PeckPush = factor(events3$PeckPush)
 # Save the data frame with peck/push classifications as a new csv file. 
-write.csv(events3, file = 'Events_classified_20180213.csv',row.names=FALSE)
+write.csv(events3, file = './Data/Events_classified_20180213.csv',row.names=FALSE)
 
 ```
 
@@ -1875,7 +1885,7 @@ for (i in 1:nrow(events4)){
 ```{r horizForceSummary,echo=showcode}
 # Maximum forces in the horizontal plane (shearing force)
 cat('Strongest overall force in horizontal plane (this was a peck), Newtons\n')
-max(abs(forceDir$horizForce.N))
+(maxHorizForce = max(abs(forceDir$horizForce.N)))
 
 cat('\nStrongest push force in horizontal plane, Newtons\n')
 max(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
@@ -2481,3 +2491,58 @@ Forces = exp(logForces)
 plot(x = area.m * 10000, y = Forces, type = 'p', xlab = 'Aperture area (cm^2)',
 		ylab = 'Force (N)')
 ```
+
+
+```{r fitShearStationaryData, echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperature areas. The best fit line and 95% prediction interval are shown. Data reproduced from Denny & Blanchette 2000. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment.'}
+fdirDenny = './Data/Denny_Blanchette_2000_tenacity_data/'
+Dennydata = read.csv(file=paste0(fdirDenny,
+				'Lgigantea_shear_stationary_Denny_Blanchette_2000.csv'))
+
+modfit = lm(log(Force.N)~log(Area.m2), data = Dennydata)
+Beta = exp(coef(modfit)[1])
+alpha = coef(modfit)[2]
+
+
+newdat = data.frame(Area.m2 = seq(0.00001,0.0018, by = 0.00001))
+# Generate 95% prediction intervals around the fitted regression
+newdat[,2:4] = predict(modfit, newdata = newdat, interval='prediction')
+names(newdat)[2:4] = c('fitted','lower95','upper95') # name columns
+
+par(family = 'serif')
+plot(x=newdat$Area.m2,y = exp(newdat$fitted), type = 'l',
+		ylim = c(0,800), las = 1, 
+		ylab = 'Force (N)',
+		xlab = '',
+		xaxt = 'n',
+		xaxs = 'i', yaxs = 'i')
+# Create vector of x values for the polygon
+xx = c(newdat$Area.m2,rev(newdat$Area.m2))	
+#create vector of y values for the polygon using upper and lower limits
+yy = c(exp(newdat$upper95),exp(rev(newdat$lower95)))
+#plot polygon
+polygon(xx,yy, col = rgb(0,0,0,0.4), border = NA)
+points(x=Dennydata$Area.m2, y = Dennydata$Force.N, pch = 20)
+# Plot a line showing the maximum horizontal (shearing) force imposed on the 
+# limpet mimic by the captive oystercatcher.
+abline(h = maxHorizForce, col = 'black', lwd = 2, lty = 2)
+axis(side = 1, at = pretty(newdat$Area.m2), labels = pretty(newdat$Area.m2)*10000)
+mtext(side = 1, text = expression(Area~'(cm'^2*')'), line = 2.5)
+```
+
+```{r}
+# Find the value where the lower 95% prediction interval exceeds the
+# maximum horizontal (shearing) force recorded on the transducer (convert to 
+# cm^2 from m^2
+maxArea.cm2 = newdat$Area.m2[max(which(exp(newdat$lower95) <= 
+								maxHorizForce))] * 10000
+
+```
+
+The largest shear force we measured on the limpet force transducer was
+`r round(maxHorizForce,dig=2)` N. Using data from Denny & Blanchette, 2000,
+*Journal of Experimental Biology*, we fit a power function to their measured
+dislodgement forces applied in shear to *L. gigantea* that were stationary and
+had been tapped to produce the highest tenacity. Based on the calculated 95%
+prediction interval, the largest L. gigantea that might be dislodged by a single
+pecking force applied in shear (parallel to the substratum) is
+`r round(maxArea.cm2,digits = 1)` cm^2. 
