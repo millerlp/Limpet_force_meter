@@ -925,32 +925,54 @@ lines(BEAM_Z_signal~Time.msec,
 
 ## DEFINTIONS
 
-* A given force can only be assigned to one category (cannot be a push and peck)
-* Forces discussed below refer to Euclidean forces (`norm`)
+These definitions are based on Rachel's email from 2018-02-06.
+
+* A given force can only be assigned to one category (cannot be a push *and*
+  peck)
+* Forces discussed below refer to net Euclidean forces in 3 dimensions
+  (`norm`).
 
 ### Peck:
 
-* Magnitude: ≥ 2N and MUST BE greater than or equal to two times the
-intensity of the force data points immediately before AND after a given point. 
-* Duration: Force MUST BE sustained for ≤ 20 consecutive milliseconds
-* Both magnitude and duration conditions must be met in order for a force
-to be categorized as a peck
+* Peak magnitude: ≥ 2 N, and MUST BE greater than or equal to two times the
+magnitude of the force data points immediately before AND after a given point. 
+* Duration: Force > 2 N MUST BE sustained for ≤ 2 successive samples, giving
+a total event duration of less than 30 ms. 
+* Both the magnitude and duration conditions must be met in order for a force
+to be categorized as a Peck
 
 ### Push:
 
-* Magnitude: ≥ 2N and may or may not be greater than or equal to two times
-the intensity of the force before and after a given force data point
-* Duration:  May be sustained for any amount of time
-* Forces categorized as pushes do not meet conditions of Peck and Touch
+* Peak magnitude: ≥ 2 N, and may or may not be greater than or equal to two
+  times the magnitude of the force before and after a given force data point
+* Duration:  Forces ≥ 2 N that do not meet the magnitude criteria for a 
+  Peck may be sustained for any amount of time
+* Forces categorized as Pushes do not meet conditions of Peck and Touch
 
 ### Touch:
 
-* Magnitude: < 2N  (e.g. the bird seems to be playing with the ‘limpet’
+* Magnitude: < 2 N  (e.g. the bird seems to be playing with the ‘limpet’
 mimic rather than actively attempting to remove it)
 * We are not considering ‘Touches’ in our force meter analyses
 
 
-I wrote an interactive function (`PushPeckPickFunction`) to let the user pick a 
+Additional clarification, from Rachel in email on 2018-02-06:
+"Secondly, had event #3 been an actual force produced by the bird, we did
+classify these events as a peck because had considered a peck to be a force that
+was exerted over one or two sampling intervals.  We did this because there were
+instances when the bird produced two forces in quick succession that created a
+distinct force peak on the read outs (such as in your
+Limpet_force_meter_analysis, figure 2016-12-14, 621.47s, push).  In this case,
+we classified both of the peaks in that example as pecks because, when the
+forces were lumped together,  the magnitude of the first and second forces were
+twice the magnitude of the forces before or after it (presumably in this case
+those forces were 0 N).  So even though those two forces are not distinct peaks,
+in an example like this, we lumped them together as one peak."
+
+  
+## Picking pecks and pushes
+
+I wrote an interactive function (`PushPeckPickFunction()`) to let the user pick a 
 trial date and 
 go through the raw time series data and attempt to identify potential pecks and
 pushes. The script has the user first identify a period of at least 8 samples 
@@ -964,10 +986,10 @@ a row from the original `forces` data frame for each identified peak. As a
 result, the time in milliseconds (`Time.msec`), the raw X, Y, Z values
 (`X.N`,`Y.N`,`Z.N`, units of Newtons), calibrated forces in the X, Y, and Z axes
 (`X.N.off`, `Y.N.off`,`Z.N.off`, units of Newtons), the
-euclidean norm of all 3 axes (`Norm`, units of Newtons), and the timestamp of
+euclidean norm of all 3 axes (`Norm`, units of Newtons), and the time stamp of
 the chosen baseline value (`BaselineTime.msec`) are available for each peak
 event. These data could be
-used to relocate a chunk of the raw timeseries around each peak event for
+used to relocate a chunk of the raw time series around each peak event for
 further analysis. 
 
 
@@ -1384,7 +1406,7 @@ write.csv(output, file = './Data/Events_picker_output_20180213.csv',row.names=FA
 
 # Classifying peaks vs. pushes
 
-The output from the `peakChooser` function was saved to a csv file called
+The output from the `peakChooser()` function was saved to a csv file called
 `Events_picker_output_20180213.csv`. The data in that file next need to be 
 processed to determine if each event was a peck or a push according to the 
 criteria outlined above. 
@@ -1394,30 +1416,106 @@ criteria outlined above.
 #################################
 # Function peckPushAlgo
 #' Classify an event as a peck or push 
+#' 
+#' Classify each event as a peck or push based on the defined criteria. For a
+#' peck, the peak force must be more than 2x larger than the force immediately
+#' before and after the peak force. In addition, a peak must have the force
+#' be above the forceThreshold value (usually 2 N) for no more than 2 sample
+#' intervals. Based on these rules, a peck will have a duration of either 20 ms
+#' or 30 ms (one sample above threshold or 2 samples above threshold, 
+#' respectively).
 #' @param Norm A vector of forces (euclidean norm = 3-axis net force), units of 
 #' Newtons 
 #' @param peakIndex A row index into the Norm vector that marks the peak to be
-#' classified as a peck or push
+#' classified as a Peck or Push
 #' @param forceThreshold Numeric value specifying the minimum force (Newtons) 
-#' needed for the peak to be considered a peck or push. Default = 2 Newtsons. 
+#' needed for the peak to be considered a Peck or Push. Default = 2 Newtons. 
+#' @param forceRatio Numeric values specifying the minimum ratio of forces
+#' between the peak force and samples immediately before and after the peak
+#' force, for classification as a Peck vs. a Push. Default = 2. 
 #' @return A 1-element character vector containing 'Peak', 'Push', or NA, based
 #' on the results of the classification algorithm. 
 
-peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2){
-# Determine if this was a peck or push
-	# Start by getting the smaller force either immediately before or after
+peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2, forceRatio = 2){
+# Determine if this event can be a peck
+	
+	# Start by getting the smaller forces immediately before and after
 	# the peakIndex force
-	nearestN = min(c(Norm[peakIndex-1],Norm[peakIndex+1]))
-	# Now look at the ratio of these two forces, and see if they are
-	# above the forceThreshold ratio of 2
-	if ( (Norm[peakIndex] / nearestN) > forceThreshold) {
-		# If the ratio of the peak force to its nearest neighbors is greater
-		# than 2, it meets one threshold for magnitude of a peck
-		peckThreshMagnitude = TRUE
+	nearestBefore = Norm[peakIndex-1]
+	nearestAfter = Norm[peakIndex+1]
+	# The test for classifying a Peck involves the peak force being 2x larger
+	# than the two nearest neighboring forces. BUT, in specific cases where
+	# there are 2 large forces in a row >2N, we instead check that the larger of 
+	# the pair of forces is 2x larger than the nearest
+	# neighbors before and after that pair of points.
+	
+	before1Flag <- before2Flag <- after1Flag <- after2Flag <- FALSE
+	
+	# Process the point ahead of the peak
+	if ( ((Norm[peakIndex] / nearestBefore) > forceRatio) ){
+		# If the ratio for the point immediately before is > forceRatio, set
+		# the flags
+		before1Flag = TRUE
+		before2Flag = FALSE
 	} else {
+		# If the ratio for the 1st point before is not 2x, check the next
+		# earlier point
+		nearestBefore = Norm[peakIndex-2]
+	
+		if  ( (Norm[peakIndex] / nearestBefore) > forceRatio ){
+			# If the point 2 steps ahead is 2x, set the flags
+			before1Flag = FALSE
+			before2Flag = TRUE
+		} else {
+			# In this case, both points ahead of the peak were not 2x
+			before1Flag = FALSE
+			before2Flag = FALSE
+		}
+	}
+	# Now process the point after the peak
+	if ( (Norm[peakIndex] / nearestAfter) > forceRatio) {
+		# If the first point after meets the 2x ratio, set flags
+		after1Flag = TRUE
+		after2Flag = FALSE
+	} else {
+		# If the first point after doesn't meet the 2x ratio, check the next
+		# point
+		nearestAfter = Norm[peakIndex+2]
+		if ( (Norm[peakIndex] / nearestAfter) > forceRatio){
+			# If true, set flags
+			after1Flag = FALSE
+			after2Flag = TRUE
+		} else {
+			# If the 2nd point after wasn't 2x, then set flags
+			after1Flag = FALSE
+			after2Flag = FALSE
+		}
+	}
+	
+	# Now process the flags to decide if this event meets the Peck threshold
+	if (before1Flag & after1Flag){
+		# Points immediately before & after peak meet the 2x threshold
+		peckThreshMagnitude = TRUE
+	} else if (before2Flag & after1Flag){
+		# A 2-point peak, where the point 2 steps ahead and 1 step after meet
+		# the 2x threshold
+		peckThreshMagnitude = TRUE
+	} else if (before1Flag & after2Flag){
+		# A 2-point peak, where the point 1 step ahead and 2 steps after meet
+		# the 2x threshold
+		peckThreshMagnitude = TRUE
+	} else if (before2Flag & after2Flag){
+		# If before2Flag and after2Flag both came up true, then the event
+		# didn't meet the peck threshold
+		peckThreshMagnitude = FALSE
+	} else {
+		# In all other cases, the event didn't meet the peck threshold because
+	# the points just before and after the 1 or 2-sample peak weren't above the
+	# 2x threshold
 		peckThreshMagnitude = FALSE
 	}
-	######################
+
+	#########################################################################
 	# Now deal with the criterion that if more than 1 neighboring time point
 	# is still above the forceThreshold, then this is a push. But if 0 or 1
 	# neighboring time points are above forceThreshold, then this is a peak.
@@ -1427,7 +1525,7 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2){
 		# the threshold. Keep highCount at 0
 		highCount = highCount + 0
 	} else { # If the point before peakIndex was > forceThreshold
-		highCount = highCount + 1 # increment for one high timepoint neighbor
+		highCount = highCount + 1 # increment for one high time point neighbor
 		if (Norm[peakIndex-2] < forceThreshold){
 			highCount = highCount + 0 # do not increment 
 		} else {
@@ -1443,7 +1541,7 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2){
 		# Check the 2nd time point after peakIndex
 		if (Norm[peakIndex+2] < forceThreshold){
 			highCount = highCount + 0 # do not increment again
-		} else { # 2nd timepoint was also above forceThreshold
+		} else { # 2nd time point was also above forceThreshold
 			highCount = highCount + 1 # increment
 		}
 	}
@@ -1451,26 +1549,26 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2){
 	# Now deal with the various flags to classify as a Peck or Push
 	if (peckThreshMagnitude == TRUE){
 		# If peckThreshMagnitude is true, then the peak was 2x larger than
-		# its largest neighbor. Now check if the high force went on for 
-		# more than 2 sample intervals (20ms), including the peak timepoint
+		# its largest neighbors. Now check if the high force went on for 
+		# more than 2 sample intervals (20ms), including the peak time point
 		if (highCount > 1) {
 			# If highCount is greater than 1, then the force was high for at 
 			# least 3 consecutive time points, making it a Push
 			peckPush = 'Push'
 		} else if (highCount <= 1){
 			# If highCount is 0 or 1, the force was only high for 1 or 2 
-		# sample intervals, making it a Peck. 
+			# sample intervals, making it a Peck. 
 			peckPush = 'Peck'
 		}
 	} else if (peckThreshMagnitude != TRUE) {
 		# If the peckThreshMagnitude is not TRUE, this may still be a series
-		# of high forces above the 2N threshold, if highCount is > 1
-		if (highCount > 1) {
+		# of high forces above the 2N threshold, constituting a Push
+		if (Norm[peakIndex] > forceThreshold){
 			peckPush = 'Push'
-		} else if (highCount <= 1){
+		} else {
 			# In this case the peak wasn't high enough to meet the 2x ratio
-			# threshold, and also didn't stay above 2N for long enough to be a 
-			# Push, so it should remain NA 
+			# threshold, and also didn't go above 2N, so it should remain NA
+			# to denote a Touch
 			peckPush = NA
 		}
 	}
@@ -1547,7 +1645,7 @@ peckpushClassify <- function(events, forces, calibs, forceThreshold = 2,
 		}
 		# Call the peckPushAlgo() function to classify the event
 		events$PeckPush[i] = peckPushAlgo(chunk$Norm, peakIndex = peakIndex,
-				forceThreshold = forceThreshold)
+				forceThreshold = forceThreshold, forceRatio = 2)
 		
 		# Estimate the duration of the event (time with force above 2N thresh)
 	    # A single sample peak above the peakThreshold will end up with a 
@@ -1648,7 +1746,7 @@ plotpeckpush = function(eventNum, events = events2, forces=forces,
 			type = 'b',
 			xlab = 'Elapsed time, ms', ylab = 'Net force, N', las = 1)
 	par(xpd=FALSE)
-	
+	# Plot grey rectangle over the regions < 2 N on the y axis
 	rect(par()$usr[1],par()$usr[3],par()$usr[2],2, col = rgb(.9,.9,.9,.8))
 	grid(lty = 2, col = 'grey70')
 	abline(h = 2, lty = 2, col = 'red', lwd = 2)
@@ -1666,7 +1764,10 @@ plotpeckpush = function(eventNum, events = events2, forces=forces,
 	# Plot a point at the identified peak
 	points(x = peaktime, y = chunk$Norm[peakIndex], pch = 20, cex = 2, 
 			col='red')
-	# Calculate the threshold value that is 1/2 of the peak value
+	# Calculate the threshold value that is 1/2 of the peak value. For a Peck
+	# the neighboring points for the peak would both need to be less than this
+	# value (except in case where the peak is made of 2 points, in which case
+	# the one large neighboring point isn't counted (yellow point in code below)
 	halfThresh = 0.5 * chunk$Norm[peakIndex]
 	# Plot points at the neighboring 2 samples (before and after)
 	points(x = chunk$Time.msec[peakIndex-1], y = chunk$Norm[peakIndex-1],
@@ -1696,34 +1797,50 @@ plotpeckpush = function(eventNum, events = events2, forces=forces,
 					round(peaktime/1000,digits=2),'s, ', peckPush), 
 			cex= 1.3, line = 1)
 		
-}
+} 
 
 #plotpeckpush(eventNum = 9, events = events2, forces = forces, calibs = calibCoeffs)
 
 ```
 
-The code defines a function `peakPushAlgo` to classify each peak event as either
+The code defines a function `peakPushAlgo()` to classify each peak event as either
 a push or peck, when an sample force greater than 2 Newtons was identified. The
-function `peckpushClassify` then cycles through all identified events and
-classifies them.  The code in `peakpushClassify` also determines the duration of
+function `peckpushClassify()` then cycles through all identified events and
+classifies them.  The code in `peakpushClassify()` also determines the duration of
 each event, based on the time the force spent above the 2 Newton threshold
 during that event. Because the raw data were sampled at 10 millisecond
-intervals, a single peak force above 2 Newtons (peck) will have a duration of 20
-ms. That is the time it takes to go from ~0 N to >2 N and back to ~0 N. For push
-events, the duration should end up longer than 20 ms. The output of 
-`peakpushClassify` is a data frame similar to the input events data frame, but 
-with four new columns added on, `PeckPush`, `Duration.msec`, `StartPeak.msec`,
-and `EndPeak.msec`. The latter two columns list the time stamp in milliseconds
-where the algorithm declared the start and end of a given event (the force
-exceeding the 2 Newton threshold). If an event in the
-events data frame does not meet the critera for a peck or a push, these new
-columns will contain NA. 
+intervals, a single peak force above 2 Newtons (peck) will have a 
+maximum duration of 20
+ms. That is the time it takes to go from ~0 N to >2 N and back to ~0 N over
+the course of 3 samples.
+However, based on our earlier definition of a Peck (1 OR 2 sample forces above
+2N), we also include events where the force
+was above the 2 N threshold for 2 samples in a row, which means the force was
+above 2 N for at most 30 ms, which is the interval between 4 sample points.
+Thus peck events will have a duration recorded in the output file of either 20
+ms (single sample above 2 N, which takes a minimum of two 10 ms intervals to be
+recorded by the transducer) or 30 ms (2 samples above 2 N, which takes a minimum
+of three 10 ms intervals to be recorded by the transducer).   
+
+For push
+events, the duration of time the force is >2 N should end up longer than 
+20 ms, where 20 ms encompasses 3 sampling time points, and durations longer than
+20 ms encompass 4 or more sampling time points.
+ The output of `peakpushClassify()` is a data frame similar to the input
+events data frame, but with four new columns added on, `PeckPush`,
+`Duration.msec`, `StartPeak.msec`, and `EndPeak.msec`. The latter two columns
+list the time stamp in milliseconds where the algorithm declared the start and
+end of a given event (the force exceeding the 2 Newton threshold). If an event
+in the events data frame does not meet the critera for a peck or a push, these
+new columns will contain NA. 
+
+The results were saved to a csv file `Events_classified_20180213.csv`.
 
 
 ```{r classifyPeckPush, echo=showcode, cache = TRUE}
 # Re-load the events file from the output of the peakChooser function above
 baseLength = 8 # 8 sample baseline
-peakThreshold = 2  # newtons  
+peakThreshold = 2  # newtons   
 events2 = read.csv(paste0(fdir,'Events_picker_output_20180213.csv'))
 events2$Date = as.Date(events2$Date)   
 events = events2
@@ -1736,13 +1853,13 @@ write.csv(events3, file = './Data/Events_classified_20180213.csv',row.names=FALS
 ```
 
 ```{r histPecks, echo=showcode,dpi = 300, fig.width = 6, fig.height = 8}
-par(mfrow=c(2,1)) 
+par(mfrow=c(2,1))  
 hist(events3$Norm[events3$PeckPush == 'Peck'], 
 		main = 'Peak forces for all Peck events', col = 'red', 
-		ylim = c(0,80), las = 1, xlab = 'Force, Newtons')
+		ylim = c(0,140), las = 1, xlab = 'Force, Newtons')
 hist(events3$Norm[events3$PeckPush == 'Push'], 
 		main = 'Peak forces for all Push events', col = 'blue',
-		ylim = c(0,80), las = 1, xlab = 'Force, Newtons')
+		ylim = c(0,140), las = 1, xlab = 'Force, Newtons')
 
 ```
 
@@ -1751,10 +1868,11 @@ hist(events3$Norm[events3$PeckPush == 'Push'],
 
 #events3 = read.csv(paste0(fdir,'Events_classified_20180213.csv'))
 
+# Remove all events that were classified NA for PeckPush
+events3 = events3[!is.na(events3$PeckPush),] 
 
 # Generate some summary statistics from the events3 data frame for Peck and 
 # Push events
-
 maxPeck = max(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE) 
 minPeck = min(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE)
 maxPush = max(events3$Norm[events3$PeckPush == 'Push'], na.rm=TRUE)
@@ -1765,8 +1883,8 @@ sdPeck = sd(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE)
 sdPush = sd(events3$Norm[events3$PeckPush == 'Push'], na.rm=TRUE)
 medianPeck = median(events3$Norm[events3$PeckPush == 'Peck'], na.rm=TRUE)
 medianPush = median(events3$Norm[events3$PeckPush == 'Push'], na.rm=TRUE)
-nPeck = length(events3$Norm[events3$PeckPush == 'Peck'])
-nPush = length(events3$Norm[events3$PeckPush == 'Push'])
+nPeck = sum(!is.na(events3$Norm[events3$PeckPush == 'Peck']))
+nPush = sum(!is.na(events3$Norm[events3$PeckPush == 'Push']))
 # Subset top 10 percent
 peck10 = events3[events3$PeckPush == 'Peck',]
 peck10 = peck10[!is.na(peck10$PeckPush),] # Remove NA rows
@@ -1812,10 +1930,25 @@ Below are some example classified Pecks and Pushes. The figures have guidelines
 showing where the thresholds are for classification as a peck or push. These
 are not all of the events picked out. 
 
+
+```{r NetForceSummary,echo=showcode}
+
+cat('\nFraction of pecks greater than 14 Newtons net force (3 dimensions)\n') 
+round(sum(abs(events3$Norm[events3$PeckPush == 'Peck']) > 14) / 
+		length(events3$Norm[events3$PeckPush == 'Peck']),dig=4)
+
+cat('\nFraction of pushes greater than 14 Newtons net force (3 dimensions)\n')
+round(sum(abs(events3$Norm[events3$PeckPush == 'Push']) > 14) / 
+		length(events3$Norm[events3$PeckPush == 'Push']),dig=4)
+
+```
+
+
+
 ```{r plotPeckPushes,echo=showcode,cache=TRUE, fig.height = 10, fig.width=8,dpi=300,dev='png'}
 # Make some example plots
 for (i in seq(1,36,by = 6)){ 
-	par(mfrow = c(3,2) )
+	par(mfrow = c(3,2) ) 
 	for (j in i:(i+5)){
 		plotpeckpush(eventNum = j, events = events2, forces = forces, 
 				calibs = calibCoeffs, forceThreshold = 2, baseLength=baseLength)	
@@ -1847,7 +1980,7 @@ the bird attacked the mimic limpet at.
 # contain the offset-corrected forces in Newtons for the X, Y, Z axes. First 
 # subset events3 to remove events that were classified as NA instead of Peck 
 # or Push
-events4 = events3[-which(is.na(events3$PeckPush)),]
+events4 = events3 
 
 forceDir = events4[,c('EventNumber','Date','Time.msec','PeckPush','Norm',
 				'X.N.off','Y.N.off','Z.N.off')]
@@ -1887,10 +2020,10 @@ for (i in 1:nrow(events4)){
 cat('Strongest overall force in horizontal plane (this was a peck), Newtons\n')
 (maxHorizForce = max(abs(forceDir$horizForce.N)))
 
-cat('\nStrongest push force in horizontal plane, Newtons\n')
+cat('\nStrongest push force in horizontal plane, Newtons\n') 
 max(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
 
-cat('\nFraction of horizontal pecks greater than 14 Newtons\n')
+cat('\nFraction of horizontal pecks greater than 14 Newtons\n') 
 sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']) > 14) / 
 		length(forceDir$horizForce.N[forceDir$PeckPush == 'Peck'])
 
@@ -1901,37 +2034,38 @@ sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']) > 14) /
 ```
 
 
-```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 244), right column shows events classified as pushes (n = 129)'}
+```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 218), right column shows events classified as pushes (n = 137)'}
 par(mfrow=c(2,2))
 
-mybreaks = seq(0,40,by=5)
+mybreaks = seq(0,40,by=2) 
 textLine = 1.8
 textadj = -0.3
-textcex = 1.5
+textcex = 1.5 
+ylims = c(0,100)
 par(family='serif')
 hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']), 
 		main = 'Peck force, horizontal plane',
 		xlab = 'Net force in horizontal plane (N)', ylab = 'Frequency',
-		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'A', line = textLine, adj = textadj, cex = textcex)
 
 hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']), 
 		main = 'Push force, horizontal plane',
 		xlab = 'Net force in horizontal plane (N)', ylab = 'Frequency',
-		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
 hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']), 
 		main = 'Peck force, 3 dimensions',
 		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
-		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'C', line = textLine, adj = textadj, cex = textcex)
 hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']), 
 		main = 'Push force, 3 dimensions',
 		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
-		col = 'grey40', las = 1, ylim = c(0,150), xlim = c(0,40),
+		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'D', line = textLine, adj = textadj, cex = textcex)
 ```
@@ -1968,13 +2102,13 @@ imgSide = readPNG("Lgigantea_profile_cutout.png")
 
 ```
 
-```{r circularAnglePlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
+```{r circularAnglePlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
 library(circular)
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1)) 
 shrinkval = 0.8
 sepVal = 0.04
-panelLetterAdj = 0.01
+panelLetterAdj = 0.01 
 letterLine = 1.5
 # Make a simple plot of the distribution of fore-aft & left-right directional
 # data for the peaks and pushes together.
@@ -2040,11 +2174,11 @@ addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 ```
 
 
-```{r circularAnglePecksOnlyPlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
+```{r circularAnglePecksOnlyPlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
 library(circular)
 
 par(mfrow=c(2,1))
-shrinkval = 0.8
+shrinkval = 0.8 
 sepVal = 0.04
 panelLetterAdj = 0.01
 letterLine = 1.5
@@ -2114,7 +2248,7 @@ addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 # Here's some modified functions from the 'circular' package to allow me to 
 # plot stacked points on a circle, but using a color for each point to represent
 # the associated force. 
-
+ 
 my.points.circular <- function (x, pch = 16, cex = 1, stack = FALSE, start.sep = 0, 
 		sep = 0.025, shrink = 1, bins = NULL, col = NULL, next.points = NULL, 
 		plot.info = NULL, zero = NULL, rotation = NULL, mycols, ...) 
@@ -2238,8 +2372,9 @@ my.PointsCircularRad <- function (x, bins, stack, col, pch, iseries, nseries, st
 
 
 ```{r circularAngleColorPlot,echo=showcode,dpi=300, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
+# Plot all Pushes and Pecks on the same plot
 library(circular)
-library(RColorBrewer)
+library(RColorBrewer) 
 library(plotrix)
 
 # Set up multiple plotting regions
@@ -2258,9 +2393,8 @@ cols = brewer.pal(9,'Greys')
 cols = cols[3:9]
 # Create color ramp palette function
 pal = colorRampPalette(cols)
-# subset peck data
-#pecks = forceDir[forceDir$PeckPush == 'Peck',]
-pecks = forceDir # no subset
+
+pecks = forceDir # no subset, use all Pushes and Pecks
 # Order the peck data based on the absolute value of the 3-D peck force
 pecks = pecks[order(abs(pecks$Norm)),]
 # Generate a vector of color codes for the ordered force values
@@ -2358,14 +2492,13 @@ text(x = 0.30,
 		y=plotrix::rescale(seq(2,max(vpecks$Norm),l=6),newrange=c(0,1)), 
 		labels = round(seq(2,max(vpecks$Norm),l=6),dig=1), pos = 4)
 mtext(side=4,text='Force (N)', line = 0.5)
-close.screen(all.screens=TRUE)
+close.screen(all.screens=TRUE) 
 ```
 
 
 
-```{r circularAnglePushesOnlyPlot,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
-library(circular)
-
+```{r circularAnglePushesOnlyPlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
+# Plot of only the Pushes in horizontal and vertical planes
 par(mfrow=c(2,1))
 shrinkval = 0.8
 sepVal = 0.04
@@ -2438,7 +2571,7 @@ addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 cat('Test of mean angle of attack in the horizontal plane for pecks vs pushes.')
 # Test of the mean angle of attach in the horizontal plane for pecks vs. pushes
 print(aov.circular(h,group = forceDir$PeckPush, method="LRT"))
-
+ 
 cat('\n\nTest of mean angle of attack in the vertical and \n 
 anterior-posterior plane for pecks vs pushes.')
 # Test of the mean angle of attack in the horizontal plane for pecks vs. pushes
@@ -2454,7 +2587,7 @@ plot.edf(hpecks, col = 'red', main = 'Horizontal plane', xlab = 'Radians',
 lines.edf(hpush, col = 'blue')
 legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1,
 		)
-
+ 
 ## Vertical plane
 plot.edf(fpecks, col = 'red', main = 'Vertical plane',
 		xlab = 'Radians',ylab='Cumulative probability', las = 1)
@@ -2465,7 +2598,7 @@ legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1)
 ```
 
 
-```{r}
+```{r DennyBlanchetteStationaryShearFit,echo=showcode,dpi=300,fig.width=7,fig.cap="Best-fit line of stationary L. gigantea dislodgement force in shear, from data in Denny & Blanchette 2000, J. Exp. Biol."}
 # From Denny & Blanchette 2002 JEB
 # Regression coefficients for dislodgement force as a function of aperture area
 # Shear: 
@@ -2489,52 +2622,58 @@ logForces = log(76301) + (Beta*log(area.m))
 Forces = exp(logForces)
 
 plot(x = area.m * 10000, y = Forces, type = 'p', xlab = 'Aperture area (cm^2)',
-		ylab = 'Force (N)')
+		ylab = 'Force (N)', 
+		main = 'From Denny and Blanchette 2000, stationary shear force',
+		cex.main = 1,
+		las = 1)
 ```
 
 
-```{r fitShearStationaryData, echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperature areas. The best fit line and 95% prediction interval are shown. Data reproduced from Denny & Blanchette 2000. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment.'}
+```{r fitShearStationaryData, echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperature areas. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment.'}
 fdirDenny = './Data/Denny_Blanchette_2000_tenacity_data/'
 Dennydata = read.csv(file=paste0(fdirDenny,
 				'Lgigantea_shear_stationary_Denny_Blanchette_2000.csv'))
 
-modfit = lm(log(Force.N)~log(Area.m2), data = Dennydata)
-Beta = exp(coef(modfit)[1])
-alpha = coef(modfit)[2]
+# Convert m^2 to cm^2
+Dennydata$Area.cm2 = Dennydata$Area.m2 * 10000
 
+modfit = lm(log(Force.N)~log(Area.cm2), data = Dennydata)
+# ln(F) = ln(alpha) + Beta*ln(aperature area) 
+alpha = exp(coef(modfit)[1])
+beta = coef(modfit)[2]
 
-newdat = data.frame(Area.m2 = seq(0.00001,0.0018, by = 0.00001))
+newdat = data.frame(Area.cm2 = seq(0.1,18, by = 0.01))
 # Generate 95% prediction intervals around the fitted regression
 newdat[,2:4] = predict(modfit, newdata = newdat, interval='prediction')
 names(newdat)[2:4] = c('fitted','lower95','upper95') # name columns
 
 par(family = 'serif')
-plot(x=newdat$Area.m2,y = exp(newdat$fitted), type = 'l',
+plot(x=newdat$Area.cm2,y = exp(newdat$fitted), type = 'l',
 		ylim = c(0,800), las = 1, 
 		ylab = 'Force (N)',
 		xlab = '',
 		xaxt = 'n',
 		xaxs = 'i', yaxs = 'i')
 # Create vector of x values for the polygon
-xx = c(newdat$Area.m2,rev(newdat$Area.m2))	
+xx = c(newdat$Area.cm2,rev(newdat$Area.cm2))	
 #create vector of y values for the polygon using upper and lower limits
 yy = c(exp(newdat$upper95),exp(rev(newdat$lower95)))
 #plot polygon
 polygon(xx,yy, col = rgb(0,0,0,0.4), border = NA)
-points(x=Dennydata$Area.m2, y = Dennydata$Force.N, pch = 20)
+# Plot the raw data from Denny & Blanchette
+points(x=Dennydata$Area.cm2, y = Dennydata$Force.N, pch = 20)
 # Plot a line showing the maximum horizontal (shearing) force imposed on the 
 # limpet mimic by the captive oystercatcher.
 abline(h = maxHorizForce, col = 'black', lwd = 2, lty = 2)
-axis(side = 1, at = pretty(newdat$Area.m2), labels = pretty(newdat$Area.m2)*10000)
+axis(side = 1, at = pretty(newdat$Area.cm2), labels = pretty(newdat$Area.cm2))
 mtext(side = 1, text = expression(Area~'(cm'^2*')'), line = 2.5)
 ```
 
-```{r}
+```{r maxAreacm2,echo=showcode}
 # Find the value where the lower 95% prediction interval exceeds the
-# maximum horizontal (shearing) force recorded on the transducer (convert to 
-# cm^2 from m^2
-maxArea.cm2 = newdat$Area.m2[max(which(exp(newdat$lower95) <= 
-								maxHorizForce))] * 10000
+# maximum horizontal (shearing) force recorded on the transducer 
+maxArea.cm2 = newdat$Area.cm2[max(which(exp(newdat$lower95) <= 
+								maxHorizForce))] 
 
 ```
 
@@ -2543,6 +2682,10 @@ The largest shear force we measured on the limpet force transducer was
 *Journal of Experimental Biology*, we fit a power function to their measured
 dislodgement forces applied in shear to *L. gigantea* that were stationary and
 had been tapped to produce the highest tenacity. Based on the calculated 95%
-prediction interval, the largest L. gigantea that might be dislodged by a single
-pecking force applied in shear (parallel to the substratum) is
-`r round(maxArea.cm2,digits = 1)` cm^2. 
+prediction interval, the largest *L. gigantea* that might be dislodged by a
+single pecking or pushing force applied in shear (parallel to the substratum) is
+`r round(maxArea.cm2,digits = 2)` cm^2. 
+
+The best fit line through the Denny and Blanchette 2000 data is of the 
+form
+$ln(Force) = ln(38.66) + 0.815\times ln(Area)$
