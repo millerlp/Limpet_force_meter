@@ -1518,7 +1518,7 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2, forceRatio = 2){
 	#########################################################################
 	# Now deal with the criterion that if more than 1 neighboring time point
 	# is still above the forceThreshold, then this is a push. But if 0 or 1
-	# neighboring time points are above forceThreshold, then this is a peak.
+	# neighboring time points are above forceThreshold, then this is a peck.
 	highCount = 0 # Add 1 for each time a neighboring point is above threshold
 	if (Norm[peakIndex-1] < forceThreshold){
 		# In this case, the point immediately before peakIndex is below
@@ -2102,7 +2102,7 @@ imgSide = readPNG("Lgigantea_profile_cutout.png")
 
 ```
 
-```{r circularAnglePlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
+```{r circularAnglePlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
 library(circular)
 
 par(mfrow=c(2,1)) 
@@ -2174,7 +2174,7 @@ addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 ```
 
 
-```{r circularAnglePecksOnlyPlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
+```{r circularAnglePecksOnlyPlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
 library(circular)
 
 par(mfrow=c(2,1))
@@ -2371,7 +2371,7 @@ my.PointsCircularRad <- function (x, bins, stack, col, pch, iseries, nseries, st
 ```
 
 
-```{r circularAngleColorPlot,echo=showcode,dpi=300, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
+```{r circularAngleColorPlot,echo=showcode,dpi=300, cache=TRUE,fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
 # Plot all Pushes and Pecks on the same plot
 library(circular)
 library(RColorBrewer) 
@@ -2497,7 +2497,7 @@ close.screen(all.screens=TRUE)
 
 
 
-```{r circularAnglePushesOnlyPlot,fig.show='hide',echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
+```{r circularAnglePushesOnlyPlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
 # Plot of only the Pushes in horizontal and vertical planes
 par(mfrow=c(2,1))
 shrinkval = 0.8
@@ -2629,7 +2629,7 @@ plot(x = area.m * 10000, y = Forces, type = 'p', xlab = 'Aperture area (cm^2)',
 ```
 
 
-```{r fitShearStationaryData, echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperature areas. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment.'}
+```{r fitShearStationaryDataPlot, echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperature areas. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment.'}
 fdirDenny = './Data/Denny_Blanchette_2000_tenacity_data/'
 Dennydata = read.csv(file=paste0(fdirDenny,
 				'Lgigantea_shear_stationary_Denny_Blanchette_2000.csv'))
@@ -2689,3 +2689,76 @@ single pecking or pushing force applied in shear (parallel to the substratum) is
 The best fit line through the Denny and Blanchette 2000 data is of the 
 form
 $ln(Force) = ln(38.66) + 0.815\times ln(Area)$
+
+
+Rachel provided aperture area estimates for L. gigantea that were successfully 
+removed by the captive oystercatcher during feeding trials. The limpets had
+been held overnight in high tide conditions after collection, and then were 
+exposed to a 4 hour "low tide" (or no low tide) prior to being presented to 
+the oystercatcher. Only a subset of the successfully eaten limpets have 
+aperture area data.
+
+```{r eatenApertureAreaData,echo=showcode, results='asis'}
+eatenArea.cm2 = data.frame(Treatment = c(rep('CLT',7), rep('WLT',9), 
+				rep('NLT',8)), 
+		Length.cm = c(35.2,35,35,38.6,34.2,33.9,32.4,
+				32.4,35.7,38.2,30.2,37.5,33.3,39.0,38.7,33.1,
+				35.7,35.2,37.8,38.8,38.7,39,39.4,33.5),
+		Aperture.cm2 = c(7.39,7.27,7.31,rep(NA,4),
+				6.51,7.5,8.51,5.76,7.93,4.87,8.53,8.73,6.36,
+				7.41,8.29,7.9,9.63,9.13,9.13,9.06,NA))
+kable(eatenArea.cm2, 
+		caption="Approximate foot aperture area (cm^2) for L. gigantea eaten by the captive
+oystercatcher. Treatments are Cold Low Tide (CLT), Warm Low Tide (WLT), or 
+No Low Tide (NLT). Aperture area data were missing for 4 CLT limpets and 1 
+NLT limpet (all shell lengths were recorded).")
+```
+
+```{r ShearStationayDataWithAperturesPlot,echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperture areas with a single pull in tension. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment. Arrows on the horizontal axis mark the sizes of L. gigantea successfully dislodged by the captive oystercatcher using multiple strikes.'}
+
+# Convert m^2 to cm^2
+Dennydata$Area.cm2 = Dennydata$Area.m2 * 10000
+
+modfit = lm(log(Force.N)~log(Area.cm2), data = Dennydata)
+# ln(F) = ln(alpha) + Beta*ln(aperature area) 
+alpha = exp(coef(modfit)[1])
+beta = coef(modfit)[2]
+
+newdat = data.frame(Area.cm2 = seq(0.1,18, by = 0.01))
+# Generate 95% prediction intervals around the fitted regression
+newdat[,2:4] = predict(modfit, newdata = newdat, interval='prediction')
+names(newdat)[2:4] = c('fitted','lower95','upper95') # name columns
+
+par(family = 'serif')
+plot(x=newdat$Area.cm2,y = exp(newdat$fitted), type = 'l',
+		ylim = c(0,800), las = 1, 
+		ylab = 'Force (N)',
+		xlab = '',
+		xaxt = 'n',
+		xaxs = 'i', yaxs = 'i')
+# Create vector of x values for the polygon
+xx = c(newdat$Area.cm2,rev(newdat$Area.cm2))	
+#create vector of y values for the polygon using upper and lower limits
+yy = c(exp(newdat$upper95),exp(rev(newdat$lower95)))
+#plot polygon
+polygon(xx,yy, col = rgb(0,0,0,0.4), border = NA)
+# Plot the raw data from Denny & Blanchette
+points(x=Dennydata$Area.cm2, y = Dennydata$Force.N, pch = 20)
+# Plot a line showing the maximum horizontal (shearing) force imposed on the 
+# limpet mimic by the captive oystercatcher.
+abline(h = maxHorizForce, col = 'black', lwd = 2, lty = 2)
+axis(side = 1, at = pretty(newdat$Area.cm2), labels = pretty(newdat$Area.cm2))
+mtext(side = 1, text = expression(Area~'(cm'^2*')'), line = 2.5)
+# Add arrows along the x-axis showing the aperture areas of L. gig that 
+# the captive oystercatcher managed to remove in the feeding trials, using 
+# multiple pecks (so a single maximum force within the prediction interval
+# probably wasn't necessary).
+par(xpd=TRUE)
+arrows(x0 = eatenArea.cm2$Aperture.cm2, 
+		x1 = eatenArea.cm2$Aperture.cm2,
+		y0 = rep(-30,nrow(eatenArea.cm2)),
+		y1 = rep(0,nrow(eatenArea.cm2)), 
+				angle = 30, cex = 1.5,
+				length = 0.1, lwd = 2)
+par(xpd=FALSE)
+```
