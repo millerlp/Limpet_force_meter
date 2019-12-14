@@ -13,6 +13,15 @@ knitr::opts_chunk$set(tidy=FALSE)
 showcode = FALSE
 ```
 
+
+```{r loadPackages, cache=FALSE}
+library(circular)
+library(RColorBrewer) 
+library(plotrix)
+library(RANN) # for nn2 nearest neighbor search function
+library(png)
+```
+
 ```{r calibrationFunctions, cache = TRUE, echo = showcode}
 #################################################################################
 ## Function loadCalibFile
@@ -1633,6 +1642,11 @@ peckpushClassify <- function(events, forces, calibs, forceThreshold = 2,
 				tempcalibs$Z$intercept
 		# Apply offset based on the average of the baseline values (8 samples)
 		xoffset = mean(chunk$X.N[1:baseLength])
+		# Subtract off the offset value. If the baseline force value is negative to 
+		# begin with for this section, the xoffset value will be negative, 
+		# and so you end up adding the offset to all the X.N values because of
+		# the X.N - (negative offset) operation. Or if the offset is positive,
+		# the forces will get the offset subtracted off them. 
 		chunk$X.N.off = chunk$X.N - xoffset
 		yoffset = mean(chunk$Y.N[1:baseLength])
 		chunk$Y.N.off = chunk$Y.N - yoffset
@@ -1959,6 +1973,106 @@ par(mfrow=c(1,1))
 
 ```
 
+```{r examplePeckPushPlots,echo=showcode,dpi=600,fig.width=6,fig.height=6,fig.cap='Examples of net forces exerted by the captive bird on the force transducer. Data from 2016-12-14 at 621.5 sec elapsed'}
+# Plot example data from 2016-12-14 trial at 621000 msec elapsed time
+op = par(mfrow=c(2,1), mar = c(5,5.5,0.5,1))
+par(family='serif')
+textadj = -0.22
+textcex = 1.5 
+textLine = -0.8
+ptcex = 0.5
+i = 16
+trialDate = events$Date[i]
+tempcalibs = calibCoeffs[[which.min(abs(calibDates-(trialDate-1)))]]
+
+chunk = forces[forces$Time.msec > 621000 & forces$Time.msec < 624100, ]
+chunk = chunk[chunk$Date == trialDate,]
+chunk$X.N = (chunk$JOY_X_signal * tempcalibs$X$slope) + 
+		tempcalibs$X$intercept
+chunk$Y.N = (chunk$JOY_Y_signal * tempcalibs$Y$slope) + 
+		tempcalibs$Y$intercept
+chunk$Z.N = (chunk$BEAM_Z_signal * tempcalibs$Z$slope) + 
+		tempcalibs$Z$intercept
+
+# Apply offset based on the average of the baseline values (10 samples)
+xoffset = mean(chunk$X.N[1:10])
+chunk$X.N.off = chunk$X.N - xoffset
+yoffset = mean(chunk$Y.N[1:10])
+chunk$Y.N.off = chunk$Y.N - yoffset
+zoffset = mean(chunk$Z.N[1:10]) 
+chunk$Z.N.off = chunk$Z.N - zoffset 
+# Calculate euclidean norm force
+for (r in 1:nrow(chunk)){
+	xyz = as.matrix(chunk[r,c('X.N.off','Y.N.off','Z.N.off')])
+	chunk$Norm[r] = norm(xyz,'2')
+}
+
+# Generate a plot of the data
+plot(x = chunk$Time.msec, y = chunk$Norm, 
+		type = 'n',
+		xlab = 'Elapsed time (s)', ylab = 'Net force (N)', las = 1,
+		xaxt = 'n',
+		ylim = c(0,35),
+		pch = 20)
+abline(v = prettyvalsTenthSec,
+		lty = 3, col = 'grey50')
+abline(h = 0, lty = 3, col = 'grey50')
+lines(x = chunk$Time.msec, y = chunk$Norm)
+points(x = chunk$Time.msec, y = chunk$Norm, pch = 20, cex = ptcex)
+prettyvals = pretty(chunk$Time.msec)
+prettyvalsTenthSec = seq(prettyvals[1],prettyvals[length(prettyvals)],by = 100)
+# Draw 0.1 sec tick marks
+axis(side = 1, at = prettyvalsTenthSec, 
+		labels = rep('',length(prettyvalsTenthSec)), tcl = -0.2)
+# Label the 1/2 sec tick marks
+axis(side = 1, at = pretty(chunk$Time.msec),
+		labels = pretty(chunk$Time.msec - chunk$Time.msec[1])/1000)
+
+mtext(side = 3, text = 'A', line = textLine, adj = textadj, cex = textcex)
+###################
+# Close-up plot of peck and push from same data chunk
+chunk2 = forces[forces$Time.msec > 621480 & forces$Time.msec < 621720, ]
+chunk2 = chunk2[chunk2$Date == trialDate,]
+chunk2$X.N = (chunk2$JOY_X_signal * tempcalibs$X$slope) + 
+		tempcalibs$X$intercept
+chunk2$Y.N = (chunk2$JOY_Y_signal * tempcalibs$Y$slope) + 
+		tempcalibs$Y$intercept
+chunk2$Z.N = (chunk2$BEAM_Z_signal * tempcalibs$Z$slope) + 
+		tempcalibs$Z$intercept
+
+# Apply offset based on the average of the baseline values (10 samples)
+xoffset = mean(chunk2$X.N[1:7])
+chunk2$X.N.off = chunk2$X.N - xoffset
+yoffset = mean(chunk2$Y.N[1:7])
+chunk2$Y.N.off = chunk2$Y.N - yoffset
+zoffset = mean(chunk2$Z.N[1:7]) 
+chunk2$Z.N.off = chunk2$Z.N - zoffset 
+# Calculate euclidean norm force
+for (r in 1:nrow(chunk2)){
+	xyz = as.matrix(chunk2[r,c('X.N.off','Y.N.off','Z.N.off')])
+	chunk2$Norm[r] = norm(xyz,'2')
+}
+
+# Generate a plot of the data
+plot(x = chunk2$Time.msec, y = chunk2$Norm, 
+		type = 'n',
+		xlab = 'Elapsed time (s)', ylab = 'Net force (N)', las = 1,
+		xaxt = 'n',
+		ylim = c(0,15))
+abline(h = 0, lty = 3, col = 'grey50')
+lines(x = chunk2$Time.msec, y = chunk2$Norm)
+points(x = chunk2$Time.msec, y = chunk2$Norm, pch = 20)
+#prettyvals = pretty(chunk$Time.msec)
+#prettyvalsTenthSec = seq(prettyvals[1],prettyvals[length(prettyvals)],by = 100)
+axis(side = 1, at = prettyvalsTenthSec, labels = rep('',length(prettyvalsTenthSec)))
+axis(side = 1, at = prettyvalsTenthSec,
+		labels = (prettyvalsTenthSec-prettyvalsTenthSec[1])/1000)
+#abline(v = prettyvalsTenthSec,
+#		lty = 3, col = 'grey50')
+
+mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
+
+```
 
 # Peck/Push direction
 
@@ -2034,21 +2148,34 @@ sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']) > 14) /
 ```
 
 
-```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 218), right column shows events classified as pushes (n = 137)'}
-par(mfrow=c(2,2))
-
+```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 218), right column shows events classified as pushes (n = 137). Points and error bars represent the mean +/- 1 SD.'}
+# 4-panel plot of force histograms, divided up by peck vs push, and horizontal
+# vs 3-D forces. Also added points and error bars representing mean + 1SE
+op = par(mfrow=c(2,2))
+pointY = 95
 mybreaks = seq(0,40,by=2) 
 textLine = 1.8
 textadj = -0.3
 textcex = 1.5 
 ylims = c(0,100)
 par(family='serif')
-hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']), 
+histInfo = hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']), 
 		main = 'Peck force, horizontal plane',
 		xlab = 'Net force in horizontal plane (N)', ylab = 'Frequency',
 		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'A', line = textLine, adj = textadj, cex = textcex)
+# Add point for mean and SE
+peckHorizMean = mean(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
+peckHorizSD = sd(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
+#peckHorizLength = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
+#peckHorizSE = peckHorizSD / sqrt(peckHorizLength)
+points(x = peckHorizMean, y = pointY, pch = 20, cex = 1.5)
+arrows(x0 = peckHorizMean - peckHorizSD, x = peckHorizMean + peckHorizSD,
+		y0 = pointY, y1 = pointY, length = 0.05,
+		angle = 90, code = 3)
+
+
 
 hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']), 
 		main = 'Push force, horizontal plane',
@@ -2056,18 +2183,51 @@ hist(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']),
 		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
+# Add point for mean and SE
+pushHorizMean = mean(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
+pushHorizSD = sd(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
+#pushHorizLength = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
+#pushHorizSE = pushHorizSD / sqrt(pushHorizLength)
+points(x = pushHorizMean, y = pointY, pch = 20, cex = 1.5)
+arrows(x0 = pushHorizMean - pushHorizSD, x = pushHorizMean + pushHorizSD,
+		y0 = pointY, y1 = pointY, length = 0.05,
+		angle = 90, code = 3)
+
+
+
 hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']), 
 		main = 'Peck force, 3 dimensions',
 		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
 		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'C', line = textLine, adj = textadj, cex = textcex)
+# Add point for mean and SE
+peck3DMean = mean(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']))
+peck3DSD = sd(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']))
+#peck3DLength = length(abs(forceDir$netForce.N[forceDir$PeckPush == 'Peck']))
+#peck3DSE = peck3DSD / sqrt(peck3DLength)
+points(x = peck3DMean, y = pointY, pch = 20, cex = 1.5)
+arrows(x0 = peck3DMean - peck3DSD, x = peck3DMean + peck3DSD,
+		y0 = pointY, y1 = pointY, length = 0.05,
+		angle = 90, code = 3)
+
+
 hist(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']), 
 		main = 'Push force, 3 dimensions',
 		xlab = 'Net force in 3 dimensions (N)', ylab = 'Frequency',
 		col = 'grey40', las = 1, ylim = ylims, xlim = c(0,40),
 		breaks = mybreaks)
 mtext(side = 3, text = 'D', line = textLine, adj = textadj, cex = textcex)
+# Add point for mean and SE
+push3DMean = mean(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']))
+push3DSD = sd(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']))
+#push3DLength = length(abs(forceDir$netForce.N[forceDir$PeckPush == 'Push']))
+#push3DSE = push3DSD / sqrt(push3DLength)
+points(x = push3DMean, y = pointY, pch = 20, cex = 1.5)
+arrows(x0 = push3DMean - push3DSD, x = push3DMean + push3DSD,
+		y0 = pointY, y1 = pointY, length = 0.05,
+		angle = 90, code = 3)
+par(op)
 ```
 
 
@@ -2373,9 +2533,7 @@ my.PointsCircularRad <- function (x, bins, stack, col, pch, iseries, nseries, st
 
 ```{r circularAngleColorPlot,echo=showcode,dpi=300, cache=TRUE,fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
 # Plot all Pushes and Pecks on the same plot
-library(circular)
-library(RColorBrewer) 
-library(plotrix)
+
 
 # Set up multiple plotting regions
 split.screen(figs = rbind(c(0,0.85,0.5,1),
