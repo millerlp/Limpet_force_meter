@@ -15,7 +15,7 @@ showcode = FALSE
 
 
 ```{r loadPackages, cache=FALSE}
-library(circular)
+# library(circular)  # Call this as needed below, since it masks mean() and sd()
 library(RColorBrewer) 
 library(plotrix)
 library(RANN) # for nn2 nearest neighbor search function
@@ -2230,6 +2230,94 @@ arrows(x0 = push3DMean - push3DSD, x = push3DMean + push3DSD,
 par(op)
 ```
 
+* For horizontal pecks, the mean + 1SD was 
+`r round(peckHorizMean,dig=3)` + `r round(peckHorizSD,dig=3)`.
+* For horizontal pushes, the mean + 1SD was 
+`r round(pushHorizMean,dig=3)` + `r round(pushHorizSD,dig=3)`.
+* For pecks in 3 dimensions, the mean + 1SD was
+`r round(peck3DMean,dig=3)` + `r round(peck3DSD,dig=3)`.
+* For pushes in 3 dimensions, the mean + 1SD was 
+`r round(push3DMean,dig=3)` + `r round(push3DSD,dig=3)`.
+
+
+```{r, strikeAngles,echo=showcode, eval = FALSE}
+# TODO: work on this nonsense
+library(circular, quietly = TRUE)
+# All forceDir$vertAngle values with negative values are downwards-directed strikes.
+# Values from 0 to -90 are downwards towards the anterior, while -90 to -180
+# are downwards towards the posterior. Any positive values are upwards strikes.
+
+# Subset the negative (downward) angle data
+vertAngle = forceDir$vertAngle[forceDir$vertAngle < 0]
+# Mirror the anterior values to be posterior-directed so we can just get
+# a summary of the average downward angle, ignoring fore/aft direction. 
+vertAngle[vertAngle>-90] = (180 + vertAngle[vertAngle>-90])*-1
+
+# Take all angle data and mirror so that it's all anterior-directed
+allAngles = forceDir$vertAngle
+allAngles[allAngles>-90 & allAngles<0] = (180+allAngles[allAngles>-90 & allAngles<0])*-1
+allAngles[allAngles>=0 & allAngles<90] = (180+allAngles[allAngles>=0 & allAngles<90])
+
+
+# Convert to a circular object, only downward-directed strikes
+forceAngle = circular(vertAngle, units='degrees',
+		template = 'none')
+# Also generate circular data object for all strikes
+allAngles = circular(forceDir$vertAngle, units = 'degrees', template = 'none')
+
+
+
+
+f <- circular(allAngles, units='degrees',
+		template = 'none')
+plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+# Plot the stacked points
+points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal)	
+points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal, col = 'red')	
+
+
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+```
+
+```{r summaryStrikeAngles,echo=TRUE}
+library(circular, quietly = TRUE)
+# All angles are flipped 180 degrees, so that downward-directed angles
+# are now reported as degrees above horizontal
+# Summary stats for only the downward-directed strikes (n=228)
+summary(forceAngle+180)
+# Summary stats for all strikes, downwards, horizontal, upwards (n=355)
+summary(allAngles+180)
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+```
+
+
+
+
+```
+
+
 
 ```{r addImgFunction,echo=showcode}
 # Make a function to help ease adding PNG image into the plots below
@@ -2261,148 +2349,6 @@ imgTop = readPNG('Lgigantea_top_view_cutout.png')
 imgSide = readPNG("Lgigantea_profile_cutout.png")
 
 ```
-
-```{r circularAnglePlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
-library(circular)
-
-par(mfrow=c(2,1)) 
-shrinkval = 0.8
-sepVal = 0.04
-panelLetterAdj = 0.01 
-letterLine = 1.5
-# Make a simple plot of the distribution of fore-aft & left-right directional
-# data for the peaks and pushes together.
-h <- circular(forceDir$horizAngle, units='degrees',
-		template = 'none')
-par(xpd=TRUE)
-thisplot = plot(h, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
-		axes=FALSE, tol = 0.01)
-# Angle labels
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
-		lwd = 1.5)
-par(xpd=TRUE)
-# Body axis labels
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Anterior','Posterior'), tcl.text = -0.25,
-		at = c(circular(c(90,270), units='degrees', template='none')))
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Right','Left'), tcl.text = -0.25, 
-		at = c(circular(c(0,180), units='degrees', template='none')))
-# Plot the stacked points
-points.circular(h, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = pi/2,
-		pch = 20, sep = sepVal)	
-par(xpd=FALSE)
-mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
-# Add limpet image to center
-addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
-
-####################################################################
-####################################################################
-# Make a plot of the distribution of vertical and fore-aft directional
-# data for the peaks and pushes together.
-par(xpd=TRUE)
-f <- circular(forceDir$vertAngle, units='degrees',
-				template = 'none')
-plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
-		axes = FALSE)
-#abline(h = 0, lty = 2)
-#abline(v = 0, lty = 2)
-# Angle labels
-axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
-		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
-		lwd = 1.5)
-
-# Body axis labels
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Ventral','Dorsal'), 
-		tcl.text = -0.2,
-		at = c(circular(c(270,90),units='degrees',template='none')))
-
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Anterior','Posterior'), 
-		tcl.text = -0.45,
-		at = c(circular(c(-7,185),units='degrees',template='none')))
- 
-points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = 0,
-		pch = 20, plot.info = plot2, sep = sepVal)	
-mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
-# Add Lottia image side view
-addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
-```
-
-
-```{r circularAnglePecksOnlyPlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
-library(circular)
-
-par(mfrow=c(2,1))
-shrinkval = 0.8 
-sepVal = 0.04
-panelLetterAdj = 0.01
-letterLine = 1.5
-# Make a simple plot of the distribution of fore-aft & left-right directional
-# data for the peaks and pushes together.
-hpecks <- circular(forceDir$horizAngle[forceDir$PeckPush == 'Peck'], units='degrees',
-		template = 'none')
-par(xpd=TRUE)
-thisplot = plot(hpecks, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
-		axes=FALSE, tol = 0.01)
-# Angle labels
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
-		lwd = 1.5)
-par(xpd=TRUE)
-# Body axis labels
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Anterior','Posterior'), tcl.text = -0.25,
-		at = c(circular(c(90,270), units='degrees', template='none')))
-axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
-		labels=c('Right','Left'), tcl.text = -0.25, 
-		at = c(circular(c(0,180), units='degrees', template='none')))
-# Plot the stacked points
-points.circular(hpecks, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = pi/2,
-		pch = 20, sep = sepVal)	
-par(xpd=FALSE)
-mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
-# Add limpet image to center
-addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
-
-####################################################################
-####################################################################
-# Make a plot of the distribution of vertical and fore-aft directional
-# data for the peaks and pushes together.
-par(xpd=TRUE)
-fpecks <- circular(forceDir$vertAngle[forceDir$PeckPush == 'Peck'], units='degrees',
-				template = 'none')
-plot2 = plot(fpecks, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
-		axes = FALSE)
-# Angle labels
-axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
-		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
-		lwd = 1.5)
-# Body axis labels
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Ventral','Dorsal'), 
-		tcl.text = -0.2,
-		at = c(circular(c(270,90),units='degrees',template='none')))
-
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Anterior','Posterior'), 
-		tcl.text = -0.45,
-		at = c(circular(c(-7,185),units='degrees',template='none')))
-
-points.circular(fpecks, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = 0,
-		pch = 20, plot.info = plot2, sep = sepVal)	
-mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
-# Add Lottia image side view
-addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
-
-```
-
 
 ```{r circularPlotFunctions, echo=showcode}
 # Here's some modified functions from the 'circular' package to allow me to 
@@ -2531,10 +2477,166 @@ my.PointsCircularRad <- function (x, bins, stack, col, pch, iseries, nseries, st
 ```
 
 
+```{r circularAnglePlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event by the black oystercatcher during trials on 6 dates.'}
+library(circular, quietly = TRUE)
+
+par(mfrow=c(2,1)) 
+shrinkval = 0.8
+sepVal = 0.04
+panelLetterAdj = 0.01 
+letterLine = 1.5
+# Make a simple plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+h <- circular(forceDir$horizAngle, units='degrees',
+		template = 'none')
+par(xpd=TRUE)
+thisplot = plot(h, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
+		axes=FALSE, tol = 0.01)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.25, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+points.circular(h, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal)	
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
+
+####################################################################
+####################################################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+par(xpd=TRUE)
+f <- circular(forceDir$vertAngle, units='degrees',
+				template = 'none')
+plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+#abline(h = 0, lty = 2)
+#abline(v = 0, lty = 2)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+
+#axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+#		tcl.text = 0.20, at = NULL, tcl = 0.1,
+#		lwd = 1.5)
+
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+ 
+points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = sepVal)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
+
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+
+```
+
+
+```{r circularAnglePecksOnlyPlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck by the black oystercatcher during trials on 6 dates.'}
+library(circular, quietly = TRUE)
+
+par(mfrow=c(2,1))
+shrinkval = 0.8 
+sepVal = 0.04
+panelLetterAdj = 0.01
+letterLine = 1.5
+# Make a simple plot of the distribution of fore-aft & left-right directional
+# data for the peaks and pushes together.
+hpecks <- circular(forceDir$horizAngle[forceDir$PeckPush == 'Peck'], units='degrees',
+		template = 'none')
+par(xpd=TRUE)
+thisplot = plot(hpecks, type = 'n', shrink = shrinkval, rotation = 'clock', zero = pi/2, 
+		axes=FALSE, tol = 0.01)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		lty = 1, tcl.text = 0.15, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+par(xpd=TRUE)
+# Body axis labels
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Anterior','Posterior'), tcl.text = -0.25,
+		at = c(circular(c(90,270), units='degrees', template='none')))
+axis.circular(template = 'none', units='degrees', zero = pi/2, rotation='clock', 
+		labels=c('Right','Left'), tcl.text = -0.25, 
+		at = c(circular(c(0,180), units='degrees', template='none')))
+# Plot the stacked points
+points.circular(hpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = pi/2,
+		pch = 20, sep = sepVal)	
+par(xpd=FALSE)
+mtext(side = 3, text = 'A', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add limpet image to center
+addImg(imgTop,x = 0,y = 0,width = 1.2,interpolate=TRUE)
+
+####################################################################
+####################################################################
+# Make a plot of the distribution of vertical and fore-aft directional
+# data for the peaks and pushes together.
+par(xpd=TRUE)
+fpecks <- circular(forceDir$vertAngle[forceDir$PeckPush == 'Peck'], units='degrees',
+				template = 'none')
+plot2 = plot(fpecks, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+		axes = FALSE)
+# Angle labels
+axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+		lwd = 1.5)
+# Body axis labels
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Ventral','Dorsal'), 
+		tcl.text = -0.2,
+		at = c(circular(c(270,90),units='degrees',template='none')))
+
+axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+		labels=c('Anterior','Posterior'), 
+		tcl.text = -0.45,
+		at = c(circular(c(-7,185),units='degrees',template='none')))
+
+points.circular(fpecks, stack = TRUE, bins = 360, shrink =1.3, 
+		rotation = 'counter', zero = 0,
+		pch = 20, plot.info = plot2, sep = sepVal)	
+mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
+# Add Lottia image side view
+addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
+
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+
+```
+
+
+
+
+
 ```{r circularAngleColorPlot,echo=showcode,dpi=300, cache=TRUE,fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
 # Plot all Pushes and Pecks on the same plot
 
-
+library(circular, quietly = TRUE)
 # Set up multiple plotting regions
 split.screen(figs = rbind(c(0,0.85,0.5,1),
 						c(0,0.85,0,0.5),
@@ -2650,13 +2752,18 @@ text(x = 0.30,
 		y=plotrix::rescale(seq(2,max(vpecks$Norm),l=6),newrange=c(0,1)), 
 		labels = round(seq(2,max(vpecks$Norm),l=6),dig=1), pos = 4)
 mtext(side=4,text='Force (N)', line = 0.5)
-close.screen(all.screens=TRUE) 
+close.screen(all.screens=TRUE)
+
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+
 ```
 
 
 
 ```{r circularAnglePushesOnlyPlot,fig.show='hide',cache=TRUE,echo=showcode,dpi=600, fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a push by the black oystercatcher during trials on 6 dates.'}
 # Plot of only the Pushes in horizontal and vertical planes
+library(circular, quietly = TRUE)
 par(mfrow=c(2,1))
 shrinkval = 0.8
 sepVal = 0.04
@@ -2722,10 +2829,14 @@ mtext(side = 3, text = 'B', cex = 2.5, adj = panelLetterAdj, line = letterLine)
 # Add Lottia image side view
 addImg(imgSide,x = 0,y = 0.2,width = 1.7,interpolate=TRUE)
 
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+
 ```
 
 
 ```{r directionAOV, echo=showcode}
+library(circular, quietly = TRUE)
 cat('Test of mean angle of attack in the horizontal plane for pecks vs pushes.')
 # Test of the mean angle of attach in the horizontal plane for pecks vs. pushes
 print(aov.circular(h,group = forceDir$PeckPush, method="LRT"))
@@ -2735,9 +2846,13 @@ anterior-posterior plane for pecks vs pushes.')
 # Test of the mean angle of attack in the horizontal plane for pecks vs. pushes
 print(aov.circular(f,group = forceDir$PeckPush, method="LRT"))
 
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
+
 ```
 
 ```{r angleECDFplot, echo=showcode, dpi=300,fig.height = 7, fig.width = 5,fig.cap='Empirical cumulative density functions for angle (in radians) of pecks vs. pushes in the horizontal plane (top panel) and vertical plane (bottom panel).'}
+library(circular, quietly = TRUE)
 par(mfrow=c(2,1))
 # Horizontal plane
 plot.edf(hpecks, col = 'red', main = 'Horizontal plane', xlab = 'Radians',
@@ -2752,7 +2867,8 @@ plot.edf(fpecks, col = 'red', main = 'Vertical plane',
 lines.edf(fpush, col = 'blue')
 legend('topleft',legend=c('Pecks','Pushes'),col=c('red','blue'), lty = 1)
 
-
+# Unload circular package to avoid interference with mean() and sd() functions
+detach('package:circular', unload=TRUE)
 ```
 
 
