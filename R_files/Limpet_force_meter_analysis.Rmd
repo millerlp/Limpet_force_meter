@@ -2014,13 +2014,14 @@ plot(x = chunk$Time.msec, y = chunk$Norm,
 		xaxt = 'n',
 		ylim = c(0,35),
 		pch = 20)
+prettyvals = pretty(chunk$Time.msec)
+prettyvalsTenthSec = seq(prettyvals[1],prettyvals[length(prettyvals)],by = 100)
 abline(v = prettyvalsTenthSec,
 		lty = 3, col = 'grey50')
 abline(h = 0, lty = 3, col = 'grey50')
 lines(x = chunk$Time.msec, y = chunk$Norm)
 points(x = chunk$Time.msec, y = chunk$Norm, pch = 20, cex = ptcex)
-prettyvals = pretty(chunk$Time.msec)
-prettyvalsTenthSec = seq(prettyvals[1],prettyvals[length(prettyvals)],by = 100)
+
 # Draw 0.1 sec tick marks
 axis(side = 1, at = prettyvalsTenthSec, 
 		labels = rep('',length(prettyvalsTenthSec)), tcl = -0.2)
@@ -2073,6 +2074,47 @@ axis(side = 1, at = prettyvalsTenthSec,
 mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
 
 ```
+
+
+```{r eventInterval,echo=showcode}
+# Estimate time between strikes using the peck/push data in events3
+
+# Get the available experiment dates
+mydates = unique(events3$Date)
+
+for (i in 1:length(mydates)) {
+	# subset data for a given date
+	temp = events3[events3$Date == mydates[i],]
+	# Make sure they are ordered by time
+	temp = temp[order(temp$Time.msec),]
+	# Calculate the difference in milliseconds between each event ('Time.msec'
+	# column)
+	interval = diff(temp$Time.msec)
+	# Ignore intervals greater than an arbitrary length (10 seconds)
+	interval = interval[interval < 10000]
+	# Extract summary stats
+	sums = summary(interval)
+	if (i == 1){
+		intervalData = data.frame(Date = temp$Date[1], 
+				Median.msec = as.numeric(sums[3]),
+				Mean.msec = as.numeric(sums[4]))
+	} else {
+		intervalData = rbind(intervalData, 
+				data.frame(Date = temp$Date[1], 
+						Median.msec = as.numeric(sums[3]),
+						Mean.msec = as.numeric(sums[4])))
+	}
+}	
+
+```
+
+```{r intervalTable,echo=showcode,results='asis'}
+kable(intervalData, caption = "Median and mean interval (milliseconds) between 
+strikes, for all events spaced less than 10 seconds apart.")
+
+```
+
+
 
 # Peck/Push direction
 
@@ -2240,8 +2282,12 @@ par(op)
 `r round(push3DMean,dig=3)` + `r round(push3DSD,dig=3)`.
 
 
-```{r, strikeAngles,echo=showcode, eval = FALSE}
-# TODO: work on this nonsense
+```{r avgStrikeAngles, strikeAngles,echo=showcode, eval = FALSE}
+# Generate some data frames of force direction in the fore-aft/up-down axes,
+# but pooling the fore-aft data so that we can just look at average strike
+# angles relative to the horizontal plane (i.e. downward-directed strikes or
+# upward-directed). 
+
 library(circular, quietly = TRUE)
 # All forceDir$vertAngle values with negative values are downwards-directed strikes.
 # Values from 0 to -90 are downwards towards the anterior, while -90 to -180
@@ -2252,49 +2298,54 @@ vertAngle = forceDir$vertAngle[forceDir$vertAngle < 0]
 # Mirror the anterior values to be posterior-directed so we can just get
 # a summary of the average downward angle, ignoring fore/aft direction. 
 vertAngle[vertAngle>-90] = (180 + vertAngle[vertAngle>-90])*-1
+vertAngle = circular(vertAngle, units='degrees', template = 'none')
 
-# Take all angle data and mirror so that it's all anterior-directed
+
+# Take all angle data and mirror so that it's all posterior-directed
 allAngles = forceDir$vertAngle
+# First flip all of the anterior-ventral-directed forces to posterior-ventral
 allAngles[allAngles>-90 & allAngles<0] = (180+allAngles[allAngles>-90 & allAngles<0])*-1
+# Next flip all anterior-dorsal-directed forces to posterior-dorsal
 allAngles[allAngles>=0 & allAngles<90] = (180+allAngles[allAngles>=0 & allAngles<90])
+# Convert to circular object. 
+af = circular(allAngles, units='degrees', template = 'none')
+# Now all of the values just represent an angle above (positive) or below 
+# (negative) horizontal, with a value of +/- 180 being horizontal-posterior
 
 
-# Convert to a circular object, only downward-directed strikes
-forceAngle = circular(vertAngle, units='degrees',
-		template = 'none')
-# Also generate circular data object for all strikes
-allAngles = circular(forceDir$vertAngle, units = 'degrees', template = 'none')
-
-
-
-
-f <- circular(allAngles, units='degrees',
-		template = 'none')
-plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
-		axes = FALSE)
-# Angle labels
-axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
-		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
-		lwd = 1.5)
-
-# Body axis labels
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Ventral','Dorsal'), 
-		tcl.text = -0.2,
-		at = c(circular(c(270,90),units='degrees',template='none')))
-
-axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
-		labels=c('Anterior','Posterior'), 
-		tcl.text = -0.45,
-		at = c(circular(c(-7,185),units='degrees',template='none')))
-# Plot the stacked points
-points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = pi/2,
-		pch = 20, sep = sepVal)	
-points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
-		rotation = 'counter', zero = pi/2,
-		pch = 20, sep = sepVal, col = 'red')	
-
+############################
+## Plot for testing purposes
+#shrinkval = 1
+#par(xpd=TRUE)
+#sepVal = 0.04
+#panelLetterAdj = 0.01 
+#letterLine = 1.5
+## convert original angles to a circular object
+#f <- circular(forceDir$vertAngle, units='degrees',
+#		template = 'none')
+#plot2 = plot(f, type = 'n', shrink = shrinkval, rotation = 'counter', zero = 0, 
+#		axes = FALSE)
+## Angle labels
+#axis.circular(template = 'none', units='degrees', zero = 0, lty = 1, 
+#		tcl.text = 0.20, at = NULL, labels = rep('',4), tcl = 0.1,
+#		lwd = 1.5)
+## Body axis labels
+#axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+#		labels=c('Ventral','Dorsal'), 
+#		tcl.text = -0.2,
+#		at = c(circular(c(270,90),units='degrees',template='none')))
+#axis.circular(template = 'none',units='degrees',zero = 0,rotation='counter', 
+#		labels=c('Anterior','Posterior'), 
+#		tcl.text = -0.45,
+#		at = c(circular(c(-7,185),units='degrees',template='none')))
+## Plot the original set of angles
+#points.circular(f, stack = TRUE, bins = 360, shrink =1.3, 
+#		rotation = 'counter', zero = 0,
+#		pch = 20, plot.info = plot2, sep = sepVal)
+## Plot the version with all directions flipped to posterior-directed
+#points.circular(af, stack = TRUE, bins = 360, shrink =1.3, 
+#		rotation = 'counter', zero = 0,
+#		pch = 1, plot.info = plot2, sep = sepVal, col = 'red')	
 
 # Unload circular package to avoid interference with mean() and sd() functions
 detach('package:circular', unload=TRUE)
@@ -2302,20 +2353,31 @@ detach('package:circular', unload=TRUE)
 
 ```{r summaryStrikeAngles,echo=TRUE}
 library(circular, quietly = TRUE)
-# All angles are flipped 180 degrees, so that downward-directed angles
-# are now reported as degrees above horizontal
+
 # Summary stats for only the downward-directed strikes (n=228)
-summary(forceAngle+180)
+# We are subtracting 180 here just to make the numbers come out as positive
+# values representing angle *below* horizontal
+summary(vertAngle-180)
+mle.vonmises.bootstrap.ci(vertAngle-180)
+#
+#
 # Summary stats for all strikes, downwards, horizontal, upwards (n=355)
-summary(allAngles+180)
+# Here again we subtract off 180 so that a *downward* directed force shows
+# up as a positive value representing angle *below* horizontal
+summary(af-180)
+mle.vonmises.bootstrap.ci(af-180)
 # Unload circular package to avoid interference with mean() and sd() functions
 detach('package:circular', unload=TRUE)
 ```
 
+For the subset of strikes that were directed downwards towards the limpet
+(`r summary(vertAngle)[1]`),
+the mean strike angle was from `r round(summary(vertAngle-180)[5],dig=3)` degrees
+above horizontal. 
 
-
-
-```
+For all of the strikes (downwards, horizontal, or upwards, `r summary(af)[1]`),
+the mean strike angle was from `r round(summary(af-180)[5],dig=3)` degrees above
+horizontal. 
 
 
 
