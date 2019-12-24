@@ -2097,12 +2097,14 @@ for (i in 1:length(mydates)) {
 	if (i == 1){
 		intervalData = data.frame(Date = temp$Date[1], 
 				Median.msec = as.numeric(sums[3]),
-				Mean.msec = as.numeric(sums[4]))
+				Mean.msec = as.numeric(sums[4]),
+				SampleSize = length(interval))
 	} else {
 		intervalData = rbind(intervalData, 
 				data.frame(Date = temp$Date[1], 
 						Median.msec = as.numeric(sums[3]),
-						Mean.msec = as.numeric(sums[4])))
+						Mean.msec = as.numeric(sums[4]),
+						SampleSize = length(interval)))
 	}
 }	
 
@@ -2110,7 +2112,7 @@ for (i in 1:length(mydates)) {
 
 ```{r intervalTable,echo=showcode,results='asis'}
 kable(intervalData, caption = "Median and mean interval (milliseconds) between 
-strikes, for all events spaced less than 10 seconds apart.")
+strikes, for all events spaced less than 10 seconds apart.") 
 
 ```
 
@@ -2282,7 +2284,7 @@ par(op)
 `r round(push3DMean,dig=3)` + `r round(push3DSD,dig=3)`.
 
 
-```{r avgStrikeAngles, strikeAngles,echo=showcode, eval = FALSE}
+```{r avgStrikeAngles, strikeAngles,echo=showcode}
 # Generate some data frames of force direction in the fore-aft/up-down axes,
 # but pooling the fore-aft data so that we can just look at average strike
 # angles relative to the horizontal plane (i.e. downward-directed strikes or
@@ -2364,7 +2366,7 @@ mle.vonmises.bootstrap.ci(vertAngle-180)
 # Summary stats for all strikes, downwards, horizontal, upwards (n=355)
 # Here again we subtract off 180 so that a *downward* directed force shows
 # up as a positive value representing angle *below* horizontal
-summary(af-180)
+summary(af-180) 
 mle.vonmises.bootstrap.ci(af-180)
 # Unload circular package to avoid interference with mean() and sd() functions
 detach('package:circular', unload=TRUE)
