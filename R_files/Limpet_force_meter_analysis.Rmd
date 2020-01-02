@@ -1861,8 +1861,17 @@ events = events2
 events3 = peckpushClassify(events = events2, forces = forces, 
 		calibs = calibCoeffs, forceThreshold = 2, baseLength = baseLength)
 events3$PeckPush = factor(events3$PeckPush)
+
+# There are 2 duplicate events in the events3 data frame that should be removed
+# before proceeding (one push, one peck)
+# which(diff(events3$Time.msec) == 0)
+events3 = events3[-c(28,53),]
+
+# Remove all events that were classified NA for PeckPush
+events3 = events3[!is.na(events3$PeckPush),] 
+
 # Save the data frame with peck/push classifications as a new csv file. 
-write.csv(events3, file = './Data/Events_classified_20180213.csv',row.names=FALSE)
+write.csv(events3, file = './Data/Events_classified_20200102.csv',row.names=FALSE)
 
 ```
 
@@ -1880,10 +1889,9 @@ hist(events3$Norm[events3$PeckPush == 'Push'],
 
 ```{r summaryTable, echo=showcode}
 
-#events3 = read.csv(paste0(fdir,'Events_classified_20180213.csv'))
+#events3 = read.csv(paste0(fdir,'Events_classified_20200102.csv'))
 
-# Remove all events that were classified NA for PeckPush
-events3 = events3[!is.na(events3$PeckPush),] 
+
 
 # Generate some summary statistics from the events3 data frame for Peck and 
 # Push events
@@ -2110,9 +2118,87 @@ for (i in 1:length(mydates)) {
 
 ```
 
+
+```{r boutCount, echo=showcode, eval=FALSE}
+# Get the available experiment dates
+mydates = unique(events3$Date)
+BoutCounter = 1
+if (exists('BoutIntervalData')) rm(BoutIntervalData)
+for (i in 1:length(mydates)) {
+	# subset data for a given date
+	temp = events3[events3$Date == mydates[i],]
+	# Make sure they are ordered by time
+	temp = temp[order(temp$Time.msec),]
+	# Calculate the difference in milliseconds between each event ('Time.msec'
+	# column)
+	interval = diff(temp$Time.msec)
+	# Find intervals greater than an arbitrary length (10 seconds, 10000 msec)
+	GapInterval = which(interval > 10000)
+	# If the first entry is a large gap, remove it
+	if (GapInterval[1] == 1) GapInterval = GapInterval[-1]
+	
+	
+	GapInterval = c(0,GapInterval,length(interval)+1)  # add index for event 1
+	# and the last event
+	
+	if (length(GapInterval)>0){
+		# Go through the intervals that are separated by less than 10000
+		for (j in 1:(length(GapInterval)-1)){
+			temp2 = interval[(GapInterval[j]+1):(GapInterval[j+1]-1)]
+			# Extract summary stats
+			sums =  summary(temp2)
+			# Filter for cases where the median is longer than 10 seconds, 
+			# as these will represent cases where the bird struck once and then
+			# waited 10+ seconds to strike again, which means we can't estimate
+			# the within-bout strike interval
+			if (sums[3] < 10000) {
+					if (!exists('BoutIntervalData')){
+						BoutIntervalData = data.frame(Date = temp$Date[1], 
+								Median.msec = as.numeric(sums[3]),
+								Mean.msec = as.numeric(sums[4]),
+								SampleSize = length(temp2),
+								Attack = BoutCounter)
+						BoutCounter = BoutCounter + 1
+					} else {
+						BoutIntervalData = rbind(BoutIntervalData, 
+								data.frame(Date = temp$Date[1], 
+										Median.msec = as.numeric(sums[3]),
+										Mean.msec = as.numeric(sums[4]),
+										SampleSize = length(temp2),
+										Attack = BoutCounter))
+						BoutCounter = BoutCounter + 1
+					}
+				}
+		}	
+	} else {  # If there were no 10+sec gaps on this date
+		# Extract summary stats
+		sums = summary(interval)
+		BoutIntervalData = rbind(BoutIntervalData, 
+				data.frame(Date = temp$Date[1], 
+						Median.msec = as.numeric(sums[3]),
+						Mean.msec = as.numeric(sums[4]),
+						SampleSize = length(interval),
+						Attack = BoutCounter))
+		BoutCounter = BoutCounter + 1
+	}
+	
+}
+
+
+```
+
+
 ```{r intervalTable,echo=showcode,results='asis'}
 kable(intervalData, caption = "Median and mean interval (milliseconds) between 
-strikes, for all events spaced less than 10 seconds apart.") 
+strikes (less than 10 seconds apart), on each sampling date.") 
+
+```
+
+```{r BoutintervalTable,echo=showcode,results='asis'}
+kable(BoutIntervalData, caption = "Median and mean interval (milliseconds) between 
+strikes, for all events spaced less than 10 seconds apart. Each event is defined
+as a series of strikes that occured no more than 10 seconds apart. The number
+of strikes in each attack is given, along with the attack number identifier.") 
 
 ```
 
@@ -2192,7 +2278,7 @@ sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']) > 14) /
 ```
 
 
-```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 218), right column shows events classified as pushes (n = 137). Points and error bars represent the mean +/- 1 SD.'}
+```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 217), right column shows events classified as pushes (n = 136). Points and error bars represent the mean +/- 1 SD.'}
 # 4-panel plot of force histograms, divided up by peck vs push, and horizontal
 # vs 3-D forces. Also added points and error bars representing mean + 1SE
 op = par(mfrow=c(2,2))
@@ -2212,6 +2298,7 @@ mtext(side = 3, text = 'A', line = textLine, adj = textadj, cex = textcex)
 # Add point for mean and SE
 peckHorizMean = mean(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
 peckHorizSD = sd(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
+peckHorizSample = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
 #peckHorizLength = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Peck']))
 #peckHorizSE = peckHorizSD / sqrt(peckHorizLength)
 points(x = peckHorizMean, y = pointY, pch = 20, cex = 1.5)
@@ -2230,6 +2317,7 @@ mtext(side = 3, text = 'B', line = textLine, adj = textadj, cex = textcex)
 # Add point for mean and SE
 pushHorizMean = mean(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
 pushHorizSD = sd(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
+pushHorizSample = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
 #pushHorizLength = length(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']))
 #pushHorizSE = pushHorizSD / sqrt(pushHorizLength)
 points(x = pushHorizMean, y = pointY, pch = 20, cex = 1.5)
@@ -2275,13 +2363,13 @@ par(op)
 ```
 
 * For horizontal pecks, the mean + 1SD was 
-`r round(peckHorizMean,dig=3)` + `r round(peckHorizSD,dig=3)`.
+`r round(peckHorizMean,dig=3)` + `r round(peckHorizSD,dig=3)`. Sample size was `r peckHorizSample`.
 * For horizontal pushes, the mean + 1SD was 
-`r round(pushHorizMean,dig=3)` + `r round(pushHorizSD,dig=3)`.
+`r round(pushHorizMean,dig=3)` + `r round(pushHorizSD,dig=3)`. Sample size was `r pushHorizSample`.
 * For pecks in 3 dimensions, the mean + 1SD was
-`r round(peck3DMean,dig=3)` + `r round(peck3DSD,dig=3)`.
+`r round(peck3DMean,dig=3)` + `r round(peck3DSD,dig=3)`. Sample size was `r peckHorizSample`.
 * For pushes in 3 dimensions, the mean + 1SD was 
-`r round(push3DMean,dig=3)` + `r round(push3DSD,dig=3)`.
+`r round(push3DMean,dig=3)` + `r round(push3DSD,dig=3)`. Sample size was `r pushHorizSample`.
 
 
 ```{r avgStrikeAngles, strikeAngles,echo=showcode}
@@ -2356,14 +2444,14 @@ detach('package:circular', unload=TRUE)
 ```{r summaryStrikeAngles,echo=TRUE}
 library(circular, quietly = TRUE)
 
-# Summary stats for only the downward-directed strikes (n=228)
+# Summary stats for only the downward-directed strikes (n=226)
 # We are subtracting 180 here just to make the numbers come out as positive
 # values representing angle *below* horizontal
 summary(vertAngle-180)
 mle.vonmises.bootstrap.ci(vertAngle-180)
 #
 #
-# Summary stats for all strikes, downwards, horizontal, upwards (n=355)
+# Summary stats for all strikes, downwards, horizontal, upwards (n=353)
 # Here again we subtract off 180 so that a *downward* directed force shows
 # up as a positive value representing angle *below* horizontal
 summary(af-180) 
