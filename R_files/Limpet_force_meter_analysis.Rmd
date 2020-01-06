@@ -1432,7 +1432,9 @@ criteria outlined above.
 #' be above the forceThreshold value (usually 2 N) for no more than 2 sample
 #' intervals. Based on these rules, a peck will have a duration of either 20 ms
 #' or 30 ms (one sample above threshold or 2 samples above threshold, 
-#' respectively).
+#' respectively). Cases where the >2N forces go on for longer than 30ms
+#' will be defined as a push regardless of the 2x-larger threshold defined above. 
+#' 
 #' @param Norm A vector of forces (euclidean norm = 3-axis net force), units of 
 #' Newtons 
 #' @param peakIndex A row index into the Norm vector that marks the peak to be
@@ -1539,6 +1541,10 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2, forceRatio = 2){
 			highCount = highCount + 0 # do not increment 
 		} else {
 			highCount = highCount + 1 # increment
+			# At this point, the high forces would be longer than the 
+			# defined interval for a 'peck', so this event would be classified
+			# as a push even if the 2nd and 3rd points fell below the 2x forceRatio
+			# that would otherwise make this a peck.
 		}
 	}
 	# Check the 2 time points after peakIndex now
@@ -1552,6 +1558,10 @@ peckPushAlgo <- function(Norm, peakIndex, forceThreshold = 2, forceRatio = 2){
 			highCount = highCount + 0 # do not increment again
 		} else { # 2nd time point was also above forceThreshold
 			highCount = highCount + 1 # increment
+			# At this point, the high forces would be longer than the 
+			# defined interval for a 'peck', so this event would be classified
+			# as a push even if the 2nd and 3rd points fell below the 2x forceRatio
+			# that would otherwise make this a peck.
 		}
 	}
 	
