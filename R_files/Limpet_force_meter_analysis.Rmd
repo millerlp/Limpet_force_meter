@@ -1374,7 +1374,7 @@ peakChooser = function(trialDate, forces = forces, calibs = calibCoeffs,
 
 ```
 
-```{r choosePeaks, eval = FALSE, echo=showcode}
+```{r choosePeaks, eval = FALSE, echo=TRUE}
 # After defining the peak choosing function in the previous chunk of code, 
 # now use it to identify potential peak/push events on each trial date. 
 # Run the code in this chunk manually, since it requires a lot of user 
@@ -1861,7 +1861,7 @@ new columns will contain NA.
 The results were saved to a csv file `Events_classified_20180213.csv`.
 
 
-```{r classifyPeckPush, echo=showcode, cache = TRUE}
+```{r classifyPeckPush, echo=showcode, cache=TRUE}
 # Re-load the events file from the output of the peakChooser function above
 baseLength = 8 # 8 sample baseline
 peakThreshold = 2  # newtons   
