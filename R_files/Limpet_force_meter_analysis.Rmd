@@ -2119,7 +2119,7 @@ for (i in 1:length(mydates)) {
 ```
 
 
-```{r boutCount, echo=showcode, eval=FALSE}
+```{r boutCount, echo=showcode}
 # Get the available experiment dates
 mydates = unique(events3$Date)
 BoutCounter = 1
