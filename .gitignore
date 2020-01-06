@@ -1,11 +1,8 @@
 *.s#*
 *.b#*
 
-R_files/Calib_data_process.R
-R_files/Examine_data_v1.R
 
 Manuscripts/
-
 
 R_files/*.png
 
