@@ -1991,7 +1991,7 @@ par(mfrow=c(1,1))
 
 ```
 
-```{r examplePeckPushPlots,echo=showcode,dpi=600,fig.width=6,fig.height=6,fig.cap='Examples of net forces exerted by the captive bird on the force transducer. Data from 2016-12-14 at 621.5 sec elapsed'}
+```{r examplePeckPushPlots,echo=showcode,dpi=600,dev=c('png','pdf'),fig.width=6,fig.height=6,fig.cap='Examples of net forces exerted by the captive bird on the force transducer. Data from 2016-12-14 at 621.5 sec elapsed'}
 # Plot example data from 2016-12-14 trial at 621000 msec elapsed time
 op = par(mfrow=c(2,1), mar = c(5,5.5,0.5,1))
 par(family='serif')
@@ -2288,7 +2288,7 @@ sum(abs(forceDir$horizForce.N[forceDir$PeckPush == 'Push']) > 14) /
 ```
 
 
-```{r forceHistograms,echo=showcode, dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 217), right column shows events classified as pushes (n = 136). Points and error bars represent the mean +/- 1 SD.'}
+```{r forceHistograms,echo=showcode,dev=c('png','pdf'), dpi=300,fig.width=6,fig.height=6,fig.cap='Histogram of forces in the horizontal plane (A,B) and three dimensions (C,D), classified as pecks or pushes. Left column shows events classified as pecks (n = 217), right column shows events classified as pushes (n = 136). Points and error bars represent the mean +/- 1 SD.'}
 # 4-panel plot of force histograms, divided up by peck vs push, and horizontal
 # vs 3-D forces. Also added points and error bars representing mean + 1SE
 op = par(mfrow=c(2,2))
@@ -2795,7 +2795,7 @@ detach('package:circular', unload=TRUE)
 
 
 
-```{r circularAngleColorPlot,echo=showcode,dpi=300, cache=TRUE,fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
+```{r circularAngleColorPlot,echo=showcode,dev=c('png','pdf'),dpi=300, cache=TRUE,fig.width=7,fig.height = 9,fig.cap='Angular distribution of force vectors for pecks and pushes along the A) anterior-posterior and left-right axes and B) anterior-posterior and dorsal-ventral axes of the limpet mimic. Each point represents the resultant direction of a single strike event classified as a peck or push by the black oystercatcher during trials on 6 dates. Point colors indicate the net force in Newtons of the strike event.'}
 # Plot all Pushes and Pecks on the same plot
 
 library(circular, quietly = TRUE)
@@ -3150,7 +3150,7 @@ No Low Tide (NLT). Aperture area data were missing for 4 CLT limpets and 1
 NLT limpet (all shell lengths were recorded).")
 ```
 
-```{r ShearStationayDataWithAperturesPlot,echo=showcode,dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperture areas with a single pull in tension. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment. Arrows on the horizontal axis mark the sizes of L. gigantea successfully dislodged by the captive oystercatcher using multiple strikes.'}
+```{r ShearStationayDataWithAperturesPlot,echo=showcode,dev=c('png','pdf'),dpi=300,fig.width=7,fig.height=7,fig.cap='Forces applied in shear required to dislodge L. gigantea of various aperture areas with a single pull in tension. Raw data points reproduced from Denny & Blanchette 2000, J. Exp. Biol. The best fit line and 95% prediction interval are shown. The dashed horizontal line represents the largest shear force recorded by the captive oystercatcher in this experiment. Arrows on the horizontal axis mark the sizes of L. gigantea successfully dislodged by the captive oystercatcher using multiple strikes.'}
 
 # Convert m^2 to cm^2
 Dennydata$Area.cm2 = Dennydata$Area.m2 * 10000
